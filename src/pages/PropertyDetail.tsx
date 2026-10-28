@@ -34,7 +34,7 @@ import {
   toggleFavorite,
 } from '@/lib/ota';
 import type { Hotel, RateCalendarEntry, Review, Room } from '@/lib/types';
-import { handleImageError, resolveCoverUrl, resolveImageUrl } from '@/lib/media';
+import { handleImageError, resolveRoomCoverUrl, resolveImageUrl } from '@/lib/media';
 import ImageCarousel from '@/components/ImageCarousel';
 
 export const PropertyDetail: React.FC = () => {
@@ -295,7 +295,7 @@ export const PropertyDetail: React.FC = () => {
                       >
                         {room.images && (
                           <img
-                            src={resolveCoverUrl(parseList(room.images), hotel.image_url)}
+                            src={resolveRoomCoverUrl(parseList(room.images), hotel.image_url)}
                             onError={handleImageError}
                             alt={room.name}
                             className="sm:w-40 h-32 object-cover rounded-xl"

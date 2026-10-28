@@ -4,7 +4,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { client } from '@/lib/api';
 import { Hotel, Room, Booking, Inquiry } from '@/lib/types';
-import { handleImageError, resolveCoverUrl, resolveImageUrl } from '@/lib/media';
+import { handleImageError, resolveRoomCoverUrl, resolveImageUrl } from '@/lib/media';
 import { 
   Building2, 
   BedDouble, 
@@ -539,7 +539,7 @@ export const AdminDashboard: React.FC = () => {
                     <div>
                       <div className="aspect-[16/9] relative bg-slate-900">
                         <img
-                          src={resolveCoverUrl(room.images?.split(','), h?.image_url)}
+                          src={resolveRoomCoverUrl(room.images?.split(','), h?.image_url)}
                           onError={handleImageError}
                           alt={room.name}
                           className="w-full h-full object-cover"

@@ -50,6 +50,18 @@ export function resolveCoverUrl(
   return list.length ? resolveImageUrl(list[0]) : IMAGE_PLACEHOLDER;
 }
 
+/** Oda kapağı: odanın kendi ilk fotoğrafı; yoksa tesis görseline düşer. */
+export function resolveRoomCoverUrl(
+  images?: (string | null | undefined)[] | null,
+  fallback?: string | null,
+): string {
+  const list = (images || [])
+    .map((v) => (v ? v.trim() : ''))
+    .filter(Boolean);
+  if (list.length) return resolveImageUrl(list[0]);
+  return resolveCoverUrl([], fallback);
+}
+
 /** `<img onError>` için yedek görsele düşüren ortak işleyici. */
 export function handleImageError(e: React.SyntheticEvent<HTMLImageElement>): void {
   const img = e.currentTarget;

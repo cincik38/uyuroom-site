@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Users, Maximize2, Bed, Check, Sparkles, ArrowRight, ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Room, Hotel } from '@/lib/types';
-import { resolveCoverUrl, handleImageError } from '@/lib/media';
+import { resolveRoomCoverUrl, handleImageError } from '@/lib/media';
 
 interface RoomCardProps {
   room: Room;
@@ -17,7 +17,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, hotel, bookingQuery })
     ? room.amenities.split(',').map((a) => a.trim()).slice(0, 4)
     : ['Klima', 'Wi-Fi', 'Smart TV', 'Özel Banyo'];
 
-  const imageUrl = resolveCoverUrl(
+  const imageUrl = resolveRoomCoverUrl(
     room.images?.split(',') || [],
     hotel?.image_url,
   );
