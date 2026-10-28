@@ -1725,7 +1725,7 @@ export const PropertyManager: React.FC = () => {
                       onChange={setHotelBankAccounts}
                       onSave={saveHotelBanks}
                       title="Tesis Banka Hesapları (Havale / EFT)"
-                      description="Misafirler havale/EFT ile ödeme yaparken burada tanımladığınız hesapları görür. Hesap eklemezseniz platformun genel banka hesapları gösterilir. IBAN formatı: TR + 24 rakam."
+                      description="Misafirler havale/EFT ile ödeme yaparken burada tanımladığınız hesapları görür. IBAN formatı: TR + 24 rakam."
                       saveLabel="Tesis Hesaplarını Kaydet"
                     />
                   </div>
