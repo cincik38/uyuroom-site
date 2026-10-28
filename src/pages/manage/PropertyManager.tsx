@@ -373,8 +373,8 @@ export const PropertyManager: React.FC = () => {
       await client.entities.hotels.update({ id: String(hotelId), data });
       toast.success(message);
       loadData();
-    } catch {
-      toast.error('Kayıt başarısız oldu.');
+    } catch (e) {
+      toast.error(`Kayıt başarısız oldu: ${(e as Error)?.message || 'bilinmeyen hata'}`);
     }
   };
 
