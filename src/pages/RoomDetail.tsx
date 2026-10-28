@@ -4,7 +4,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { client } from '@/lib/api';
 import { Room, Hotel } from '@/lib/types';
-import { handleImageError, resolveImageUrl, resolveImageUrls } from '@/lib/media';
+import { handleImageError, resolveImageUrls } from '@/lib/media';
 import ImageCarousel from '@/components/ImageCarousel';
 import { 
   Users, 
@@ -97,7 +97,7 @@ export const RoomDetail: React.FC = () => {
   }
 
   const galleryImages = resolveImageUrls(
-    room.images ? room.images.split(',') : [hotel?.image_url || ''],
+    room.images ? room.images.split(',').filter(Boolean) : [hotel?.image_url || ''],
   );
   const amenitiesList = room.amenities ? room.amenities.split(',').map((a) => a.trim()) : [];
 
@@ -123,7 +123,7 @@ export const RoomDetail: React.FC = () => {
         {/* Gallery Hero */}
         <div className="mb-8">
           <ImageCarousel
-            images={hotel?.image_url ? [...galleryImages, resolveImageUrl(hotel.image_url)] : galleryImages}
+            images={galleryImages}
             alt={room.name}
             aspectClassName="aspect-[16/10]"
           />
