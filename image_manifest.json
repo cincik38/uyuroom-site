@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "results": [
+    {
+      "status": "success",
+      "filename": "uyuroom-adana-hotel-exterior.jpg",
+      "url": "/images/uyuroom-adana-hotel-exterior.webp",
+      "path": "/images/uyuroom-adana-hotel-exterior.webp",
+      "absolute_path": "/images/uyuroom-adana-hotel-exterior.webp"
+    },
+    {
+      "status": "success",
+      "filename": "uyuroom-usak-hotel-exterior.jpg",
+      "url": "/images/uyuroom-usak-hotel-exterior.webp",
+      "path": "/images/uyuroom-usak-hotel-exterior.webp",
+      "absolute_path": "/images/uyuroom-usak-hotel-exterior.webp"
+    },
+    {
+      "status": "success",
+      "filename": "room-deluxe-king-suite.jpg",
+      "url": "/images/room-deluxe-king-suite.webp",
+      "path": "/images/room-deluxe-king-suite.webp",
+      "absolute_path": "/images/room-deluxe-king-suite.webp"
+    },
+    {
+      "status": "success",
+      "filename": "room-executive-deluxe.jpg",
+      "url": "/images/room-executive-deluxe.webp",
+      "path": "/images/room-executive-deluxe.webp",
+      "absolute_path": "/images/room-executive-deluxe.webp"
+    },
+    {
+      "status": "success",
+      "filename": "room-superior-standard.jpg",
+      "url": "/images/room-superior-standard.webp",
+      "path": "/images/room-superior-standard.webp",
+      "absolute_path": "/images/room-superior-standard.webp"
+    },
+    {
+      "status": "success",
+      "filename": "room-family-suite.jpg",
+      "url": "/images/room-family-suite.webp",
+      "path": "/images/room-family-suite.webp",
+      "absolute_path": "/images/room-family-suite.webp"
+    }
+  ],
+  "success_count": 6,
+  "failed_count": 0,
+  "running_count": 0,
+  "message": "Generated 6/6 images total"
+}

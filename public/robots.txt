@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /yonetim
+Disallow: /tesis/yonetim
+Disallow: /tesis/panel
+Disallow: /admin
+Disallow: /partner
+Disallow: /auth/
+Disallow: /booking
+Disallow: /booking-confirmation
+
+Sitemap: https://uyuroom.com/sitemap.xml
