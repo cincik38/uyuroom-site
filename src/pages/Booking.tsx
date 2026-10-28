@@ -63,7 +63,7 @@ export const BookingPage: React.FC = () => {
   const [selectedBankIndex, setSelectedBankIndex] = useState(0);
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>(DEFAULT_BANK_ACCOUNTS);
   const [bankSource, setBankSource] = useState<'hotel' | 'platform'>('platform');
-  const activeBank = bankAccounts[selectedBankIndex] || bankAccounts[0] || DEFAULT_BANK_ACCOUNTS[0];
+  const activeBank = bankAccounts[selectedBankIndex] || bankAccounts[0];
   const [copiedIban, setCopiedIban] = useState(false);
 
   useEffect(() => {
@@ -359,13 +359,19 @@ export const BookingPage: React.FC = () => {
                 </div>
               )}
 
-              {paymentMethod === 'bank_transfer' && (
+              {paymentMethod === 'bank_transfer' && bankAccounts.length === 0 && (
+                <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-sm text-amber-900">
+                  Havale bilgileri rezervasyon sonrasında telefonla veya mesajla iletilecektir.
+                </div>
+              )}
+
+              {paymentMethod === 'bank_transfer' && bankAccounts.length > 0 && activeBank && (
                 <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-amber-400 uppercase">
                       {bankSource === 'hotel'
                         ? `${hotel?.name || 'Tesis'} Banka Hesapları`
-                        : 'Kurumsal Banka Hesaplarımız'}
+                        : 'UYUROOM Hotel Banka Hesapları'}
                     </span>
                     <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30 font-semibold">
                       %5 İndirim Uygulandı
@@ -415,7 +421,7 @@ export const BookingPage: React.FC = () => {
                   <p className="text-[11px] text-slate-400 italic">
                     {bankSource === 'hotel'
                       ? `* Ödeme doğrudan ${hotel?.name || 'tesis'} hesabına yapılır.`
-                      : '* Ödeme platformun kurumsal hesabına yapılır.'}
+                      : '* Ödeme UYUROOM Hotel hesabına yapılır.'}
                   </p>
                   <p className="text-[11px] text-slate-400 italic">
                     * Açıklama kısmına rezervasyon oluşturduktan sonra verilecek PNR kodunu yazmanız yeterlidir.

@@ -11,22 +11,8 @@ export interface BankAccount {
 
 const SETTING_KEY = 'bank_accounts';
 
-export const DEFAULT_BANK_ACCOUNTS: BankAccount[] = [
-  {
-    bank_name: 'Ziraat Bankası',
-    account_holder: 'UYUROOM HOTEL TURİZM VE TİC. A.Ş.',
-    iban: 'TR120001009010293847560001',
-    branch: 'Adana Ziyapaşa Şubesi',
-    note: 'Açıklama kısmına PNR kodunuzu yazmanız yeterlidir.',
-  },
-  {
-    bank_name: 'Garanti BBVA',
-    account_holder: 'UYUROOM HOTEL TURİZM VE TİC. A.Ş.',
-    iban: 'TR620006200000012345678902',
-    branch: 'Uşak Merkez Şubesi',
-    note: 'Açıklama kısmına PNR kodunuzu yazmanız yeterlidir.',
-  },
-];
+/** Gerçek hesap girilene kadar boş: sahte IBAN asla gösterilmez. */
+export const DEFAULT_BANK_ACCOUNTS: BankAccount[] = [];
 
 /** IBAN'ı 4'erli gruplar halinde okunaklı biçimde döndürür. */
 export function formatIban(iban: string): string {
