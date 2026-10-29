@@ -1,7 +1,8 @@
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Index from './pages/Index';
 import RoomDetail from './pages/RoomDetail';
 import BookingPage from './pages/Booking';
@@ -22,6 +23,23 @@ import WhatsAppWidget from './components/WhatsAppWidget';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const queryClient = new QueryClient();
+
+/** Sayfa değişince en üste kaydırır; #anchor varsa o bölüme gider. */
+const ScrollToTop = () => {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+    if (hash) {
+      const el = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (el) {
+        el.scrollIntoView();
+        return;
+      }
+    }
+    window.scrollTo(0, 0);
+  }, [pathname, hash]);
+  return null;
+};
 
 const AppRoutes = () => (
   <Routes>
@@ -70,6 +88,7 @@ const App = () => (
       <Toaster position="top-right" richColors />
       <BrowserRouter>
         <ErrorBoundary>
+          <ScrollToTop />
           <AppRoutes />
           <WhatsAppWidget />
         </ErrorBoundary>
