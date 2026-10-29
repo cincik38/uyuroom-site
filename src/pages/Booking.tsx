@@ -1,3 +1,4 @@
+import { trackBookingComplete, trackBeginBooking } from '@/lib/analytics';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
@@ -104,6 +105,7 @@ export const BookingPage: React.FC = () => {
           const roomRes = await client.entities.rooms.get({ id: roomIdParam });
           if (roomRes?.data) {
             setRoom(roomRes.data);
+            trackBeginBooking({ value: Number(roomRes.data.discounted_price || roomRes.data.price_per_night || 0), roomId: roomRes.data.id, roomName: roomRes.data.name });
             const targetHotelId = roomRes.data.hotel_id || hotelIdParam;
             if (targetHotelId) {
               const hotelRes = await client.entities.hotels.get({ id: targetHotelId.toString() });
@@ -182,6 +184,12 @@ export const BookingPage: React.FC = () => {
         data: bookingPayload,
       });
 
+      trackBookingComplete({
+        code: bookingCode,
+        value: Number(bookingPayload.total_price || 0),
+        roomId: bookingPayload.room_id as number,
+        roomName: String(room?.name || ''),
+      });
       toast.success('Rezervasyonunuz başarıyla oluşturuldu!');
       navigate(`/booking-confirmation?code=${bookingCode}`);
     } catch (err: any) {

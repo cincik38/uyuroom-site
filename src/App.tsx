@@ -20,6 +20,8 @@ import BlogIndexPage from './pages/blog/BlogIndexPage';
 import BlogPostPage from './pages/blog/BlogPostPage';
 import RoleGuard from './components/RoleGuard';
 import WhatsAppWidget from './components/WhatsAppWidget';
+import CookieBanner from './components/CookieBanner';
+import { trackPageView, trackContactClick } from './lib/analytics';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const queryClient = new QueryClient();
@@ -38,6 +40,19 @@ const ScrollToTop = () => {
     }
     window.scrollTo(0, 0);
   }, [pathname, hash]);
+  useEffect(() => {
+    trackPageView(pathname);
+  }, [pathname]);
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement | null)?.closest?.('a');
+      const href = a?.getAttribute('href') || '';
+      if (href.startsWith('tel:')) trackContactClick('phone');
+      else if (/wa\.me|api\.whatsapp\.com/.test(href)) trackContactClick('whatsapp');
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
   return null;
 };
 
@@ -91,6 +106,7 @@ const App = () => (
           <ScrollToTop />
           <AppRoutes />
           <WhatsAppWidget />
+          <CookieBanner />
         </ErrorBoundary>
       </BrowserRouter>
     </TooltipProvider>
