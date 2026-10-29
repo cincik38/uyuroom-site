@@ -35,7 +35,10 @@ export const Kvkk: React.FC = () => {
         <Section title="1. Veri Sorumlusu">
           <p>
             Kişisel verileriniz, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında veri sorumlusu
-            sıfatıyla <strong>UYUROOM Hotel</strong> (Adana ve Uşak şubeleri) tarafından işlenmektedir.
+            sıfatıyla <strong>UYUROOM HOTEL (ŞAHASTE ÇİNÇİK)</strong> (Adana ve Uşak şubeleri) tarafından işlenmektedir.
+          </p>
+          <p>
+            <strong>Ticari ünvan:</strong> UYUROOM HOTEL (ŞAHASTE ÇİNÇİK) · <strong>Vergi Kimlik No:</strong> 9810713434
           </p>
           <p>
             <strong>{adana.name}:</strong> {adana.address} · {adana.phoneDisplay} · {adana.email}

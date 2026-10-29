@@ -139,7 +139,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-slate-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} UYUROOM HOTEL. Tüm hakları saklıdır.</p>
+          <p>© {new Date().getFullYear()} UYUROOM HOTEL (ŞAHASTE ÇİNÇİK) · VKN: 9810713434. Tüm hakları saklıdır.</p>
           <div className="flex items-center gap-6">
             <Link to="/kvkk" className="hover:text-slate-400">Gizlilik ve Çerez Politikası</Link>
             <Link to="/kvkk" className="hover:text-slate-400">KVKK Aydınlatma Metni</Link>
