@@ -44,27 +44,28 @@ export const Navbar: React.FC = () => {
 
             <div className="flex items-center gap-1.5 sm:gap-3">
               {BRANCH_CONTACTS.map((branch) => (
-                <a
-                  key={branch.key}
-                  href={`tel:${branch.phoneRaw}`}
-                  className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md bg-amber-400/10 border border-amber-400/25 text-[11px] sm:text-xs font-bold text-amber-300 hover:bg-amber-400/20 hover:text-amber-200 transition-colors whitespace-nowrap"
-                  title={`${branch.name} - ${branch.phoneDisplay}`}
-                >
-                  <Phone className="w-3 h-3" />
-                  <span className="font-extrabold">{branch.city}:</span>
-                  <span className="tabular-nums">{branch.phoneDisplay}</span>
-                </a>
+                <div key={branch.key} className="inline-flex items-center gap-1">
+                  <a
+                    href={`tel:${branch.phoneRaw}`}
+                    className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md bg-amber-400/10 border border-amber-400/25 text-[11px] sm:text-xs font-bold text-amber-300 hover:bg-amber-400/20 hover:text-amber-200 transition-colors whitespace-nowrap"
+                    title={`${branch.name} - ${branch.phoneDisplay}`}
+                  >
+                    <Phone className="w-3 h-3" />
+                    <span className="font-extrabold">{branch.city}:</span>
+                    <span className="tabular-nums">{branch.phoneDisplay}</span>
+                  </a>
+                  <a
+                    href={buildWhatsAppLink(branch)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[#25D366]/15 border border-[#25D366]/35 text-emerald-300 hover:bg-[#25D366]/30 transition-colors"
+                    title={`${branch.city} şubesine WhatsApp ile yazın`}
+                    aria-label={`${branch.city} şubesine WhatsApp mesajı gönder`}
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               ))}
-
-              <a
-                href={buildWhatsAppLink(BRANCH_CONTACTS[0])}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#25D366]/15 border border-[#25D366]/35 text-xs font-bold text-emerald-300 hover:bg-[#25D366]/25 transition-colors"
-              >
-                <MessageCircle className="w-3 h-3" />
-                WhatsApp
-              </a>
             </div>
           </div>
         </div>
