@@ -294,16 +294,23 @@ export const PropertyDetail: React.FC = () => {
                         className="rounded-2xl border border-slate-200 p-4 flex flex-col sm:flex-row gap-4"
                       >
                         {room.images && (
-                          <img
-                            src={resolveRoomCoverUrl(parseList(room.images), hotel.image_url)}
-                            onError={handleImageError}
-                            alt={room.name}
-                            className="sm:w-40 h-32 object-cover rounded-xl"
-                            loading="lazy"
-                          />
+                          <Link to={`/room/${room.id}`} className="sm:w-40 shrink-0" aria-label={`${room.name} detaylarını gör`}>
+                            <img
+                              src={resolveRoomCoverUrl(parseList(room.images), hotel.image_url)}
+                              onError={handleImageError}
+                              alt={room.name}
+                              className="w-full h-32 object-cover rounded-xl"
+                              loading="lazy"
+                            />
+                          </Link>
                         )}
                         <div className="flex-1 space-y-1.5">
-                          <p className="font-bold text-slate-900">{room.name}</p>
+                          <Link to={`/room/${room.id}`} className="font-bold text-slate-900 hover:text-amber-600 transition-colors block">
+                            {room.name}
+                          </Link>
+                          <Link to={`/room/${room.id}`} className="text-[11px] font-semibold text-amber-600 hover:underline">
+                            Detayları gör →
+                          </Link>
                           <p className="text-xs text-slate-500 flex flex-wrap items-center gap-3">
                             <span className="flex items-center gap-1">
                               <BedDouble className="w-3.5 h-3.5" /> {room.bed_type || room.room_type}

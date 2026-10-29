@@ -14,8 +14,9 @@ interface RoomCardProps {
 
 export const RoomCard: React.FC<RoomCardProps> = ({ room, hotel, bookingQuery }) => {
   const amenitiesList = room.amenities
-    ? room.amenities.split(',').map((a) => a.trim()).slice(0, 4)
-    : ['Klima', 'Wi-Fi', 'Smart TV', 'Özel Banyo'];
+    ? room.amenities.split(',').map((a) => a.trim()).filter(Boolean).slice(0, 4)
+    : [];
+  const detailPath = `/room/${room.id}`;
 
   const imageUrl = resolveRoomCoverUrl(
     room.images?.split(',') || [],
@@ -25,7 +26,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, hotel, bookingQuery })
   return (
     <div className="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
       {/* Image & Badges */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+      <Link to={detailPath} className="relative block aspect-[16/10] overflow-hidden bg-slate-100 cursor-pointer" aria-label={`${room.name} detaylarını gör`}>
         <img
           src={imageUrl}
           onError={handleImageError}
@@ -60,16 +61,18 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, hotel, bookingQuery })
             </span>
           )}
         </div>
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="font-bold text-lg text-slate-900 group-hover:text-amber-600 transition-colors">
-                {room.name}
-              </h3>
+              <Link to={detailPath}>
+                <h3 className="font-bold text-lg text-slate-900 group-hover:text-amber-600 transition-colors">
+                  {room.name}
+                </h3>
+              </Link>
               {hotel && (
                 <p className="text-xs text-slate-500 mt-0.5">{hotel.name}</p>
               )}
@@ -77,7 +80,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, hotel, bookingQuery })
           </div>
 
           <p className="text-xs text-slate-600 line-clamp-2 mt-2 leading-relaxed">
-            {room.description || 'Modern olanaklar ve üstün uyku konforu sunan şık oda.'}
+            {room.description || ''}
           </p>
 
           {/* Bed info */}
@@ -124,7 +127,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, hotel, bookingQuery })
           </div>
 
           <div className="flex items-center gap-2">
-            <Link to={`/room/${room.id}`}>
+            <Link to={detailPath}>
               <Button variant="outline" size="sm" className="text-xs font-semibold !bg-transparent">
                 Detaylar
               </Button>
