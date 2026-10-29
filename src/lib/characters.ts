@@ -17,7 +17,13 @@ export const CHARACTERS: Record<CharacterRole, CharacterDef> = {
   },
 };
 
-export type CharacterClip = 'bekleme' | 'selam' | 'tepki';
+export type CharacterClip = 'bekleme' | 'selam' | 'tepki' | 'yurume';
+
+/**
+ * Yürüme videosu: ~1,7 sn'ye kadar yana döner ve yürümeye başlar, 1,71-2,75 sn arası kusursuz bir adım döngüsüdür,
+ * 3,8 sn'den sonra öne dönüp durur. Gezinirken bu aralık döngüye alınır.
+ */
+export const WALK_LOOP = { start: 1.71, end: 2.75 };
 
 /** Safari ve iOS şeffaf videoyu yalnızca HEVC (.mov) ile oynatır; diğer tarayıcılar WebM kullanır. */
 export const prefersHevc = (): boolean => {
