@@ -26,7 +26,19 @@ import { buildBranchMapLink, resolveBranchAddress } from '@/lib/contacts';
 import { BrandLogoMark } from '@/components/BrandLogo';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { logoutAdmin } from '@/lib/ota';
+import { logoutAdmin, parseList, serializeList, PROPERTY_TYPE_LABELS } from '@/lib/ota';
+import MediaUploader from '@/components/MediaUploader';
+
+const hotelInput = 'w-full h-11 px-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400/60 focus:border-amber-400';
+const hotelArea = 'w-full p-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400/60 focus:border-amber-400';
+
+const HotelField: React.FC<{ label: string; hint?: string; children: React.ReactNode }> = ({ label, hint, children }) => (
+  <label className="block">
+    <span className="block text-xs font-semibold text-slate-700 mb-1.5">{label}</span>
+    {children}
+    {hint && <span className="block text-[11px] text-slate-400 mt-1">{hint}</span>}
+  </label>
+);
 
 export const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'bookings' | 'rooms' | 'hotels' | 'inquiries'>('bookings');
@@ -49,7 +61,6 @@ export const AdminDashboard: React.FC = () => {
     description: '',
     image_url: '',
     features: '',
-    rating: 4.8,
     property_type: '',
     star_rating: '',
     district: '',
@@ -59,8 +70,6 @@ export const AdminDashboard: React.FC = () => {
     check_out_time: '12:00',
     legal_name: '',
     tax_number: '',
-    bank_name: '',
-    iban: '',
     payment_methods: '',
     gallery: '',
     cancellation_policy: '',
@@ -597,8 +606,8 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
             <div className="p-5 border-b border-slate-100 flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-slate-900 text-base">Otel Şubeleri (Adana, Uşak ve Yeni Şubeler)</h3>
-                <p className="text-xs text-slate-500">Yeni şehirler ve otel şubelerini buradan sisteme dahil edebilirsiniz.</p>
+                <h3 className="font-bold text-slate-900 text-base">Otel şubeleri</h3>
+                <p className="text-xs text-slate-500">Şube bilgilerini buradan düzenleyebilir, yeni şube ekleyebilirsiniz.</p>
               </div>
             </div>
 
@@ -623,43 +632,46 @@ export const AdminDashboard: React.FC = () => {
 
                   <p className="text-xs text-slate-600">{h.description}</p>
                   <p className="text-xs text-slate-500"><strong>Adres:</strong> {resolveBranchAddress(h.city, h.address)}</p>
-                  <a
-                    href={buildBranchMapLink(h.city, h.address, h.name)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-1 inline-flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg bg-slate-950 hover:bg-slate-900 text-amber-400 font-bold text-xs transition-colors border border-amber-500/40"
-                  >
-                    <Navigation className="w-3.5 h-3.5" /> Konuma Git
-                  </a>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      window.location.href = `/yonetim/tesis/${h.id}`;
-                    }}
-                    className="ml-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs min-h-[40px]"
-                  >
-                    Tesis Yönetim Merkezi
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setEditingHotelId(Number(h.id));
-                      setHotelForm({
-                        ...emptyHotelForm,
-                        ...Object.fromEntries(
-                          Object.keys(emptyHotelForm).map((k) => [
-                            k,
-                            (h as unknown as Record<string, string | number>)[k] ??
-                              (emptyHotelForm as Record<string, string | number>)[k],
-                          ]),
-                        ),
-                      });
-                      setShowHotelModal(true);
-                    }}
-                    className="ml-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs min-h-[40px]"
-                  >
-                    Tesisi Düzenle
-                  </Button>
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        window.location.href = `/yonetim/tesis/${h.id}`;
+                      }}
+                      className="bg-slate-950 hover:bg-slate-800 text-amber-400 font-bold text-xs min-h-[40px]"
+                    >
+                      Tesis yönetim merkezi
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setEditingHotelId(Number(h.id));
+                        setHotelForm({
+                          ...emptyHotelForm,
+                          ...Object.fromEntries(
+                            Object.keys(emptyHotelForm).map((k) => [
+                              k,
+                              (h as unknown as Record<string, string | number>)[k] ??
+                                (emptyHotelForm as Record<string, string | number>)[k],
+                            ]),
+                          ),
+                        });
+                        setShowHotelModal(true);
+                      }}
+                      className="font-bold text-xs min-h-[40px] !bg-transparent"
+                    >
+                      Bilgileri düzenle
+                    </Button>
+                    <a
+                      href={buildBranchMapLink(h.city, h.address, h.name)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 min-h-[40px] px-3 rounded-md text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+                    >
+                      <Navigation className="w-3.5 h-3.5" /> Konuma git
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
@@ -695,157 +707,129 @@ export const AdminDashboard: React.FC = () => {
         )}
       </div>
 
-      {/* Hotel Create Modal */}
+      {/* Hotel Create / Edit Modal */}
       {showHotelModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-xl font-bold text-slate-900">
-              {editingHotelId ? 'Tesis Bilgilerini Düzenle' : 'Yeni Otel Şubesi Ekle'}
-            </h3>
-            <form onSubmit={handleSaveHotel} className="space-y-3 text-xs">
-              <div>
-                <label className="font-bold block text-slate-700">Şube Adı *</label>
-                <input
-                  type="text"
-                  required
-                  value={hotelForm.name}
-                  onChange={(e) => setHotelForm({ ...hotelForm, name: e.target.value })}
-                  placeholder="Örn: UYUROOM Hotel İzmir"
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 mt-1"
-                />
-              </div>
+        <div className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+          <div className="bg-white rounded-2xl sm:rounded-3xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+            <div className="px-5 sm:px-8 py-5 border-b border-slate-100">
+              <h3 className="text-xl font-bold text-slate-900">
+                {editingHotelId ? 'Tesis Bilgilerini Düzenle' : 'Yeni Otel Şubesi Ekle'}
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Yıldızlı (*) alanlar zorunludur. Boş bıraktığınız alanlar sitede gösterilmez.
+              </p>
+            </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="font-bold block text-slate-700">Şehir *</label>
-                  <input
-                    type="text"
-                    required
-                    value={hotelForm.city}
-                    onChange={(e) => setHotelForm({ ...hotelForm, city: e.target.value })}
-                    placeholder="Örn: İzmir"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 mt-1"
-                  />
-                </div>
-                <div>
-                  <label className="font-bold block text-slate-700">Telefon</label>
-                  <input
-                    type="text"
-                    value={hotelForm.phone}
-                    onChange={(e) => setHotelForm({ ...hotelForm, phone: e.target.value })}
-                    placeholder="+90 232 123 45 67"
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 mt-1"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="font-bold block text-slate-700">Açık Adres</label>
-                <input
-                  type="text"
-                  value={hotelForm.address}
-                  onChange={(e) => setHotelForm({ ...hotelForm, address: e.target.value })}
-                  placeholder="Cadde, Mahalle, İlçe"
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 mt-1"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold block text-slate-700">Kapak Görseli URL</label>
-                <input
-                  type="text"
-                  value={hotelForm.image_url}
-                  onChange={(e) => setHotelForm({ ...hotelForm, image_url: e.target.value })}
-                  placeholder="https://..."
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 mt-1"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold block text-slate-700">Açıklama</label>
-                <textarea
-                  rows={2}
-                  value={hotelForm.description}
-                  onChange={(e) => setHotelForm({ ...hotelForm, description: e.target.value })}
-                  placeholder="Şube tanıtım açıklaması"
-                  className="w-full p-2.5 rounded-xl border border-slate-200 mt-1"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold block text-slate-700">Olanaklar (Virgülle ayırın)</label>
-                <input
-                  type="text"
-                  value={hotelForm.features}
-                  onChange={(e) => setHotelForm({ ...hotelForm, features: e.target.value })}
-                  placeholder="Açık Havuz, SPA, Vale Otopark, Kahvaltı"
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 mt-1"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                {([
-                  ['property_type', 'Tesis Tipi', 'Otel / Apart / Butik'],
-                  ['star_rating', 'Yıldız (1-5)', '4'],
-                  ['district', 'İlçe', 'Seyhan'],
-                  ['whatsapp', 'WhatsApp', '905058987666'],
-                  ['email', 'E-posta', 'info@uyuroom.com'],
-                  ['map_url', 'Harita Bağlantısı', 'https://maps.google.com/...'],
-                  ['check_in_time', 'Giriş Saati', '14:00'],
-                  ['check_out_time', 'Çıkış Saati', '12:00'],
-                  ['legal_name', 'Yasal Ünvan', 'UYUROOM Turizm Ltd. Şti.'],
-                  ['tax_number', 'Vergi No', '1234567890'],
-                  ['bank_name', 'Banka', 'Ziraat Bankası'],
-                  ['iban', 'IBAN', 'TR00 0000 0000 0000 0000 0000 00'],
-                  ['payment_methods', 'Ödeme Yöntemleri', 'Kapıda, Havale'],
-                ] as const).map(([key, label, ph]) => (
-                  <div key={key}>
-                    <label className="font-bold block text-slate-700">{label}</label>
-                    <input
-                      type="text"
-                      value={(hotelForm as Record<string, string | number>)[key] ?? ''}
-                      onChange={(e) => setHotelForm({ ...hotelForm, [key]: e.target.value })}
-                      placeholder={ph}
-                      className="w-full h-10 px-3 rounded-xl border border-slate-200 mt-1"
-                    />
+            <form onSubmit={handleSaveHotel} className="flex-1 flex flex-col min-h-0">
+              <div className="flex-1 overflow-y-auto px-5 sm:px-8 py-6 space-y-8 text-sm">
+                {/* Temel bilgiler */}
+                <fieldset className="space-y-4">
+                  <legend className="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100 w-full">Temel bilgiler</legend>
+                  <HotelField label="Şube adı *">
+                    <input type="text" required value={hotelForm.name as string} onChange={(e) => setHotelForm({ ...hotelForm, name: e.target.value })} placeholder="UYUROOM Hotel Uşak" className={hotelInput} />
+                  </HotelField>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <HotelField label="Şehir *">
+                      <input type="text" required value={hotelForm.city as string} onChange={(e) => setHotelForm({ ...hotelForm, city: e.target.value })} placeholder="Uşak" className={hotelInput} />
+                    </HotelField>
+                    <HotelField label="İlçe">
+                      <input type="text" value={hotelForm.district as string} onChange={(e) => setHotelForm({ ...hotelForm, district: e.target.value })} placeholder="Merkez" className={hotelInput} />
+                    </HotelField>
+                    <HotelField label="Tesis tipi">
+                      <select value={hotelForm.property_type as string} onChange={(e) => setHotelForm({ ...hotelForm, property_type: e.target.value })} className={hotelInput}>
+                        <option value="">Seçin</option>
+                        {Object.entries(PROPERTY_TYPE_LABELS).map(([v, l]) => (
+                          <option key={v} value={v}>{l}</option>
+                        ))}
+                      </select>
+                    </HotelField>
                   </div>
-                ))}
+                  <HotelField label="Tanıtım metni" hint="Tesis sayfasında ve arama sonuçlarında görünür. 2-3 cümle yeterli.">
+                    <textarea rows={3} value={hotelForm.description as string} onChange={(e) => setHotelForm({ ...hotelForm, description: e.target.value })} placeholder="Şehir merkezinde temiz ve konforlu odalar sunan otelimiz..." className={hotelArea} />
+                  </HotelField>
+                  <HotelField label="Öne çıkan olanaklar" hint="Virgülle ayırın. Örnek: Ücretsiz Wi-Fi, Klima, Kahvaltı Dahil, Ücretsiz Otopark">
+                    <input type="text" value={hotelForm.features as string} onChange={(e) => setHotelForm({ ...hotelForm, features: e.target.value })} placeholder="Ücretsiz Wi-Fi, Klima, 7/24 Resepsiyon" className={hotelInput} />
+                  </HotelField>
+                </fieldset>
+
+                {/* İletişim ve konum */}
+                <fieldset className="space-y-4">
+                  <legend className="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100 w-full">İletişim ve konum</legend>
+                  <HotelField label="Açık adres">
+                    <input type="text" value={hotelForm.address as string} onChange={(e) => setHotelForm({ ...hotelForm, address: e.target.value })} placeholder="Mahalle, sokak, no, ilçe / il" className={hotelInput} />
+                  </HotelField>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <HotelField label="Telefon">
+                      <input type="tel" value={hotelForm.phone as string} onChange={(e) => setHotelForm({ ...hotelForm, phone: e.target.value })} placeholder="0553 122 22 79" className={hotelInput} />
+                    </HotelField>
+                    <HotelField label="WhatsApp numarası" hint="Başında 90 ile, boşluksuz">
+                      <input type="tel" value={hotelForm.whatsapp as string} onChange={(e) => setHotelForm({ ...hotelForm, whatsapp: e.target.value })} placeholder="905531222279" className={hotelInput} />
+                    </HotelField>
+                    <HotelField label="E-posta">
+                      <input type="email" value={hotelForm.email as string} onChange={(e) => setHotelForm({ ...hotelForm, email: e.target.value })} placeholder="ornek@uyuroom.com" className={hotelInput} />
+                    </HotelField>
+                    <HotelField label="Google Haritalar bağlantısı">
+                      <input type="url" value={hotelForm.map_url as string} onChange={(e) => setHotelForm({ ...hotelForm, map_url: e.target.value })} placeholder="https://maps.app.goo.gl/..." className={hotelInput} />
+                    </HotelField>
+                  </div>
+                </fieldset>
+
+                {/* Fotoğraflar */}
+                <fieldset className="space-y-3">
+                  <legend className="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100 w-full">Fotoğraflar</legend>
+                  <p className="text-xs text-slate-500">
+                    Bilgisayarınızdan yükleyin. İlk sıradaki fotoğraf kapak görseli olur; sıralamayı ok butonlarıyla değiştirebilirsiniz.
+                  </p>
+                  <MediaUploader
+                    label="Tesis fotoğrafları"
+                    prefix={`hotel-${editingHotelId ?? 'new'}/gallery`}
+                    value={parseList(hotelForm.gallery as string)}
+                    onChange={(list: string[]) =>
+                      setHotelForm({ ...hotelForm, gallery: serializeList(list), image_url: list[0] || '' })
+                    }
+                  />
+                </fieldset>
+
+                {/* Konaklama kuralları */}
+                <fieldset className="space-y-4">
+                  <legend className="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100 w-full">Konaklama kuralları</legend>
+                  <div className="grid grid-cols-2 gap-4">
+                    <HotelField label="Giriş saati">
+                      <input type="time" value={hotelForm.check_in_time as string} onChange={(e) => setHotelForm({ ...hotelForm, check_in_time: e.target.value })} className={hotelInput} />
+                    </HotelField>
+                    <HotelField label="Çıkış saati">
+                      <input type="time" value={hotelForm.check_out_time as string} onChange={(e) => setHotelForm({ ...hotelForm, check_out_time: e.target.value })} className={hotelInput} />
+                    </HotelField>
+                  </div>
+                  <HotelField label="İptal politikası">
+                    <textarea rows={3} value={hotelForm.cancellation_policy as string} onChange={(e) => setHotelForm({ ...hotelForm, cancellation_policy: e.target.value })} placeholder="Örn: Girişten 24 saat öncesine kadar ücretsiz iptal." className={hotelArea} />
+                  </HotelField>
+                  <HotelField label="Tesis kuralları">
+                    <textarea rows={3} value={hotelForm.house_rules as string} onChange={(e) => setHotelForm({ ...hotelForm, house_rules: e.target.value })} placeholder="Örn: Odalarda sigara içilmez." className={hotelArea} />
+                  </HotelField>
+                  <HotelField label="Ödeme yöntemleri" hint="Virgülle ayırın.">
+                    <input type="text" value={hotelForm.payment_methods as string} onChange={(e) => setHotelForm({ ...hotelForm, payment_methods: e.target.value })} placeholder="Otelde ödeme, Havale / EFT" className={hotelInput} />
+                  </HotelField>
+                  <p className="text-xs text-slate-500">
+                    Banka hesapları (IBAN) için <strong>Tesis Yönetim Merkezi → Ayarlar & Kullanıcı</strong> bölümünü kullanın.
+                  </p>
+                </fieldset>
+
+                {/* Yasal bilgiler */}
+                <fieldset className="space-y-4">
+                  <legend className="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100 w-full">Yasal bilgiler</legend>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <HotelField label="Ticari ünvan">
+                      <input type="text" value={hotelForm.legal_name as string} onChange={(e) => setHotelForm({ ...hotelForm, legal_name: e.target.value })} placeholder="Şirket veya işletme ünvanı" className={hotelInput} />
+                    </HotelField>
+                    <HotelField label="Vergi kimlik no">
+                      <input type="text" inputMode="numeric" value={hotelForm.tax_number as string} onChange={(e) => setHotelForm({ ...hotelForm, tax_number: e.target.value })} placeholder="10 haneli vergi no" className={hotelInput} />
+                    </HotelField>
+                  </div>
+                </fieldset>
               </div>
 
-              <div>
-                <label className="font-bold block text-slate-700">Galeri Görselleri (virgülle)</label>
-                <textarea
-                  rows={2}
-                  value={hotelForm.gallery}
-                  onChange={(e) => setHotelForm({ ...hotelForm, gallery: e.target.value })}
-                  placeholder="https://... , https://..."
-                  className="w-full p-2.5 rounded-xl border border-slate-200 mt-1"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold block text-slate-700">İptal Politikası</label>
-                <textarea
-                  rows={2}
-                  value={hotelForm.cancellation_policy}
-                  onChange={(e) =>
-                    setHotelForm({ ...hotelForm, cancellation_policy: e.target.value })
-                  }
-                  className="w-full p-2.5 rounded-xl border border-slate-200 mt-1"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold block text-slate-700">Tesis Kuralları</label>
-                <textarea
-                  rows={2}
-                  value={hotelForm.house_rules}
-                  onChange={(e) => setHotelForm({ ...hotelForm, house_rules: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 mt-1"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-4 border-t border-slate-100">
+              <div className="px-5 sm:px-8 py-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
                 <Button
                   type="button"
                   variant="outline"
@@ -855,10 +839,10 @@ export const AdminDashboard: React.FC = () => {
                     setHotelForm(emptyHotelForm);
                   }}
                 >
-                  İptal
+                  Vazgeç
                 </Button>
                 <Button type="submit" className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold">
-                  {editingHotelId ? 'Değişiklikleri Kaydet' : 'Kaydet & Ekle'}
+                  {editingHotelId ? 'Değişiklikleri kaydet' : 'Şubeyi ekle'}
                 </Button>
               </div>
             </form>
