@@ -1,7 +1,8 @@
 /**
  * Reklam / analiz takibi (GA4, Google Ads, Meta Pixel).
  * Kimlikler .env.production içindeki VITE_* değişkenlerinden okunur; boşsa hiçbir şey yüklenmez.
- * Takip yalnızca ziyaretçi "Kabul Et" derse başlar (KVKK / çerez onayı).
+ * Google etiketi index.html içinde Consent Mode v2 ile (varsayılan: reddedildi) yüklenir;
+ * ziyaretçi "Kabul Et" derse izinler güncellenir. Meta Pixel yalnızca onayla yüklenir.
  */
 type Dict = Record<string, unknown>;
 
@@ -49,22 +50,25 @@ function loadScript(src: string) {
   document.head.appendChild(s);
 }
 
+function grantGoogle() {
+  window.gtag?.('consent', 'update', {
+    ad_storage: 'granted',
+    analytics_storage: 'granted',
+    ad_user_data: 'granted',
+    ad_personalization: 'granted',
+  });
+}
+
+// Google Ads etiketi (Consent Mode izinlere göre davranır)
+if (typeof window !== 'undefined' && ADS) window.gtag?.('config', ADS);
+// Daha önce onay verilmişse ilk sayfa görüntülemeden önce izinleri uygula
+if (typeof window !== 'undefined' && getConsent() === 'granted') grantGoogle();
+
 export function startTracking() {
   if (started || getConsent() !== 'granted' || !trackingConfigured) return;
   started = true;
 
-  const gId = GA4 || ADS;
-  if (gId) {
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag() {
-      // eslint-disable-next-line prefer-rest-params
-      window.dataLayer!.push(arguments);
-    };
-    window.gtag('js', new Date());
-    if (GA4) window.gtag('config', GA4, { send_page_view: false });
-    if (ADS) window.gtag('config', ADS);
-    loadScript(`https://www.googletagmanager.com/gtag/js?id=${gId}`);
-  }
+  grantGoogle();
 
   if (PIXEL) {
     const f = function (...args: unknown[]) {
@@ -75,28 +79,25 @@ export function startTracking() {
     window.fbq = f;
     loadScript('https://connect.facebook.net/en_US/fbevents.js');
     window.fbq('init', PIXEL);
+    window.fbq('track', 'PageView');
   }
-
-  trackPageView(window.location.pathname + window.location.search);
 }
 
-const active = () => started && getConsent() === 'granted';
+const metaOn = () => started && getConsent() === 'granted';
 
 export function trackPageView(path: string) {
-  if (!active()) return;
   window.gtag?.('event', 'page_view', { page_path: path, page_location: window.location.href });
-  window.fbq?.('track', 'PageView');
+  metaOn() && window.fbq?.('track', 'PageView');
 }
 
 /** Oda sayfası görüntüleme. */
 export function trackViewRoom(room: { id: number | string; name: string; price: number; hotel?: string }) {
-  if (!active()) return;
   window.gtag?.('event', 'view_item', {
     currency: 'TRY',
     value: room.price,
     items: [{ item_id: String(room.id), item_name: room.name, item_category: room.hotel, price: room.price }],
   });
-  window.fbq?.('track', 'ViewContent', {
+  metaOn() && window.fbq?.('track', 'ViewContent', {
     content_ids: [String(room.id)],
     content_name: room.name,
     content_type: 'product',
@@ -107,18 +108,16 @@ export function trackViewRoom(room: { id: number | string; name: string; price: 
 
 /** Rezervasyon sayfası açıldı. */
 export function trackBeginBooking(p: { value: number; roomId: number | string; roomName: string }) {
-  if (!active()) return;
   window.gtag?.('event', 'begin_checkout', {
     currency: 'TRY',
     value: p.value,
     items: [{ item_id: String(p.roomId), item_name: p.roomName }],
   });
-  window.fbq?.('track', 'InitiateCheckout', { value: p.value, currency: 'TRY' });
+  metaOn() && window.fbq?.('track', 'InitiateCheckout', { value: p.value, currency: 'TRY' });
 }
 
 /** Rezervasyon tamamlandı (dönüşüm). */
 export function trackBookingComplete(p: { code: string; value: number; roomId: number | string; roomName: string }) {
-  if (!active()) return;
   window.gtag?.('event', 'purchase', {
     transaction_id: p.code,
     currency: 'TRY',
@@ -133,12 +132,11 @@ export function trackBookingComplete(p: { code: string; value: number; roomId: n
       transaction_id: p.code,
     });
   }
-  window.fbq?.('track', 'Purchase', { value: p.value, currency: 'TRY' }, { eventID: p.code });
+  metaOn() && window.fbq?.('track', 'Purchase', { value: p.value, currency: 'TRY' }, { eventID: p.code });
 }
 
 /** Telefon / WhatsApp tıklaması. */
 export function trackContactClick(kind: 'phone' | 'whatsapp') {
-  if (!active()) return;
   window.gtag?.('event', 'contact', { method: kind });
-  window.fbq?.('track', 'Contact');
+  metaOn() && window.fbq?.('track', 'Contact');
 }
