@@ -74,6 +74,11 @@ export default defineConfig(({ command }) => {
     build: {
       rollupOptions: {
         output: {
+          // Yeni yol: Vercel 404 yanıtlarını da 'immutable' önbelleğe aldığı için, yayın sırasında
+          // takılı kalan eski 404'lerden kaçınmak üzere dosya yolu değiştirildi.
+          entryFileNames: 'assets/js/[name]-[hash].js',
+          chunkFileNames: 'assets/js/[name]-[hash].js',
+          assetFileNames: 'assets/static/[name]-[hash][extname]',
           manualChunks: {
             // Vendor chunks
             'react-vendor': ['react', 'react-dom'],
