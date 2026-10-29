@@ -25,8 +25,8 @@ export const CookieBanner: React.FC = () => {
       <div className="max-w-3xl mx-auto bg-slate-900 text-slate-100 rounded-2xl border border-slate-700 shadow-2xl p-4 flex flex-col sm:flex-row sm:items-center gap-3">
         <p className="text-xs sm:text-sm leading-relaxed flex-1">
           Sitemizi geliştirmek ve reklam performansını ölçmek için çerezler kullanıyoruz. Ayrıntılar için{' '}
-          <Link to="/policies" className="underline text-amber-400">
-            politikalarımıza
+          <Link to="/kvkk#cerezler" className="underline text-amber-400">
+            çerez politikamıza
           </Link>{' '}
           bakabilirsiniz.
         </p>

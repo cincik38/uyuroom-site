@@ -41,6 +41,13 @@ export function setConsent(value: 'granted' | 'denied') {
     /* yoksay */
   }
   if (value === 'granted') startTracking();
+  else
+    window.gtag?.('consent', 'update', {
+      ad_storage: 'denied',
+      analytics_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+    });
 }
 
 function loadScript(src: string) {

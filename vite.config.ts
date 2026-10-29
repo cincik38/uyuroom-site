@@ -48,7 +48,7 @@ export default defineConfig(({ command }) => {
       Sitemap({
         hostname: process.env.VITE_SITE_URL,
         exclude: ['/yonetim', '/tesis', '/giris', '/admin', '/partner', '/auth'],
-        dynamicRoutes: ['/tesisler', '/about', '/contact', '/policies', '/booking-query'],
+        dynamicRoutes: ['/tesisler', '/about', '/contact', '/policies', '/kvkk', '/booking-query'],
         lastmod: getSitemapLastmod(),
         readable: true,
         generateRobotsTxt: false,

@@ -523,7 +523,7 @@ export const BookingPage: React.FC = () => {
               </Button>
 
               <p className="text-[10px] text-center text-slate-400">
-                Rezervasyon yaparak UYUROOM Konaklama ve İptal Şartlarını kabul etmiş olursunuz.
+                Rezervasyon yaparak <Link to="/policies" className="underline">Konaklama ve İptal Şartlarını</Link> kabul etmiş, <Link to="/kvkk" className="underline">KVKK Aydınlatma Metni</Link>'ni okumuş olursunuz.
               </p>
             </div>
           </div>

@@ -10,6 +10,7 @@ import BookingConfirmation from './pages/BookingConfirmation';
 import BookingQuery from './pages/BookingQuery';
 import About from './pages/About';
 import Policies from './pages/Policies';
+import Kvkk from './pages/Kvkk';
 import Contact from './pages/Contact';
 import Properties from './pages/Properties';
 import PropertyDetail from './pages/PropertyDetail';
@@ -69,6 +70,7 @@ const AppRoutes = () => (
     <Route path="/booking-query" element={<BookingQuery />} />
     <Route path="/about" element={<About />} />
     <Route path="/policies" element={<Policies />} />
+    <Route path="/kvkk" element={<Kvkk />} />
     <Route path="/contact" element={<Contact />} />
     <Route path="/blog" element={<BlogIndexPage />} />
     <Route path="/blog/:slug" element={<BlogPostPage />} />
