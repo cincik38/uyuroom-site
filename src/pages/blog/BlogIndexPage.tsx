@@ -8,7 +8,7 @@ const BlogIndexPage = () => (
   <div className="min-h-screen bg-slate-100 flex flex-col">
     <Navbar />
 
-    <section className="pt-28 pb-12 bg-slate-950 text-white relative overflow-hidden">
+    <section className="pt-36 pb-12 bg-slate-950 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(251,191,36,0.18),transparent_55%)]" />
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-4">
         <span className="inline-flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-widest">

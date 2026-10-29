@@ -58,7 +58,7 @@ export const BookingQuery: React.FC = () => {
       <Navbar />
 
       {/* Header */}
-      <div className="pt-28 pb-12 bg-slate-950 text-white border-b border-slate-800">
+      <div className="pt-36 pb-12 bg-slate-950 text-white border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
           <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Rezervasyon Sorgulama</span>
           <h1 className="text-3xl sm:text-5xl font-black text-white">Rezervasyonunuzu Görüntüleyin</h1>

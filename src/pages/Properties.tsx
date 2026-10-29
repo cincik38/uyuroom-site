@@ -142,7 +142,7 @@ export const Properties: React.FC = () => {
     <div className="min-h-screen bg-slate-100 flex flex-col">
       <Navbar />
 
-      <section className="pt-24 pb-8 bg-slate-950 text-white">
+      <section className="pt-36 pb-8 bg-slate-950 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
           <div className="space-y-2">
             <span className="inline-flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-widest">

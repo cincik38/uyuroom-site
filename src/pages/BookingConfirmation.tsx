@@ -91,7 +91,7 @@ export const BookingConfirmation: React.FC = () => {
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       <Navbar />
 
-      <div className="pt-28 pb-12 flex-1 max-w-4xl mx-auto px-4 sm:px-6 w-full">
+      <div className="pt-36 pb-12 flex-1 max-w-4xl mx-auto px-4 sm:px-6 w-full">
         {loading ? (
           <div className="text-center py-20">
             <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />

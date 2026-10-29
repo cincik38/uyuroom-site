@@ -214,7 +214,7 @@ export const BookingPage: React.FC = () => {
       <Navbar />
 
       {/* Header */}
-      <div className="pt-28 pb-8 bg-slate-950 text-white border-b border-slate-800">
+      <div className="pt-36 pb-8 bg-slate-950 text-white border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link to="/tesisler" className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-amber-400 mb-3">
             <ArrowLeft className="w-4 h-4" /> Oda Seçimine Dön

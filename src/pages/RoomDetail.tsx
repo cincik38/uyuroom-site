@@ -108,7 +108,7 @@ export const RoomDetail: React.FC = () => {
       <Navbar />
 
       {/* Header Back Bar */}
-      <div className="pt-24 pb-4 bg-slate-900 text-white">
+      <div className="pt-36 pb-4 bg-slate-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <Link to="/tesisler" className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-amber-400 transition-colors">
             <ArrowLeft className="w-4 h-4" /> Tüm Odalara Dön

@@ -227,7 +227,7 @@ export const AdminDashboard: React.FC = () => {
       <Navbar />
 
       {/* Admin Top Banner */}
-      <div className="pt-28 pb-8 bg-slate-950 text-white border-b border-slate-800">
+      <div className="pt-36 pb-8 bg-slate-950 text-white border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
             <BrandLogoMark size={54} className="hidden sm:block shrink-0" />
