@@ -48,3 +48,13 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Personel karakterleri: yürürken hafif zıplama */
+@keyframes char-hop {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -5%; }
+}
+.char-hop { animation: char-hop 0.42s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .char-hop { animation: none; }
+}
