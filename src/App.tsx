@@ -11,6 +11,7 @@ import BookingQuery from './pages/BookingQuery';
 import About from './pages/About';
 import Policies from './pages/Policies';
 import Kvkk from './pages/Kvkk';
+import StaffEntry from './pages/StaffEntry';
 import Contact from './pages/Contact';
 import Properties from './pages/Properties';
 import PropertyDetail from './pages/PropertyDetail';
@@ -71,6 +72,7 @@ const AppRoutes = () => (
     <Route path="/about" element={<About />} />
     <Route path="/policies" element={<Policies />} />
     <Route path="/kvkk" element={<Kvkk />} />
+    <Route path="/personel" element={<StaffEntry />} />
     <Route path="/contact" element={<Contact />} />
     <Route path="/blog" element={<BlogIndexPage />} />
     <Route path="/blog/:slug" element={<BlogPostPage />} />

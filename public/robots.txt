@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /yonetim
+Disallow: /personel
 Disallow: /tesis/yonetim
 Disallow: /tesis/panel
 Disallow: /admin

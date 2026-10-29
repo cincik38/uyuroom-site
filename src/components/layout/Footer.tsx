@@ -144,6 +144,7 @@ export const Footer: React.FC = () => {
             <Link to="/kvkk" className="hover:text-slate-400">Gizlilik ve Çerez Politikası</Link>
             <Link to="/kvkk" className="hover:text-slate-400">KVKK Aydınlatma Metni</Link>
             <Link to="/policies" className="hover:text-slate-400">İptal ve İade Koşulları</Link>
+            <Link to="/personel" className="hover:text-slate-400">Personel Girişi</Link>
           </div>
         </div>
       </div>
