@@ -21,27 +21,26 @@ export const CookieBanner: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-[60] p-3 sm:p-4">
-      <div className="max-w-3xl mx-auto bg-slate-900 text-slate-100 rounded-2xl border border-slate-700 shadow-2xl p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+    <div className="fixed bottom-0 inset-x-0 z-[60] p-2 sm:p-4">
+      <div className="max-w-3xl mx-auto bg-slate-900 text-slate-100 rounded-xl sm:rounded-2xl border border-slate-700 shadow-2xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3">
         <p className="text-xs sm:text-sm leading-relaxed flex-1">
-          Sitemizi geliştirmek ve reklam performansını ölçmek için çerezler kullanıyoruz. Ayrıntılar için{' '}
+          Sitemizi geliştirmek ve reklam performansını ölçmek için çerez kullanıyoruz.{' '}
           <Link to="/kvkk#cerezler" className="underline text-amber-400">
-            çerez politikamıza
-          </Link>{' '}
-          bakabilirsiniz.
+            Çerez politikası
+          </Link>
         </p>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 shrink-0 [&>button]:flex-1 sm:[&>button]:flex-none">
           <button
             type="button"
             onClick={() => choose('denied')}
-            className="px-4 py-2 rounded-lg text-xs font-bold bg-slate-700 hover:bg-slate-600"
+            className="px-4 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-slate-700 hover:bg-slate-600"
           >
             Reddet
           </button>
           <button
             type="button"
             onClick={() => choose('granted')}
-            className="px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-950"
+            className="px-4 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-950"
           >
             Kabul Et
           </button>
