@@ -395,6 +395,7 @@ export const Index: React.FC = () => {
         </div>
       </section>
 
+      <Footer />
     </div>
   );
 };
