@@ -193,14 +193,47 @@ export async function loginWithCredentials(
   return { ok: true, session };
 }
 
-/** Oturumun hâlâ geçerli olduğunu sunucudan doğrular. */
-export async function verifyAdminSession(): Promise<boolean> {
+/** Yönetim oturumu en fazla bu kadar açık kalır; sonra yeniden şifre istenir. */
+export const ADMIN_SESSION_MAX_HOURS = 12;
+
+/**
+ * Oturumu ve rolü sunucudan doğrular. Tarayıcıda saklanan bilgiye güvenilmez:
+ * jeton Supabase'e sorulur, rol is_admin / is_marketing fonksiyonlarından alınır,
+ * son girişten bu yana süre sınırı aşıldıysa oturum kapatılır.
+ */
+export async function verifyAdminSession(): Promise<OtaSession | null> {
+  const fail = async () => {
+    await supabase.auth.signOut().catch(() => undefined);
+    clearSession();
+    return null;
+  };
   const { data } = await supabase.auth.getSession();
   if (!data.session) {
     clearSession();
-    return false;
+    return null;
   }
-  return true;
+  const { data: userData, error } = await supabase.auth.getUser();
+  if (error || !userData.user) return fail();
+
+  const signedInAt = userData.user.last_sign_in_at ? new Date(userData.user.last_sign_in_at).getTime() : 0;
+  if (!signedInAt || Date.now() - signedInAt > ADMIN_SESSION_MAX_HOURS * 3600 * 1000) return fail();
+
+  const { data: isAdmin } = await supabase.rpc('is_admin');
+  let role: OtaRole | null = isAdmin ? 'super_admin' : null;
+  if (!role) {
+    const { data: isMarketing } = await supabase.rpc('is_marketing');
+    if (isMarketing) role = 'reklam';
+  }
+  if (!role) return fail();
+
+  const session: OtaSession = {
+    role,
+    email: userData.user.email || '',
+    name: role === 'reklam' ? 'Reklam' : 'Yönetici',
+    loggedAt: new Date(signedInAt).toISOString(),
+  };
+  setSession(session);
+  return session;
 }
 
 export async function logoutAdmin(): Promise<void> {

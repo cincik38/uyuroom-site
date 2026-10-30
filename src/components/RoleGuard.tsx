@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getSession, homeForRole, verifyAdminSession, OtaRole, OtaSession } from '@/lib/ota';
+import { homeForRole, verifyAdminSession, OtaRole, OtaSession } from '@/lib/ota';
 
 interface RoleGuardProps {
   allow: OtaRole[];
@@ -15,14 +15,13 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({ allow, children }) => {
   const [session, setSession] = useState<OtaSession | null | undefined>(undefined);
 
   useEffect(() => {
-    verifyAdminSession().then((ok) => setSession(ok ? getSession() : null));
-    const sync = () => setSession(getSession());
-    window.addEventListener('uyuroom-session-change', sync);
-    window.addEventListener('storage', sync);
-    return () => {
-      window.removeEventListener('uyuroom-session-change', sync);
-      window.removeEventListener('storage', sync);
+    verifyAdminSession().then((verified) => setSession(verified));
+    // Başka sekmede çıkış yapılırsa bu sekme de sunucudan yeniden doğrular
+    const recheck = () => {
+      verifyAdminSession().then((verified) => setSession(verified));
     };
+    window.addEventListener('storage', recheck);
+    return () => window.removeEventListener('storage', recheck);
   }, []);
 
   if (session === undefined) {
