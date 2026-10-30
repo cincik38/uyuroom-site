@@ -1,7 +1,7 @@
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Index from './pages/Index';
 import RoomDetail from './pages/RoomDetail';
@@ -14,6 +14,7 @@ import Kvkk from './pages/Kvkk';
 import StaffEntry from './pages/StaffEntry';
 import CharacterPreview from './pages/CharacterPreview';
 import TrackingSettings from './pages/admin/TrackingSettings';
+const AdsCenter = lazy(() => import('./pages/admin/ads/AdsCenter'));
 import Contact from './pages/Contact';
 import Properties from './pages/Properties';
 import PropertyDetail from './pages/PropertyDetail';
@@ -97,6 +98,16 @@ const AppRoutes = () => (
       element={
         <RoleGuard allow={['super_admin', 'reklam']}>
           <TrackingSettings />
+        </RoleGuard>
+      }
+    />
+    <Route
+      path="/yonetim/reklam"
+      element={
+        <RoleGuard allow={['super_admin', 'reklam']}>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-9 h-9 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" /></div>}>
+            <AdsCenter />
+          </Suspense>
         </RoleGuard>
       }
     />

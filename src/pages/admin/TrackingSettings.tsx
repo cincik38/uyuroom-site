@@ -84,7 +84,7 @@ const Section: React.FC<{ title: string; active: boolean; children: React.ReactN
 );
 
 /** Reklamcı ve yönetici için: Analytics, Google Ads ve Meta Pixel kimliklerini girme sayfası. */
-export const TrackingSettings: React.FC = () => {
+export const TrackingSettings: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const session = getSession();
   const [saved, setSaved] = useState<Values>(EMPTY);
   const [values, setValues] = useState<Values>(EMPTY);
@@ -94,13 +94,14 @@ export const TrackingSettings: React.FC = () => {
   const [stamp, setStamp] = useState<{ at: string; by: string } | null>(null);
 
   useEffect(() => {
+    if (embedded) return;
     document.title = 'Takip Kodları | UYUROOM HOTEL';
     const meta = document.createElement('meta');
     meta.name = 'robots';
     meta.content = 'noindex, nofollow';
     document.head.appendChild(meta);
     return () => meta.remove();
-  }, []);
+  }, [embedded]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -174,7 +175,8 @@ export const TrackingSettings: React.FC = () => {
     : null;
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900">
+    <div className={embedded ? 'text-slate-900' : 'min-h-screen bg-slate-100 text-slate-900'}>
+      {!embedded && (
       <header className="bg-slate-950 text-white border-b border-slate-800">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
           <BrandLogo size={44} tagline="Takip Kodları" />
@@ -197,21 +199,22 @@ export const TrackingSettings: React.FC = () => {
           </div>
         </div>
       </header>
+      )}
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+      <main className={embedded ? 'space-y-6' : 'max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6'}>
         <div className="space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight">Takip Kodları</h1>
+          {!embedded && <h1 className="text-2xl sm:text-3xl font-black tracking-tight">Takip Kodları</h1>}
           <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
             Google Analytics, Google Ads ve Meta Pixel kimliklerini buraya girin. Kaydedince siteye otomatik eklenir, ayrıca
             kod yüklemeniz gerekmez. Ziyaretçi çerez bandında kabul etmeden hiçbir takip çalışmaz.
           </p>
-          <p className="flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-xs text-amber-900 leading-relaxed max-w-2xl">
+          {!embedded && <p className="flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-xs text-amber-900 leading-relaxed max-w-2xl">
             <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
             <span>
               Bu hesap yalnızca bu sayfayı kullanabilir. Rezervasyonlara ve misafir bilgilerine erişimi yoktur.
               {session?.email ? ` Giriş yapan: ${session.email}` : ''}
             </span>
-          </p>
+          </p>}
         </div>
 
         {loading ? (

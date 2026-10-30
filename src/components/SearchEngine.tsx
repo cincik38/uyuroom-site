@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Hotel } from '@/lib/types';
 import { GuestSelector } from '@/components/GuestSelector';
 import { format, addDays } from 'date-fns';
+import { trackSearch } from '@/lib/analytics';
 
 interface SearchEngineProps {
   hotels: Hotel[];
@@ -36,6 +37,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({ hotels, compact = fa
     params.set('adults', adults.toString());
     params.set('children', childrenCount.toString());
 
+    trackSearch({ checkIn, checkOut, guests: adults + childrenCount });
     navigate(`/tesisler?${params.toString()}`);
   };
 

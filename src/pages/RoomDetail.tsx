@@ -49,7 +49,7 @@ export const RoomDetail: React.FC = () => {
         const res = await client.entities.rooms.get({ id });
         if (res?.data) {
           setRoom(res.data);
-          trackViewRoom({ id: res.data.id, name: res.data.name, price: Number(res.data.discounted_price || res.data.price_per_night || 0) });
+          trackViewRoom({ id: res.data.id, name: res.data.name, price: Number(res.data.discounted_price || res.data.price_per_night || 0), hotelId: res.data.hotel_id });
           // fetch associated hotel
           if (res.data.hotel_id) {
             const hotelRes = await client.entities.hotels.get({ id: res.data.hotel_id.toString() });

@@ -105,7 +105,7 @@ export const BookingPage: React.FC = () => {
           const roomRes = await client.entities.rooms.get({ id: roomIdParam });
           if (roomRes?.data) {
             setRoom(roomRes.data);
-            trackBeginBooking({ value: Number(roomRes.data.discounted_price || roomRes.data.price_per_night || 0), roomId: roomRes.data.id, roomName: roomRes.data.name });
+            trackBeginBooking({ value: Number(roomRes.data.discounted_price || roomRes.data.price_per_night || 0), roomId: roomRes.data.id, roomName: roomRes.data.name, hotelId: roomRes.data.hotel_id });
             const targetHotelId = roomRes.data.hotel_id || hotelIdParam;
             if (targetHotelId) {
               const hotelRes = await client.entities.hotels.get({ id: targetHotelId.toString() });
@@ -189,6 +189,8 @@ export const BookingPage: React.FC = () => {
         value: Number(bookingPayload.total_price || 0),
         roomId: bookingPayload.room_id as number,
         roomName: String(room?.name || ''),
+        hotelId: bookingPayload.hotel_id as number,
+        nights,
       });
       toast.success('Rezervasyonunuz başarıyla oluşturuldu!');
       navigate(`/booking-confirmation?code=${bookingCode}`);

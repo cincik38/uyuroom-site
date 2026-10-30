@@ -47,7 +47,7 @@ export const OtaLogin: React.FC<OtaLoginProps> = ({ mode = 'admin' }) => {
 
     toast.success('Giriş başarılı. Hoş geldiniz!');
     const home = homeForRole(result.session.role);
-    const target = next.startsWith('/yonetim') && (result.session.role !== 'reklam' || next.startsWith('/yonetim/takip')) ? next : home;
+    const target = next.startsWith('/yonetim') && (result.session.role !== 'reklam' || (next.startsWith('/yonetim/takip') || next.startsWith('/yonetim/reklam'))) ? next : home;
     navigate(target, { replace: true });
   };
 

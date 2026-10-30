@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { MessageCircle, X, Phone } from 'lucide-react';
 import { BRANCH_CONTACTS, buildWhatsAppLink } from '@/lib/contacts';
 
@@ -9,6 +10,8 @@ import { BRANCH_CONTACTS, buildWhatsAppLink } from '@/lib/contacts';
  */
 export const WhatsAppWidget: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+  if (pathname.startsWith('/yonetim') || pathname.startsWith('/personel')) return null;
 
   return (
     <div className="fixed bottom-5 right-5 z-[60] flex flex-col items-end gap-3 print:hidden">

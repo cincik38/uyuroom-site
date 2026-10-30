@@ -128,7 +128,7 @@ export interface OtaSession {
 }
 
 /** Role göre giriş sonrası ilk sayfa */
-export const homeForRole = (role: OtaRole): string => (role === 'reklam' ? '/yonetim/takip' : '/yonetim/panel');
+export const homeForRole = (role: OtaRole): string => (role === 'reklam' ? '/yonetim/reklam' : '/yonetim/panel');
 
 export function getSession(): OtaSession | null {
   try {

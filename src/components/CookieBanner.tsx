@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getConsent, onTrackingReady, setConsent, startTracking } from '@/lib/analytics';
 
-/** Çerez / takip onay bandı. Takip kimliği tanımlı değilse hiç görünmez. */
+/** Çerez / ölçüm onay bandı. Seçim yapılana kadar görünür. */
 export const CookieBanner: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const { pathname } = useLocation();
 
   useEffect(() => {
     let alive = true;
-    void onTrackingReady().then((configured) => {
-      if (!alive || !configured) return;
+    void onTrackingReady().then(() => {
+      if (!alive) return;
       const c = getConsent();
       if (c === null) setVisible(true);
       else if (c === 'granted') startTracking();

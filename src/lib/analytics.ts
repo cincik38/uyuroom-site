@@ -6,6 +6,9 @@
  * .env.production içindeki VITE_* değerleri kullanılır. Boşsa ilgili etiket hiç yüklenmez.
  * Google etiketi Consent Mode v2 ile çalışır (index.html'de varsayılan: reddedildi);
  * ziyaretçi "Kabul Et" derse izinler güncellenir. Meta Pixel yalnızca onayla yüklenir.
+ *
+ * Ayrıca Reklam Merkezi için birinci taraf, kişisel veri içermeyen sayaç olayları `track_event` ile
+ * Supabase'e yazılır (yalnızca çerez onayıyla; ad, e-posta, telefon, IP hiçbir zaman gönderilmez).
  */
 import { supabase } from '@/lib/supabase';
 
@@ -133,8 +136,10 @@ export function setConsent(value: 'granted' | 'denied') {
   } catch {
     /* yoksay */
   }
-  if (value === 'granted') startTracking();
-  else
+  if (value === 'granted') {
+    startTracking();
+    collectCurrentPage();
+  } else
     window.gtag?.('consent', 'update', {
       ad_storage: 'denied',
       analytics_storage: 'denied',
@@ -234,10 +239,12 @@ export function trackPageView(path: string) {
   if (path.startsWith('/yonetim') || path.startsWith('/karakter-onizleme') || path.startsWith('/personel')) return;
   gt('event', 'page_view', { page_path: path, page_location: window.location.href });
   metaOn() && window.fbq?.('track', 'PageView');
+  collect('page_view', { path });
 }
 
 /** Oda sayfası görüntüleme. */
-export function trackViewRoom(room: { id: number | string; name: string; price: number; hotel?: string }) {
+export function trackViewRoom(room: { id: number | string; name: string; price: number; hotel?: string; hotelId?: number | string | null }) {
+  collect('view_room', { path: window.location.pathname, room_id: room.id, hotel_id: room.hotelId, props: { name: room.name } });
   gt('event', 'view_item', {
     currency: 'TRY',
     value: room.price,
@@ -253,7 +260,8 @@ export function trackViewRoom(room: { id: number | string; name: string; price: 
 }
 
 /** Rezervasyon sayfası açıldı. */
-export function trackBeginBooking(p: { value: number; roomId: number | string; roomName: string }) {
+export function trackBeginBooking(p: { value: number; roomId: number | string; roomName: string; hotelId?: number | string | null }) {
+  collect('begin_booking', { path: window.location.pathname, room_id: p.roomId, hotel_id: p.hotelId, value: p.value, props: { name: p.roomName } });
   gt('event', 'begin_checkout', {
     currency: 'TRY',
     value: p.value,
@@ -263,7 +271,8 @@ export function trackBeginBooking(p: { value: number; roomId: number | string; r
 }
 
 /** Rezervasyon tamamlandı (dönüşüm). */
-export function trackBookingComplete(p: { code: string; value: number; roomId: number | string; roomName: string }) {
+export function trackBookingComplete(p: { code: string; value: number; roomId: number | string; roomName: string; hotelId?: number | string | null; nights?: number }) {
+  collect('booking_complete', { path: window.location.pathname, room_id: p.roomId, hotel_id: p.hotelId, value: p.value, code: p.code, props: { name: p.roomName, nights: p.nights } });
   gt('event', 'purchase', {
     transaction_id: p.code,
     currency: 'TRY',
@@ -283,10 +292,212 @@ export function trackBookingComplete(p: { code: string; value: number; roomId: n
 
 /** Telefon / WhatsApp tıklaması. */
 export function trackContactClick(kind: 'phone' | 'whatsapp') {
+  collect('contact_click', { path: window.location.pathname, props: { kind } });
   gt('event', 'contact', { method: kind });
   const label = kind === 'phone' ? cfg.adsPhone : cfg.adsWhatsapp;
   if (cfg.ads && label) gt('event', 'conversion', { send_to: `${cfg.ads}/${label}` });
   metaOn() && window.fbq?.('track', 'Contact');
+}
+
+/** Arama formu gönderildi. */
+export function trackSearch(p: { checkIn: string; checkOut: string; guests: number }) {
+  gt('event', 'search', { search_term: `${p.checkIn}_${p.checkOut}` });
+  collect('search', { path: window.location.pathname, props: { check_in: p.checkIn, check_out: p.checkOut, guests: p.guests } });
+}
+
+/* ------------------------------------------------------------------ */
+/* Birinci taraf ölçüm (Reklam Merkezi)                                */
+/* ------------------------------------------------------------------ */
+
+type EventType = 'page_view' | 'view_room' | 'search' | 'begin_booking' | 'booking_complete' | 'contact_click';
+
+interface Attr {
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  term?: string;
+  content?: string;
+  click_id?: string;
+  ref_host?: string;
+}
+
+interface Sess {
+  id: string;
+  t: number;
+  n: number;
+  a: Attr;
+}
+
+const SESSION_KEY = 'uyu_sid_v1';
+const SESSION_MS = 30 * 60 * 1000;
+const CLICK_IDS = ['gclid', 'gbraid', 'wbraid', 'fbclid', 'msclkid', 'ttclid'] as const;
+const NO_COLLECT = ['/yonetim', '/personel', '/karakter-onizleme'];
+
+let landingChecked = false;
+let lastPagePath = '';
+
+function isExcluded(): boolean {
+  try {
+    const ua = navigator.userAgent || '';
+    if ((navigator as Navigator & { webdriver?: boolean }).webdriver) return true;
+    if (/bot|crawl|spider|slurp|headless|lighthouse|pagespeed|facebookexternalhit|preview/i.test(ua)) return true;
+    // Panelde oturum açmış yönetici / reklamcı ziyaretleri sayılmaz
+    if (localStorage.getItem('uyuroom_ota_session')) return true;
+  } catch {
+    /* yoksay */
+  }
+  return false;
+}
+
+function randomId(): string {
+  const bytes = new Uint8Array(12);
+  try {
+    crypto.getRandomValues(bytes);
+  } catch {
+    for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+  }
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+const clip = (v: string | null | undefined, n: number) => (v ? v.slice(0, n) : undefined);
+
+function readAttr(): Attr {
+  const a: Attr = {};
+  try {
+    const q = new URLSearchParams(window.location.search);
+    a.source = clip(q.get('utm_source'), 60);
+    a.medium = clip(q.get('utm_medium'), 40);
+    a.campaign = clip(q.get('utm_campaign'), 100);
+    a.term = clip(q.get('utm_term'), 100);
+    a.content = clip(q.get('utm_content'), 100);
+    for (const k of CLICK_IDS) {
+      if (q.get(k)) {
+        a.click_id = k;
+        break;
+      }
+    }
+    if (document.referrer) {
+      const host = new URL(document.referrer).hostname.replace(/^www\./, '');
+      const mine = window.location.hostname.replace(/^www\./, '');
+      if (host && host !== mine && !host.endsWith('uyuroom.com')) a.ref_host = host.slice(0, 80);
+    }
+  } catch {
+    /* yoksay */
+  }
+  (Object.keys(a) as Array<keyof Attr>).forEach((k) => a[k] === undefined && delete a[k]);
+  return a;
+}
+
+function loadSession(): Sess | null {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw) as Sess;
+    if (!s || typeof s.id !== 'string' || typeof s.t !== 'number') return null;
+    return s;
+  } catch {
+    return null;
+  }
+}
+
+function saveSession(s: Sess) {
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+  } catch {
+    /* yoksay */
+  }
+}
+
+/** Oturumu getirir; 30 dakika hareketsizlikte veya yeni bir reklam / dış kaynak girişinde yenisini açar. */
+function touchSession(): Sess {
+  const now = Date.now();
+  let s = loadSession();
+  if (s && now - s.t > SESSION_MS) s = null;
+  if (!landingChecked) {
+    landingChecked = true;
+    const attr = readAttr();
+    const fresh = Boolean(attr.source || attr.campaign || attr.click_id || attr.ref_host);
+    if (fresh && (!s || JSON.stringify(s.a) !== JSON.stringify(attr))) s = { id: randomId(), t: now, n: 0, a: attr };
+  }
+  if (!s) s = { id: randomId(), t: now, n: 0, a: {} };
+  s.t = now;
+  return s;
+}
+
+function deviceInfo() {
+  const ua = navigator.userAgent || '';
+  const w = window.innerWidth || 1024;
+  const tablet = /iPad|Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua));
+  const device = tablet ? 'tablet' : /Mobi|iPhone|Android/i.test(ua) || w < 768 ? 'mobile' : w < 1024 ? 'tablet' : 'desktop';
+  const browser = /Edg\//.test(ua)
+    ? 'Edge'
+    : /OPR\/|Opera/.test(ua)
+      ? 'Opera'
+      : /SamsungBrowser/.test(ua)
+        ? 'Samsung'
+        : /Firefox|FxiOS/.test(ua)
+          ? 'Firefox'
+          : /Chrome|CriOS/.test(ua)
+            ? 'Chrome'
+            : /Safari/.test(ua)
+              ? 'Safari'
+              : 'Diğer';
+  const os = /Windows/.test(ua)
+    ? 'Windows'
+    : /Android/.test(ua)
+      ? 'Android'
+      : /iPhone|iPad|iPod/.test(ua)
+        ? 'iOS'
+        : /Mac OS X/.test(ua)
+          ? 'macOS'
+          : /Linux/.test(ua)
+            ? 'Linux'
+            : 'Diğer';
+  return { device, browser, os };
+}
+
+interface CollectData {
+  path?: string;
+  room_id?: number | string | null;
+  hotel_id?: number | string | null;
+  value?: number;
+  code?: string;
+  props?: Record<string, unknown>;
+}
+
+function collect(type: EventType, data: CollectData = {}) {
+  if (typeof window === 'undefined' || getConsent() !== 'granted') return;
+  const path = data.path ?? window.location.pathname;
+  if (NO_COLLECT.some((p) => path.startsWith(p)) || isExcluded()) return;
+  const s = touchSession();
+  const payload = {
+    type,
+    sid: s.id,
+    path: path.slice(0, 200),
+    ...s.a,
+    landing: s.n === 0,
+    ...deviceInfo(),
+    lang: (navigator.language || '').slice(0, 10),
+    room_id: data.room_id == null ? undefined : String(data.room_id),
+    hotel_id: data.hotel_id == null ? undefined : String(data.hotel_id),
+    value: typeof data.value === 'number' && isFinite(data.value) ? Math.round(data.value * 100) / 100 : undefined,
+    code: data.code,
+    props: data.props,
+  };
+  s.n += 1;
+  saveSession(s);
+  if (type === 'page_view') lastPagePath = path;
+  try {
+    void Promise.resolve(supabase.rpc('track_event', { p: payload })).catch(() => undefined);
+  } catch {
+    /* ölçüm hatası siteyi etkilemez */
+  }
+}
+
+/** Onay yeni verildiyse, o an açık olan sayfa da sayılsın. */
+function collectCurrentPage() {
+  const path = window.location.pathname;
+  if (path !== lastPagePath) collect('page_view', { path });
 }
 
 export type { Dict };
