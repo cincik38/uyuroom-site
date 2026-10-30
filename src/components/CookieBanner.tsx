@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getConsent, setConsent, startTracking, trackingConfigured } from '@/lib/analytics';
+import { Link, useLocation } from 'react-router-dom';
+import { getConsent, onTrackingReady, setConsent, startTracking } from '@/lib/analytics';
 
 /** Çerez / takip onay bandı. Takip kimliği tanımlı değilse hiç görünmez. */
 export const CookieBanner: React.FC = () => {
   const [visible, setVisible] = useState(false);
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    if (!trackingConfigured) return;
-    const c = getConsent();
-    if (c === null) setVisible(true);
-    else if (c === 'granted') startTracking();
+    let alive = true;
+    void onTrackingReady().then((configured) => {
+      if (!alive || !configured) return;
+      const c = getConsent();
+      if (c === null) setVisible(true);
+      else if (c === 'granted') startTracking();
+    });
+    return () => {
+      alive = false;
+    };
   }, []);
 
-  if (!visible) return null;
+  if (!visible || pathname.startsWith('/yonetim')) return null;
 
   const choose = (v: 'granted' | 'denied') => {
     setConsent(v);

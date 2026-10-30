@@ -253,7 +253,12 @@ export const AdminDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link to="/yonetim/takip">
+              <Button variant="outline" size="sm" className="border-amber-500/50 text-amber-300 hover:text-amber-200 !bg-transparent text-xs">
+                Takip Kodları
+              </Button>
+            </Link>
             <Link to="/">
               <Button variant="outline" size="sm" className="border-slate-700 text-slate-300 hover:text-white !bg-transparent text-xs">
                 <ArrowLeft className="w-4 h-4 mr-1.5" /> Misafir Görünümüne Dön

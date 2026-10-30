@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ShieldCheck, Mail, Lock, LogIn, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BrandLogo } from '@/components/BrandLogo';
-import { getSession, loginWithCredentials } from '@/lib/ota';
+import { getSession, homeForRole, loginWithCredentials } from '@/lib/ota';
 import { toast } from 'sonner';
 
 interface OtaLoginProps {
@@ -25,7 +25,7 @@ export const OtaLogin: React.FC<OtaLoginProps> = ({ mode = 'admin' }) => {
   useEffect(() => {
     const session = getSession();
     if (session) {
-      navigate('/yonetim/panel', { replace: true });
+      navigate(homeForRole(session.role), { replace: true });
     }
   }, [navigate]);
 
@@ -46,7 +46,8 @@ export const OtaLogin: React.FC<OtaLoginProps> = ({ mode = 'admin' }) => {
     }
 
     toast.success('Giriş başarılı. Hoş geldiniz!');
-    const target = next.startsWith('/yonetim') ? next : '/yonetim/panel';
+    const home = homeForRole(result.session.role);
+    const target = next.startsWith('/yonetim') && (result.session.role !== 'reklam' || next.startsWith('/yonetim/takip')) ? next : home;
     navigate(target, { replace: true });
   };
 

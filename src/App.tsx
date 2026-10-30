@@ -13,6 +13,7 @@ import Policies from './pages/Policies';
 import Kvkk from './pages/Kvkk';
 import StaffEntry from './pages/StaffEntry';
 import CharacterPreview from './pages/CharacterPreview';
+import TrackingSettings from './pages/admin/TrackingSettings';
 import Contact from './pages/Contact';
 import Properties from './pages/Properties';
 import PropertyDetail from './pages/PropertyDetail';
@@ -88,6 +89,14 @@ const AppRoutes = () => (
       element={
         <RoleGuard allow={['super_admin']}>
           <AdminDashboard />
+        </RoleGuard>
+      }
+    />
+    <Route
+      path="/yonetim/takip"
+      element={
+        <RoleGuard allow={['super_admin', 'reklam']}>
+          <TrackingSettings />
         </RoleGuard>
       }
     />

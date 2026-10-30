@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getSession, verifyAdminSession, OtaRole, OtaSession } from '@/lib/ota';
+import { getSession, homeForRole, verifyAdminSession, OtaRole, OtaSession } from '@/lib/ota';
 
 interface RoleGuardProps {
   allow: OtaRole[];
@@ -38,7 +38,7 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({ allow, children }) => {
   }
 
   if (!allow.includes(session.role)) {
-    const fallback = '/';
+    const fallback = session.role === 'reklam' ? homeForRole('reklam') : '/';
     return <Navigate to={fallback} replace />;
   }
 

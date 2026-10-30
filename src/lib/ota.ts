@@ -117,7 +117,7 @@ export const PAYMENT_METHOD_LABELS: Record<string, string> = {
 /* Oturum & Roller                                                     */
 /* ------------------------------------------------------------------ */
 
-export type OtaRole = 'super_admin' | 'partner';
+export type OtaRole = 'super_admin' | 'partner' | 'reklam';
 
 export interface OtaSession {
   role: OtaRole;
@@ -126,6 +126,9 @@ export interface OtaSession {
   hotelId?: number;
   loggedAt: string;
 }
+
+/** Role göre giriş sonrası ilk sayfa */
+export const homeForRole = (role: OtaRole): string => (role === 'reklam' ? '/yonetim/takip' : '/yonetim/panel');
 
 export function getSession(): OtaSession | null {
   try {
@@ -168,14 +171,22 @@ export async function loginWithCredentials(
     return { ok: false, error: 'E-posta veya şifre hatalı.' };
   }
   const { data: isAdmin } = await supabase.rpc('is_admin');
+  let role: OtaRole = 'super_admin';
+  let name = 'Yönetici';
   if (!isAdmin) {
-    await supabase.auth.signOut();
-    return { ok: false, error: 'Bu hesabın yönetim yetkisi yok.' };
+    // Reklam yetkilisi: yalnızca takip kodları sayfasını görür
+    const { data: isMarketing } = await supabase.rpc('is_marketing');
+    if (!isMarketing) {
+      await supabase.auth.signOut();
+      return { ok: false, error: 'Bu hesabın yönetim yetkisi yok.' };
+    }
+    role = 'reklam';
+    name = 'Reklam';
   }
   const session: OtaSession = {
-    role: 'super_admin',
+    role,
     email: data.user.email || email,
-    name: 'Yönetici',
+    name,
     loggedAt: new Date().toISOString(),
   };
   setSession(session);
