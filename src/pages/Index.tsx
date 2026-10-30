@@ -11,12 +11,34 @@ import { parseList } from '@/lib/ota';
 import { MapPin, Star, Banknote, Building2, Navigation, PhoneCall, Search, MessageCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { buildBranchMapLink, resolveBranchAddress, findBranchContact } from '@/lib/contacts';
+import { StaffCharacter } from '@/components/StaffCharacter';
+
+/** Ana sayfa karakteri: sayfa yüklendikten sonra gelir, veri tasarrufu açıksa hiç yüklenmez. */
+const useCharacterStage = () => {
+  const [show, setShow] = useState(false);
+  const [size, setSize] = useState(124);
+  useEffect(() => {
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (conn?.saveData) return;
+    const mq = window.matchMedia('(min-width: 640px)');
+    const apply = () => setSize(mq.matches ? 160 : 124);
+    apply();
+    mq.addEventListener?.('change', apply);
+    const t = window.setTimeout(() => setShow(true), 1800);
+    return () => {
+      window.clearTimeout(t);
+      mq.removeEventListener?.('change', apply);
+    };
+  }, []);
+  return { show, size };
+};
 
 export const Index: React.FC = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [featuredRooms, setFeaturedRooms] = useState<Room[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const stage = useCharacterStage();
 
   useEffect(() => {
     const loadData = async () => {
@@ -62,7 +84,14 @@ export const Index: React.FC = () => {
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Kat görevlisi karakteri: otelin önünde gezinir, ara sıra konuşur */}
+          <div className="relative mt-6 h-[132px] sm:h-[160px]" aria-label="Kat görevlisi karakteri">
+            {stage.show && (
+              <StaffCharacter role="kat-gorevlisi" startX={72} minX={4} maxX={96} size={stage.size} talk />
+            )}
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
             {(hotels.length > 0 ? hotels : [null, null]).map((hotel, idx) => {
               if (!hotel) {
                 return <div key={idx} className="aspect-[4/3] sm:aspect-[16/10] rounded-2xl bg-slate-900 animate-pulse" />;

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CHARACTERS, CharacterClip, CharacterRole, WALK_LOOP, clipUrl } from '@/lib/characters';
+import { clickLine, greetingLine, holdMs, pickLine } from '@/lib/characterTalk';
 
 interface Props {
   role: CharacterRole;
@@ -13,6 +14,8 @@ interface Props {
   lift?: number;
   /** Gezinme ve kendiliğinden selam; test ve azaltılmış hareket için kapatılabilir */
   wander?: boolean;
+  /** Ara sıra konuşma balonuyla otel hakkında bir şey söyler */
+  talk?: boolean;
 }
 
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
@@ -22,7 +25,7 @@ const CLIPS: CharacterClip[] = ['bekleme', 'selam', 'tepki', 'yurume'];
  * Tek bir personel karakteri: bekler, ara ara yeni bir yere yürür, vardığında selam verir,
  * tıklanınca tepki verir. Şeffaf videolar üst üste durur, aktif olan görünür.
  */
-export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX = 100, size = 170, lift = 0, wander = true }) => {
+export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX = 100, size = 170, lift = 0, wander = true, talk = false }) => {
   const def = CHARACTERS[role];
   const urls = useMemo(
     () => Object.fromEntries(CLIPS.map((c) => [c, clipUrl(role, c)])) as Record<CharacterClip, string>,
@@ -46,6 +49,11 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
   const xRef = useRef(startX);
   const timers = useRef<number[]>([]);
   const raf = useRef(0);
+  const box = useRef<HTMLDivElement>(null);
+  const bubbleEl = useRef<HTMLSpanElement>(null);
+  const visible = useRef(true);
+  const recent = useRef<string[]>([]);
+  const [shift, setShift] = useState(0);
   const reduce = useRef(false);
 
   useEffect(() => {
@@ -54,6 +62,21 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
       timers.current.forEach((t) => window.clearTimeout(t));
       cancelAnimationFrame(raf.current);
     };
+  }, []);
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => {
+      visible.current = e.isIntersecting;
+      const idle = refs.bekleme.current;
+      if (!idle) return;
+      if (!e.isIntersecting) idle.pause();
+      else if (!busy.current) void idle.play().catch(() => undefined);
+    });
+    io.observe(el);
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const later = (fn: () => void, ms: number) => {
@@ -92,6 +115,7 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
     let arrived = false;
     let exitDone = false;
 
+    setBubble(null);
     setFacing(target > xRef.current ? 1 : -1);
     v.currentTime = 0;
     setClip('yurume');
@@ -129,7 +153,7 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
     busy.current = false;
     setFacing(1);
     setClip('bekleme');
-    if (Math.random() < 0.6) later(() => play('selam', def.greeting), 250);
+    if (Math.random() < 0.6) later(() => play('selam', greetingLine()), 250);
   };
 
   // Gezinme döngüsü
@@ -138,7 +162,7 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
     let alive = true;
     const step = () => {
       if (!alive) return;
-      if (busy.current) {
+      if (busy.current || !visible.current || document.hidden) {
         later(step, 1500);
         return;
       }
@@ -159,8 +183,44 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wander]);
 
+  // Konuşma döngüsü: ara sıra bir cümle söyler
+  useEffect(() => {
+    if (!talk) return;
+    let alive = true;
+    const speak = () => {
+      if (!alive) return;
+      if (busy.current || !visible.current || document.hidden) {
+        later(speak, 3000);
+        return;
+      }
+      const text = pickLine(recent.current);
+      recent.current = [...recent.current, text].slice(-8);
+      setShift(0);
+      setBubble(text);
+      later(() => setBubble((b) => (b === text ? null : b)), holdMs(text));
+      later(speak, holdMs(text) + rand(9000, 20000));
+    };
+    later(speak, rand(5000, 9000));
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [talk]);
+
+  // Balon ekran kenarından taşmasın
+  useEffect(() => {
+    const b = bubbleEl.current;
+    if (!b) return;
+    const r = b.getBoundingClientRect();
+    const pad = 10;
+    const vw = document.documentElement.clientWidth;
+    if (r.left < pad) setShift(pad - r.left);
+    else if (r.right > vw - pad) setShift(vw - pad - r.right);
+  }, [bubble]);
+
   return (
     <div
+      ref={box}
       className="absolute"
       style={{
         bottom: lift,
@@ -174,7 +234,7 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
       <button
         type="button"
         aria-label={`${def.label}, tıklayın`}
-        onClick={() => play('tepki', 'Hihi!')}
+        onClick={() => play('tepki', clickLine())}
         className="relative block w-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl"
         style={{ aspectRatio: '1 / 1', background: 'transparent' }}
       >
@@ -213,11 +273,23 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
 
       {bubble && (
         <span
-          className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-800 shadow-lg ring-1 ring-black/5"
-          style={{ top: '-2%' }}
+          ref={bubbleEl}
+          className="pointer-events-none absolute z-10 w-max max-w-[190px] rounded-2xl bg-white px-3 py-2 text-center text-xs font-semibold leading-snug text-slate-800 shadow-lg ring-1 ring-black/5 sm:max-w-[250px] sm:text-sm"
+          style={{
+            top: '6%',
+            ...(x < 50
+              ? { left: `calc(50% + ${Math.round(size * 0.27)}px)` }
+              : { right: `calc(50% + ${Math.round(size * 0.27)}px)` }),
+            transform: `translateX(${shift}px)`,
+          }}
           role="status"
         >
           {bubble}
+          <span
+            aria-hidden
+            className="absolute h-2.5 w-2.5 rotate-45 bg-white"
+            style={{ top: '40%', ...(x < 50 ? { left: -4 } : { right: -4 }) }}
+          />
         </span>
       )}
       <span className="mt-0.5 block text-center">
