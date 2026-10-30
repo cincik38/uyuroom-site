@@ -16,12 +16,12 @@ import { StaffCharacter } from '@/components/StaffCharacter';
 /** Ana sayfa karakteri: sayfa yüklendikten sonra gelir, veri tasarrufu açıksa hiç yüklenmez. */
 const useCharacterStage = () => {
   const [show, setShow] = useState(false);
-  const [size, setSize] = useState(124);
+  const [size, setSize] = useState(60);
   useEffect(() => {
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
     if (conn?.saveData) return;
     const mq = window.matchMedia('(min-width: 640px)');
-    const apply = () => setSize(mq.matches ? 160 : 124);
+    const apply = () => setSize(mq.matches ? 76 : 60);
     apply();
     mq.addEventListener?.('change', apply);
     const t = window.setTimeout(() => setShow(true), 1800);
@@ -70,7 +70,15 @@ export const Index: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      <Navbar />
+      <Navbar
+        accessory={
+          <div className="relative shrink-0" style={{ width: stage.size, height: stage.size }}>
+            {stage.show && (
+              <StaffCharacter role="kat-gorevlisi" startX={50} size={stage.size} wander={false} talk greet inline />
+            )}
+          </div>
+        }
+      />
 
       {/* Hero: başlık + iki şube */}
       <section className="bg-slate-950 text-white pt-32 sm:pt-36 pb-24 sm:pb-28">
@@ -84,14 +92,7 @@ export const Index: React.FC = () => {
             </p>
           </div>
 
-          {/* Kat görevlisi karakteri: otelin önünde gezinir, ara sıra konuşur */}
-          <div className="relative mt-6 h-[132px] sm:h-[160px]" aria-label="Kat görevlisi karakteri">
-            {stage.show && (
-              <StaffCharacter role="kat-gorevlisi" startX={72} minX={4} maxX={96} size={stage.size} talk />
-            )}
-          </div>
-
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
             {(hotels.length > 0 ? hotels : [null, null]).map((hotel, idx) => {
               if (!hotel) {
                 return <div key={idx} className="aspect-[4/3] sm:aspect-[16/10] rounded-2xl bg-slate-900 animate-pulse" />;

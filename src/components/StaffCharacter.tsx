@@ -16,6 +16,12 @@ interface Props {
   wander?: boolean;
   /** Ara sıra konuşma balonuyla otel hakkında bir şey söyler */
   talk?: boolean;
+  /** Üst bilgideki küçük hâl: yerinde durur, kutuyu kaplar, balon aşağı açılır */
+  inline?: boolean;
+  /** Altında rol etiketi göster */
+  showLabel?: boolean;
+  /** Yerinde dururken ara sıra el sallar */
+  greet?: boolean;
 }
 
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
@@ -25,7 +31,7 @@ const CLIPS: CharacterClip[] = ['bekleme', 'selam', 'tepki', 'yurume'];
  * Tek bir personel karakteri: bekler, ara ara yeni bir yere yürür, vardığında selam verir,
  * tıklanınca tepki verir. Şeffaf videolar üst üste durur, aktif olan görünür.
  */
-export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX = 100, size = 170, lift = 0, wander = true, talk = false }) => {
+export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX = 100, size = 170, lift = 0, wander = true, talk = false, inline = false, showLabel = false, greet = false }) => {
   const def = CHARACTERS[role];
   const urls = useMemo(
     () => Object.fromEntries(CLIPS.map((c) => [c, clipUrl(role, c)])) as Record<CharacterClip, string>,
@@ -183,6 +189,22 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wander]);
 
+  // Yerinde dururken ara sıra el sallar
+  useEffect(() => {
+    if (!greet) return;
+    let alive = true;
+    const hello = () => {
+      if (!alive) return;
+      if (!busy.current && visible.current && !document.hidden) play('selam', greetingLine());
+      later(hello, rand(30000, 55000));
+    };
+    later(hello, rand(7000, 12000));
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [greet]);
+
   // Konuşma döngüsü: ara sıra bir cümle söyler
   useEffect(() => {
     if (!talk) return;
@@ -221,15 +243,19 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
   return (
     <div
       ref={box}
-      className="absolute"
-      style={{
-        bottom: lift,
-        left: `clamp(${size / 2}px, ${x}%, calc(100% - ${size / 2}px))`,
-        width: size,
-        transform: 'translateX(-50%)',
-        transition: moving ? `left ${dur}ms linear, opacity .4s` : 'opacity .4s',
-        opacity: ready ? 1 : 0,
-      }}
+      className={inline ? 'absolute inset-0' : 'absolute'}
+      style={
+        inline
+          ? { opacity: ready ? 1 : 0, transition: 'opacity .4s' }
+          : {
+              bottom: lift,
+              left: `clamp(${size / 2}px, ${x}%, calc(100% - ${size / 2}px))`,
+              width: size,
+              transform: 'translateX(-50%)',
+              transition: moving ? `left ${dur}ms linear, opacity .4s` : 'opacity .4s',
+              opacity: ready ? 1 : 0,
+            }
+      }
     >
       <button
         type="button"
@@ -274,29 +300,41 @@ export const StaffCharacter: React.FC<Props> = ({ role, startX, minX = 0, maxX =
       {bubble && (
         <span
           ref={bubbleEl}
-          className="pointer-events-none absolute z-10 w-max max-w-[190px] rounded-2xl bg-white px-3 py-2 text-center text-xs font-semibold leading-snug text-slate-800 shadow-lg ring-1 ring-black/5 sm:max-w-[250px] sm:text-sm"
-          style={{
-            top: '6%',
-            ...(x < 50
-              ? { left: `calc(50% + ${Math.round(size * 0.27)}px)` }
-              : { right: `calc(50% + ${Math.round(size * 0.27)}px)` }),
-            transform: `translateX(${shift}px)`,
-          }}
+          className={`pointer-events-none absolute z-10 w-max rounded-2xl bg-white px-3 py-2 text-center text-xs font-semibold leading-snug text-slate-800 shadow-lg ring-1 ring-black/5 sm:text-sm ${
+            inline
+              ? 'top-[calc(100%+2px)] left-0 max-w-[190px] lg:top-1/2 lg:left-full lg:ml-2.5 lg:max-w-[210px] lg:-translate-y-1/2'
+              : 'max-w-[190px] sm:max-w-[250px]'
+          }`}
+          style={
+            inline
+              ? { translate: `${shift}px 0` }
+              : {
+                  top: '6%',
+                  ...(x < 50
+                    ? { left: `calc(50% + ${Math.round(size * 0.27)}px)` }
+                    : { right: `calc(50% + ${Math.round(size * 0.27)}px)` }),
+                  transform: `translateX(${shift}px)`,
+                }
+          }
           role="status"
         >
           {bubble}
           <span
             aria-hidden
-            className="absolute h-2.5 w-2.5 rotate-45 bg-white"
-            style={{ top: '40%', ...(x < 50 ? { left: -4 } : { right: -4 }) }}
+            className={`absolute h-2.5 w-2.5 rotate-45 bg-white ${
+              inline ? '-top-1 left-5 lg:top-1/2 lg:-left-1 lg:-mt-[5px]' : ''
+            }`}
+            style={inline ? undefined : { top: '40%', ...(x < 50 ? { left: -4 } : { right: -4 }) }}
           />
         </span>
       )}
+      {showLabel && (
       <span className="mt-0.5 block text-center">
         <span className="inline-block rounded-full bg-slate-900/75 px-2.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur">
           {def.label}
         </span>
       </span>
+      )}
     </div>
   );
 };

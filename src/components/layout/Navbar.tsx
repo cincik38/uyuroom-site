@@ -5,7 +5,7 @@ import { BrandLogo } from '@/components/BrandLogo';
 import { Button } from '@/components/ui/button';
 import { BRANCH_CONTACTS, buildWhatsAppLink } from '@/lib/contacts';
 
-export const Navbar: React.FC = () => {
+export const Navbar: React.FC<{ accessory?: React.ReactNode }> = ({ accessory }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -74,13 +74,16 @@ export const Navbar: React.FC = () => {
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all ${isScrolled ? 'py-2.5' : 'py-3'}`}>
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center group" aria-label="UYUROOM HOTEL ana sayfa">
-            <BrandLogo
-              size={56}
-              tagline="Adana • Uşak"
-              className="group-hover:scale-[1.03] transition-transform"
-            />
-          </Link>
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <Link to="/" className="flex items-center group" aria-label="UYUROOM HOTEL ana sayfa">
+              <BrandLogo
+                size={56}
+                tagline="Adana • Uşak"
+                className="group-hover:scale-[1.03] transition-transform"
+              />
+            </Link>
+            {accessory}
+          </div>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-7">
