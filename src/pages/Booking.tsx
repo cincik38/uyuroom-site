@@ -23,8 +23,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { differenceInDays, parseISO, format, addDays } from 'date-fns';
 import { toast } from 'sonner';
-import {
-} from '@/lib/ota';
+import { quoteStay, nightsBetween, formatTRDate } from '@/lib/ota';
+import { loadCalendar } from '@/lib/pricing';
+import type { RateCalendarEntry } from '@/lib/types';
 import {
   resolvePayableBankAccounts,
   formatIban,
@@ -90,12 +91,35 @@ export const BookingPage: React.FC = () => {
   };
 
   const nights = calculateNights();
-  const unitPrice = room?.discounted_price || room?.price_per_night || 0;
-  
+  const datesValid = nightsBetween(checkInParam, checkOutParam) > 0;
+
+  // Tarih bazlı fiyat: takvimde o geceye özel fiyat varsa o, yoksa odanın genel fiyatı (sunucu da aynı hesabı yapar)
+  const [calendar, setCalendar] = useState<RateCalendarEntry[]>([]);
+  const [calReady, setCalReady] = useState(false);
+  useEffect(() => {
+    if (!room) return;
+    let alive = true;
+    setCalReady(false);
+    loadCalendar({ room_id: Number(room.id) }, checkInParam, checkOutParam)
+      .then((rows) => alive && setCalendar(rows))
+      .catch(() => alive && setCalendar([]))
+      .finally(() => alive && setCalReady(true));
+    return () => { alive = false; };
+  }, [room, checkInParam, checkOutParam]);
+
+  const quote = room && datesValid ? quoteStay(room, checkInParam, checkOutParam, calendar, 1) : null;
+  const unitPrice = Math.round(quote?.averageNightly ?? (room?.discounted_price || room?.price_per_night || 0));
+  const distinctNightly = new Set((quote?.nightlyPrices ?? []).map((n) => n.price)).size > 1;
+
   // Havale indirimi %5
   const discountRate = paymentMethod === 'bank_transfer' ? 0.05 : 0;
-  const rawTotal = unitPrice * nights;
+  const rawTotal = quote ? quote.baseTotal : unitPrice * nights;
   const totalPrice = Math.round(rawTotal * (1 - discountRate));
+  const blockReason = !datesValid
+    ? 'Çıkış tarihi giriş tarihinden sonra olmalıdır.'
+    : quote && !quote.available
+      ? quote.unavailableReason || 'Seçilen tarihlerde bu oda satışta değil.'
+      : null;
 
   useEffect(() => {
     const loadDetails = async () => {
@@ -138,6 +162,10 @@ export const BookingPage: React.FC = () => {
 
     if (!guestName || !guestEmail || !guestPhone) {
       toast.error('Lütfen zorunlu misafir alanlarını doldurun');
+      return;
+    }
+    if (blockReason || !calReady) {
+      toast.error(blockReason || 'Fiyat hesaplanıyor, lütfen birkaç saniye bekleyin.');
       return;
     }
 
@@ -196,7 +224,16 @@ export const BookingPage: React.FC = () => {
       navigate(`/booking-confirmation?code=${bookingCode}`);
     } catch (err: any) {
       console.error('Booking creation error', err);
-      toast.error(err?.message || 'Rezervasyon kaydedilirken bir hata oluştu');
+      const msg = String(err?.message || '');
+      toast.error(
+        /satis kapali/i.test(msg)
+          ? 'Seçilen tarihlerde bu oda için satış kapalı. Lütfen başka tarih deneyin.'
+          : /Gecmis tarih/i.test(msg)
+            ? 'Geçmiş bir tarih seçilemez.'
+            : /Gecersiz tarih/i.test(msg)
+              ? 'Çıkış tarihi giriş tarihinden sonra olmalıdır.'
+              : msg || 'Rezervasyon kaydedilirken bir hata oluştu',
+      );
     } finally {
       setSubmitting(false);
     }
@@ -495,10 +532,21 @@ export const BookingPage: React.FC = () => {
 
               {/* Pricing breakdown */}
               <div className="space-y-2 text-xs border-t border-slate-100 pt-4">
-                <div className="flex justify-between text-slate-600">
-                  <span>Gecelik Fiyat:</span>
-                  <span>₺{unitPrice.toLocaleString('tr-TR')}</span>
-                </div>
+                {distinctNightly && quote ? (
+                  <div className="space-y-1">
+                    {quote.nightlyPrices.map((n) => (
+                      <div key={n.date} className="flex justify-between text-slate-600">
+                        <span>{formatTRDate(n.date)}</span>
+                        <span>₺{n.price.toLocaleString('tr-TR')}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex justify-between text-slate-600">
+                    <span>Gecelik Fiyat:</span>
+                    <span>₺{unitPrice.toLocaleString('tr-TR')}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-slate-600">
                   <span>Toplam Gece Tutarı ({nights} gece):</span>
                   <span>₺{rawTotal.toLocaleString('tr-TR')}</span>
@@ -515,10 +563,13 @@ export const BookingPage: React.FC = () => {
                 </div>
               </div>
 
+              {blockReason && (
+                <p role="alert" className="text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{blockReason}</p>
+              )}
               {/* Submit CTA */}
               <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !!blockReason || !calReady}
                 className="w-full h-12 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/25 rounded-xl"
               >
                 {submitting ? 'Rezervasyon Kaydediliyor...' : 'Rezervasyonu Tamamla & Onayla'}

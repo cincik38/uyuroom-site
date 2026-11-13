@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { trackViewRoom } from '@/lib/analytics';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { client } from '@/lib/api';
-import { Room, Hotel } from '@/lib/types';
+import { Room, Hotel, RateCalendarEntry } from '@/lib/types';
+import { quoteStay, nightsBetween, formatTRDate } from '@/lib/ota';
+import { loadCalendar, parseStayParams } from '@/lib/pricing';
 import { handleImageError, resolveImageUrls } from '@/lib/media';
 import ImageCarousel from '@/components/ImageCarousel';
 import { 
@@ -36,10 +38,27 @@ export const RoomDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   // Quick booking state
-  const [checkIn, setCheckIn] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
-  const [checkOut, setCheckOut] = useState<string>(format(addDays(new Date(), 1), 'yyyy-MM-dd'));
-  const [adults, setAdults] = useState<number>(2);
-  const [childrenCount, setChildrenCount] = useState<number>(0);
+  const [searchParams] = useSearchParams();
+  const initial = useMemo(() => parseStayParams(searchParams), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [checkIn, setCheckIn] = useState<string>(initial.checkIn);
+  const [checkOut, setCheckOut] = useState<string>(initial.checkOut);
+  const [adults, setAdults] = useState<number>(initial.adults);
+  const [childrenCount, setChildrenCount] = useState<number>(initial.children);
+  const [calendar, setCalendar] = useState<RateCalendarEntry[]>([]);
+
+  useEffect(() => {
+    if (!id) return;
+    let alive = true;
+    loadCalendar({ room_id: Number(id) }, checkIn, checkOut)
+      .then((rows) => alive && setCalendar(rows))
+      .catch(() => alive && setCalendar([]));
+    return () => { alive = false; };
+  }, [id, checkIn, checkOut]);
+
+  const quote = useMemo(() => (room ? quoteStay(room, checkIn, checkOut, calendar, 1) : null), [room, checkIn, checkOut, calendar]);
+  const basePrice = Number(room?.discounted_price || room?.price_per_night || 0);
+  const specialPrice = !!quote && quote.nights > 0 && quote.nightlyPrices.some((n) => n.price !== basePrice);
+  const datesOk = nightsBetween(checkIn, checkOut) > 0;
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -227,9 +246,14 @@ export const RoomDetail: React.FC = () => {
           <div className="lg:col-span-1">
             <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl sticky top-24 space-y-6">
               <div className="border-b border-slate-100 pb-4">
-                <span className="text-xs text-slate-400 block uppercase tracking-wider">Gecelik Konaklama</span>
+                <span className="text-xs text-slate-400 block uppercase tracking-wider">{specialPrice ? 'Seçtiğiniz tarihler için gecelik' : 'Gecelik Konaklama'}</span>
                 <div className="flex items-baseline gap-2 mt-1">
-                  {room.discounted_price && room.discounted_price < room.price_per_night ? (
+                  {specialPrice && quote ? (
+                    <>
+                      <span className="text-3xl font-black text-amber-600">₺{Math.round(quote.averageNightly).toLocaleString('tr-TR')}</span>
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">Özel tarih fiyatı</span>
+                    </>
+                  ) : room.discounted_price && room.discounted_price < room.price_per_night ? (
                     <>
                       <span className="text-3xl font-black text-amber-600">
                         ₺{room.discounted_price.toLocaleString('tr-TR')}
@@ -245,6 +269,24 @@ export const RoomDetail: React.FC = () => {
                   )}
                   <span className="text-xs text-slate-500">/ gece</span>
                 </div>
+                {quote && quote.nights > 0 && (
+                  <div className="mt-3 rounded-xl bg-slate-50 border border-slate-200 p-3 text-xs space-y-1">
+                    {specialPrice && quote.nightlyPrices.map((n) => (
+                      <div key={n.date} className="flex justify-between text-slate-600">
+                        <span>{formatTRDate(n.date)}</span>
+                        <span className="font-semibold">₺{n.price.toLocaleString('tr-TR')}</span>
+                      </div>
+                    ))}
+                    <div className={`flex justify-between font-bold text-slate-900 ${specialPrice ? 'pt-1 border-t border-slate-200' : ''}`}>
+                      <span>{quote.nights} gece toplam</span>
+                      <span>₺{Math.round(quote.baseTotal).toLocaleString('tr-TR')}</span>
+                    </div>
+                  </div>
+                )}
+                {quote && !quote.available && (
+                  <p role="alert" className="mt-2 text-[11px] font-semibold text-red-600">{quote.unavailableReason}</p>
+                )}
+                {!datesOk && <p role="alert" className="mt-2 text-[11px] font-semibold text-red-600">Çıkış tarihi giriş tarihinden sonra olmalıdır.</p>}
               </div>
 
               <form onSubmit={handleStartBooking} className="space-y-4">
@@ -301,7 +343,7 @@ export const RoomDetail: React.FC = () => {
                 <div className="pt-2">
                   <Button
                     type="submit"
-                    disabled={adults + childrenCount > (room.capacity || 2)}
+                    disabled={adults + childrenCount > (room.capacity || 2) || !datesOk || (!!quote && !quote.available)}
                     className="w-full h-12 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/25 rounded-xl disabled:opacity-50"
                   >
                     Rezervasyona Devam Et &rarr;

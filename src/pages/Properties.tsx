@@ -19,11 +19,14 @@ import {
   formatPrice,
   getFavorites,
   isPubliclyListed,
+  quoteStay,
+  formatTRDate,
   parseList,
   toISODate,
   toggleFavorite,
 } from '@/lib/ota';
-import type { Hotel, Room } from '@/lib/types';
+import type { Hotel, RateCalendarEntry, Room } from '@/lib/types';
+import { loadCalendar, parseStayParams, stayQueryString } from '@/lib/pricing';
 import { handleImageError, resolveCoverUrl } from '@/lib/media';
 
 type SortKey = 'recommended' | 'price_asc' | 'price_desc' | 'rating';
@@ -64,18 +67,42 @@ export const Properties: React.FC = () => {
     })();
   }, []);
 
+  // Adres çubuğundaki tarihler: fiyatlar o geceler için takvimden hesaplanır
+  const stay = useMemo(() => parseStayParams(params), [params]);
+  const [calendar, setCalendar] = useState<RateCalendarEntry[]>([]);
+  useEffect(() => {
+    if (!stay.hasDates) {
+      setCalendar([]);
+      return;
+    }
+    let alive = true;
+    loadCalendar({}, stay.checkIn, stay.checkOut)
+      .then((rows) => alive && setCalendar(rows))
+      .catch(() => alive && setCalendar([]));
+    return () => { alive = false; };
+  }, [stay.hasDates, stay.checkIn, stay.checkOut]);
+  const stayQuery = stay.hasDates ? `?${stayQueryString(stay)}` : '';
+  const stayLabel = stay.hasDates ? `${formatTRDate(stay.checkIn).replace(/ \d{4}$/, '')} – ${formatTRDate(stay.checkOut).replace(/ \d{4}$/, '')}` : '';
+
   const priceByHotel = useMemo(() => {
     const map = new Map<number, number>();
+    const guests = stay.adults + stay.children;
     rooms
       .filter((r) => (r.status || 'active') === 'active')
       .forEach((r) => {
-        const price = Number(r.discounted_price || r.price_per_night || 0);
+        let price = Number(r.discounted_price || r.price_per_night || 0);
+        if (stay.hasDates) {
+          if (Number(r.capacity || 0) < guests) return;
+          const q = quoteStay(r, stay.checkIn, stay.checkOut, calendar, 1);
+          if (!q.available) return;
+          price = Math.round(q.averageNightly);
+        }
         if (!price) return;
         const current = map.get(Number(r.hotel_id));
         if (current === undefined || price < current) map.set(Number(r.hotel_id), price);
       });
     return map;
-  }, [rooms]);
+  }, [rooms, calendar, stay]);
 
   const results = useMemo(() => {
     const term = destination.trim().toLocaleLowerCase('tr-TR');
@@ -351,11 +378,11 @@ export const Properties: React.FC = () => {
                     key={hotel.id}
                     role="link"
                     tabIndex={0}
-                    onClick={() => navigate(`/tesis/${hotel.id}`)}
+                    onClick={() => navigate(`/tesis/${hotel.id}${stayQuery}`)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        navigate(`/tesis/${hotel.id}`);
+                        navigate(`/tesis/${hotel.id}${stayQuery}`);
                       }
                     }}
                     className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col sm:flex-row hover:shadow-xl hover:border-amber-300 transition-shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -433,13 +460,16 @@ export const Properties: React.FC = () => {
                           </div>
                         )}
                         <div className="text-right">
-                          <p className="text-[11px] text-slate-500">Gecelik başlangıç</p>
+                          <p className="text-[11px] text-slate-500">{stay.hasDates ? `${stayLabel} için gecelik` : 'Gecelik başlangıç'}</p>
                           <p className="text-xl font-black text-amber-600">
-                            {price ? formatPrice(price) : 'Sorunuz'}
+                            {price ? formatPrice(price) : stay.hasDates ? 'Müsait oda yok' : 'Sorunuz'}
                           </p>
+                          {stay.hasDates && !price && (
+                            <p className="text-[11px] text-slate-500">Başka bir tarih deneyin</p>
+                          )}
                         </div>
                         <Link
-                          to={`/tesis/${hotel.id}`}
+                          to={`/tesis/${hotel.id}${stayQuery}`}
                           className="w-full"
                           onClick={(e) => e.stopPropagation()}
                         >

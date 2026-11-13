@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { loadCalendar, parseStayParams } from '@/lib/pricing';
 import {
   MapPin,
   Star,
@@ -48,11 +49,12 @@ export const PropertyDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
 
-  const today = toISODate(new Date());
-  const [checkIn, setCheckIn] = useState(addDays(today, 1));
-  const [checkOut, setCheckOut] = useState(addDays(today, 2));
-  const [adults, setAdults] = useState(2);
-  const [children, setChildren] = useState(0);
+  const [searchParams] = useSearchParams();
+  const initial = useMemo(() => parseStayParams(searchParams), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [checkIn, setCheckIn] = useState(initial.checkIn);
+  const [checkOut, setCheckOut] = useState(initial.checkOut);
+  const [adults, setAdults] = useState(initial.adults);
+  const [children, setChildren] = useState(initial.children);
 
   useEffect(() => {
     if (!id) return;
@@ -60,16 +62,14 @@ export const PropertyDetail: React.FC = () => {
     (async () => {
       setLoading(true);
       try {
-        const [hotelRes, roomRes, reviewRes, calRes] = await Promise.all([
+        const [hotelRes, roomRes, reviewRes] = await Promise.all([
           client.entities.hotels.get({ id }),
           client.entities.rooms.query({ query: { hotel_id: Number(id) }, limit: 100 }),
           client.entities.reviews.query({ query: { hotel_id: Number(id) }, limit: 50 }),
-          client.entities.rate_calendar.query({ query: { hotel_id: Number(id) }, limit: 400 }),
         ]);
         setHotel(hotelRes?.data || null);
         setRooms((roomRes?.data?.items || []).filter((r: Room) => (r.status || 'active') === 'active'));
         setReviews(reviewRes?.data?.items || []);
-        setCalendar(calRes?.data?.items || []);
         pushRecentProperty(Number(id));
       } catch (e) {
         console.error(e);
@@ -79,12 +79,23 @@ export const PropertyDetail: React.FC = () => {
     })();
   }, [id]);
 
+  // Seçilen tarih aralığının tarih bazlı fiyat/müsaitlik kayıtları
+  useEffect(() => {
+    if (!id) return;
+    let alive = true;
+    loadCalendar({ hotel_id: Number(id) }, checkIn, checkOut)
+      .then((rows) => alive && setCalendar(rows))
+      .catch(() => alive && setCalendar([]));
+    return () => { alive = false; };
+  }, [id, checkIn, checkOut]);
+
   const gallery = useMemo(() => {
     if (!hotel) return [];
     const list = [hotel.image_url, ...parseList(hotel.gallery)].filter(Boolean) as string[];
     return Array.from(new Set(list)).map(resolveImageUrl);
   }, [hotel]);
 
+  const today = toISODate(new Date());
   const nights = nightsBetween(checkIn, checkOut);
   const guests = adults + children;
 
