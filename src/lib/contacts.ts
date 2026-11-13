@@ -99,3 +99,14 @@ export const buildWhatsAppLink = (branch: BranchContact, customMessage?: string)
     `Merhaba, UYUROOM HOTEL ${branch.city} şubesi için rezervasyon ve müsaitlik bilgisi almak istiyorum.`;
   return `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(message)}`;
 };
+/**
+ * Sosyal medya hesapları. Boş bırakılan hesap sitede gösterilmez.
+ * Hesap adreslerini buraya yazın (ör. https://www.instagram.com/hesapadi).
+ */
+export const SOCIAL_LINKS: { key: 'instagram' | 'facebook' | 'google' | 'x' | 'youtube'; label: string; url: string }[] = [
+  { key: 'instagram', label: 'Instagram', url: '' },
+  { key: 'facebook', label: 'Facebook', url: '' },
+  { key: 'google', label: 'Google İşletme Profili', url: '' },
+  { key: 'x', label: 'X', url: '' },
+  { key: 'youtube', label: 'YouTube', url: '' },
+];

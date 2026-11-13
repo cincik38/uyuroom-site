@@ -11,6 +11,7 @@ import BookingQuery from './pages/BookingQuery';
 import About from './pages/About';
 import Policies from './pages/Policies';
 import Kvkk from './pages/Kvkk';
+import DistanceSales from './pages/DistanceSales';
 import StaffEntry from './pages/StaffEntry';
 import CharacterPreview from './pages/CharacterPreview';
 import TrackingSettings from './pages/admin/TrackingSettings';
@@ -28,6 +29,7 @@ import WhatsAppWidget from './components/WhatsAppWidget';
 import CookieBanner from './components/CookieBanner';
 import { trackPageView, trackContactClick } from './lib/analytics';
 import ErrorBoundary from './components/ErrorBoundary';
+import { usePageMeta, STATIC_META } from './lib/pageMeta';
 
 const queryClient = new QueryClient();
 
@@ -61,7 +63,16 @@ const ScrollToTop = () => {
   return null;
 };
 
+const RouteMeta = () => {
+  const { pathname } = useLocation();
+  const m = STATIC_META[pathname.replace(/\/+$/, '') || '/'];
+  usePageMeta(m?.title, m?.description, m ? pathname : undefined);
+  return null;
+};
+
 const AppRoutes = () => (
+  <>
+  <RouteMeta />
   <Routes>
     <Route path="/" element={<Index />} />
     <Route path="/rooms" element={<Navigate to="/tesisler" replace />} />
@@ -74,6 +85,7 @@ const AppRoutes = () => (
     <Route path="/booking-query" element={<BookingQuery />} />
     <Route path="/about" element={<About />} />
     <Route path="/policies" element={<Policies />} />
+    <Route path="/mesafeli-satis" element={<DistanceSales />} />
     <Route path="/kvkk" element={<Kvkk />} />
     <Route path="/personel" element={<StaffEntry />} />
     <Route path="/karakter-onizleme" element={<CharacterPreview />} />
@@ -121,6 +133,7 @@ const AppRoutes = () => (
     />
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
+  </>
 );
 
 const App = () => (

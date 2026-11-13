@@ -576,7 +576,7 @@ export const BookingPage: React.FC = () => {
               </Button>
 
               <p className="text-[10px] text-center text-slate-400">
-                Rezervasyon yaparak <Link to="/policies" className="underline">Konaklama ve İptal Şartlarını</Link> kabul etmiş, <Link to="/kvkk" className="underline">KVKK Aydınlatma Metni</Link>'ni okumuş olursunuz.
+                Rezervasyon yaparak <Link to="/policies" className="underline">Konaklama ve İptal Şartlarını</Link> ve <Link to="/mesafeli-satis" className="underline">Mesafeli Satış Sözleşmesi ile Ön Bilgilendirme Formunu</Link> kabul etmiş, <Link to="/kvkk" className="underline">KVKK Aydınlatma Metni</Link>'ni okumuş olursunuz.
               </p>
             </div>
           </div>

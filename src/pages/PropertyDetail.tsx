@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { usePageMeta } from '@/lib/pageMeta';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { loadCalendar, parseStayParams } from '@/lib/pricing';
 import {
@@ -120,6 +121,12 @@ export const PropertyDetail: React.FC = () => {
     });
     navigate(`/booking?${query.toString()}`);
   };
+
+  usePageMeta(
+    hotel ? `${hotel.name} – ${hotel.city} Otel Rezervasyonu` : undefined,
+    hotel ? `${hotel.name}, ${hotel.district ? `${hotel.district}, ` : ''}${hotel.city}: odalar, fotoğraflar, tarihe özel fiyatlar ve komisyonsuz doğrudan rezervasyon.` : undefined,
+    hotel ? `/tesis/${hotel.id}` : undefined,
+  );
 
   if (loading) {
     return (

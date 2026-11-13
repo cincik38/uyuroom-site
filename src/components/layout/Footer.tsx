@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, ShieldCheck, CreditCard, Banknote, Building, ChevronRight, MessageCircle, Navigation } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
-import { BRANCH_CONTACTS, buildWhatsAppLink, buildMapLink } from '@/lib/contacts';
+import { BRANCH_CONTACTS, SOCIAL_LINKS, buildWhatsAppLink, buildMapLink } from '@/lib/contacts';
 
 export const Footer: React.FC = () => {
   return (
@@ -16,6 +16,16 @@ export const Footer: React.FC = () => {
               Mükemmel bir uyku ve üstün konaklama konforu için Adana ve Uşak şubelerimizle hizmetinizdeyiz. 
               Gelişmiş rezervasyon altyapısı ve çoklu ödeme kolaylığı.
             </p>
+            {SOCIAL_LINKS.some((l) => l.url) && (
+              <div className="flex flex-wrap items-center gap-2" aria-label="Sosyal medya">
+                {SOCIAL_LINKS.filter((l) => l.url).map((l) => (
+                  <a key={l.key} href={l.url} target="_blank" rel="noopener noreferrer me" aria-label={l.label}
+                    className="inline-flex items-center min-h-[40px] px-3 rounded-lg bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-amber-400 hover:border-amber-400/40 transition-colors">
+                    {l.label}
+                  </a>
+                ))}
+              </div>
+            )}
             <div className="flex items-center gap-2 pt-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-amber-400 font-medium">
                 <ShieldCheck className="w-3.5 h-3.5" /> Güvenli Rezervasyon
@@ -96,6 +106,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/mesafeli-satis" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
+                  <ChevronRight className="w-3.5 h-3.5 text-amber-400" /> Mesafeli Satış Sözleşmesi
+                </Link>
+              </li>
+              <li>
                 <Link to="/tesisler" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
                   <ChevronRight className="w-3.5 h-3.5 text-amber-400" /> Tüm Tesisler
                 </Link>
@@ -140,10 +155,11 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="border-t border-slate-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} UYUROOM HOTEL (ŞAHASTE ÇİNÇİK) · VKN: 9810713434. Tüm hakları saklıdır.</p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             <Link to="/kvkk" className="hover:text-slate-400">Gizlilik ve Çerez Politikası</Link>
             <Link to="/kvkk" className="hover:text-slate-400">KVKK Aydınlatma Metni</Link>
             <Link to="/policies" className="hover:text-slate-400">İptal ve İade Koşulları</Link>
+            <Link to="/mesafeli-satis" className="hover:text-slate-400">Mesafeli Satış Sözleşmesi</Link>
             <Link to="/personel" className="hover:text-slate-400">Personel Girişi</Link>
           </div>
         </div>

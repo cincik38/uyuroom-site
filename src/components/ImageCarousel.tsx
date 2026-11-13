@@ -116,6 +116,8 @@ const ImageCarousel = ({
             >
               <ChevronRight className="w-6 h-6" />
             </button>
+            {/* Çok fotoğraflı galerilerde (ör. 62) noktalar sıkışmasın: sadece sayaç + küçük resim şeridi */}
+            {total <= 10 && (
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
               {images.map((img, i) => (
                 <button
@@ -129,6 +131,7 @@ const ImageCarousel = ({
                 />
               ))}
             </div>
+            )}
             <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-950/70 text-white text-[11px] font-bold">
               {index + 1} / {total}
             </div>

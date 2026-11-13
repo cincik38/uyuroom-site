@@ -28,9 +28,13 @@ export const Policies: React.FC = () => {
           <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-amber-500" /> İptal ve İade Koşulları
           </h2>
-          <p>• <strong>Ücretsiz İptal:</strong> Giriş tarihine 24 saat kalana kadar yapılan iptallerde hiçbir ücret talep edilmez.</p>
-          <p>• <strong>Kapıda Ödeme:</strong> Ön ödeme alınmadığı için iptallerde ceza uygulanmaz, ancak iptal durumunu bildirmeniz rica olunur.</p>
-          <p>• <strong>Havale / EFT:</strong> İptal talebiniz onaylandığında tutar 3 iş günü içinde hesabınıza iade edilir.</p>
+          <p>• <strong>Ücretsiz İptal:</strong> Giriş tarihine 24 saatten fazla kala yapılan iptallerde hiçbir ücret talep edilmez.</p>
+          <p>• <strong>Geç İptal ve Gelmeme:</strong> Giriş tarihine 24 saatten az kala yapılan iptallerde veya otele hiç gelinmediğinde ilk gecenin konaklama bedeli alınır. Kalan tutar varsa iade edilir.</p>
+          <p>• <strong>Kapıda Ödeme:</strong> Ön ödeme alınmaz. Ücretsiz iptal süresi içinde iptal ederseniz herhangi bir ödeme yapmazsınız. Geç iptal veya gelmeme halinde ilk gece bedeli, otele yapacağınız bir sonraki konaklamada veya ödeme talebiyle tahsil edilir.</p>
+          <p>• <strong>Havale / EFT:</strong> Rezervasyon tutarı havale ile önceden ödenmiştir. Ücretsiz iptal süresi içinde iptal ederseniz tutarın tamamı, iptal talebinin onaylanmasından sonra 3 iş günü içinde ödemeyi yaptığınız hesaba iade edilir. Geç iptal veya gelmeme halinde ilk gece bedeli kesilir, kalan tutar yine 3 iş günü içinde iade edilir.</p>
+          <p>• <strong>İptal nasıl yapılır:</strong> Rezervasyon kodunuzla (PNR) şubemizi telefon veya WhatsApp üzerinden arayarak iptal talebinizi iletin. Talebin ulaştığı an iptal saati sayılır.</p>
+          <p>• <strong>Erken ayrılış:</strong> Konaklama başladıktan sonra planlanandan erken ayrılışlarda kullanılmayan geceler için iade yapılmaz.</p>
+          <p>• <strong>Özel tarih ve dönemler:</strong> Yılbaşı gibi özel tarihlerde farklı iptal koşulları geçerli olabilir; varsa bu koşul rezervasyon sırasında ayrıca belirtilir.</p>
         </div>
 
         <div className="bg-white p-8 rounded-3xl border border-slate-200 space-y-4">

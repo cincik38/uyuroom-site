@@ -29,6 +29,7 @@ import { buildBranchMapLink, resolveBranchAddress } from '@/lib/contacts';
 import { Button } from '@/components/ui/button';
 import { GuestSelector } from '@/components/GuestSelector';
 import { format, addDays } from 'date-fns';
+import { usePageMeta } from '@/lib/pageMeta';
 
 export const RoomDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -92,6 +93,12 @@ export const RoomDetail: React.FC = () => {
     );
   };
 
+  usePageMeta(
+    room ? `${room.name}${hotel ? ` – ${hotel.city}` : ''}` : undefined,
+    room ? `${hotel?.name || 'UYUROOM HOTEL'} ${room.name}: ${room.capacity} kişilik, ${room.bed_type || 'konforlu'} oda. Tarihinize özel fiyatı görün, komisyonsuz doğrudan rezervasyon yapın.` : undefined,
+    room ? `/room/${room.id}` : undefined,
+  );
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center">
@@ -120,7 +127,7 @@ export const RoomDetail: React.FC = () => {
   const galleryImages = resolveImageUrls(
     room.images ? room.images.split(',').filter(Boolean) : [hotel?.image_url || ''],
   );
-  const amenitiesList = room.amenities ? room.amenities.split(',').map((a) => a.trim()) : [];
+  const amenitiesList = room.amenities ? room.amenities.split(',').map((a) => a.trim()).filter(Boolean) : [];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
