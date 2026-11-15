@@ -119,6 +119,19 @@ const BlogPostPage = () => {
       document.documentElement.lang = seoMeta.lang;
     }
 
+    let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    const previousCanonical = canonical?.getAttribute('href') ?? '';
+    let createdCanonical = false;
+    if (resolvedUrl) {
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.rel = 'canonical';
+        document.head.appendChild(canonical);
+        createdCanonical = true;
+      }
+      canonical.href = resolvedUrl;
+    }
+
     const articleTagEntries = (seoMeta.tags ?? []).map((tag) => {
       const metaTag = document.createElement('meta');
       metaTag.setAttribute('property', 'article:tag');
@@ -130,6 +143,8 @@ const BlogPostPage = () => {
     return () => {
       document.title = previousTitle;
       document.documentElement.lang = previousLang;
+      if (canonical && createdCanonical) canonical.remove();
+      else if (canonical) canonical.href = previousCanonical;
       articleTagEntries.forEach((tag) => tag.remove());
       previousValues.forEach((entry) => {
         if (!entry) {

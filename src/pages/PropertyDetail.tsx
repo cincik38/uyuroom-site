@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { usePageMeta } from '@/lib/pageMeta';
+import { HOTELS } from '@/lib/lodgingData.mjs';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { loadCalendar, parseStayParams } from '@/lib/pricing';
 import {
@@ -36,7 +37,7 @@ import {
   toggleFavorite,
 } from '@/lib/ota';
 import type { Hotel, RateCalendarEntry, Review, Room } from '@/lib/types';
-import { handleImageError, resolveRoomCoverUrl, resolveImageUrl } from '@/lib/media';
+import { handleDisplayImageError, resizeImageUrl, resolveRoomCoverUrl, resolveImageUrl } from '@/lib/media';
 import ImageCarousel from '@/components/ImageCarousel';
 
 export const PropertyDetail: React.FC = () => {
@@ -122,10 +123,15 @@ export const PropertyDetail: React.FC = () => {
     navigate(`/booking?${query.toString()}`);
   };
 
+  const lodging = HOTELS.find((item) => item.id === Number(hotel?.id));
   usePageMeta(
-    hotel ? `${hotel.name} – ${hotel.city} Otel Rezervasyonu` : undefined,
-    hotel ? `${hotel.name}, ${hotel.district ? `${hotel.district}, ` : ''}${hotel.city}: odalar, fotoğraflar, tarihe özel fiyatlar ve komisyonsuz doğrudan rezervasyon.` : undefined,
+    lodging?.title || (hotel ? `${hotel.city} Otel | ${hotel.name}` : undefined),
+    lodging?.description ||
+      (hotel
+        ? `${hotel.name}, ${hotel.district ? `${hotel.district}, ` : ''}${hotel.city}: odalar, fotoğraflar, tarihe özel fiyatlar ve komisyonsuz doğrudan rezervasyon.`
+        : undefined),
     hotel ? `/tesis/${hotel.id}` : undefined,
+    lodging?.image || hotel?.image_url,
   );
 
   if (loading) {
@@ -218,7 +224,7 @@ export const PropertyDetail: React.FC = () => {
           </div>
 
           {/* Galeri */}
-          <ImageCarousel images={gallery} alt={hotel.name} />
+          <ImageCarousel images={gallery} alt={`${hotel.name} otel fotoğrafı`} />
 
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
@@ -314,11 +320,15 @@ export const PropertyDetail: React.FC = () => {
                         {room.images && (
                           <Link to={`/room/${room.id}`} className="sm:w-40 shrink-0" aria-label={`${room.name} detaylarını gör`}>
                             <img
-                              src={resolveRoomCoverUrl(parseList(room.images), hotel.image_url)}
-                              onError={handleImageError}
-                              alt={room.name}
+                              src={resizeImageUrl(resolveRoomCoverUrl(parseList(room.images), hotel.image_url), 480)}
+                              data-original={resolveRoomCoverUrl(parseList(room.images), hotel.image_url)}
+                              onError={handleDisplayImageError}
+                              alt={`${room.name} odası`}
                               className="w-full h-32 object-cover rounded-xl"
+                              width={320}
+                              height={180}
                               loading="lazy"
+                              decoding="async"
                             />
                           </Link>
                         )}

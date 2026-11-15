@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Users, Maximize2, Bed, Check, Sparkles, ArrowRight, ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Room, Hotel } from '@/lib/types';
-import { resolveRoomCoverUrl, handleImageError } from '@/lib/media';
+import { resolveRoomCoverUrl, handleDisplayImageError, resizeImageUrl } from '@/lib/media';
 
 interface RoomCardProps {
   room: Room;
@@ -28,11 +28,15 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room, hotel, bookingQuery })
       {/* Image & Badges */}
       <Link to={detailPath} className="relative block aspect-[16/10] overflow-hidden bg-slate-100 cursor-pointer" aria-label={`${room.name} detaylarını gör`}>
         <img
-          src={imageUrl}
-          onError={handleImageError}
-          alt={room.name}
+          src={resizeImageUrl(imageUrl, 960)}
+          data-original={imageUrl}
+          onError={handleDisplayImageError}
+          alt={`${room.name} odası${hotel?.city ? `, ${hotel.city}` : ''}`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          width={960}
+          height={600}
           loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-black/20" />
 

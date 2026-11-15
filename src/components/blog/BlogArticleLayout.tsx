@@ -17,13 +17,13 @@ const BlogArticleLayout = ({
         to="/blog/"
         className="text-sm text-slate-500 underline-offset-4 hover:text-slate-900 hover:underline"
       >
-        Back to blog
+        Bloğa dön
       </Link>
     </div>
     <article className="mx-auto max-w-3xl px-6 py-12">
       <header className="border-b border-slate-200 pb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-700">
-          Blog Article
+          UYUROOM Blog
         </p>
         <h1 className="mt-4 font-serif text-4xl leading-tight text-slate-950 sm:text-5xl">
           {title}

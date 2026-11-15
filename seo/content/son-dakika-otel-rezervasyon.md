@@ -52,7 +52,7 @@ Bu hızlı ve pratik sistem sayesinde, "hızlı otel arama" ihtiyacınız olduğ
 Online rezervasyon sistemimiz ne kadar pratik olsa da, özellikle **son dakika otel rezervasyonu** gibi acil durumlarda, bazen insan dokunuşuna ihtiyaç duyulur. UYUROOM HOTEL, bu ihtiyacı karşılamak üzere güçlü bir canlı destek ağı sunar. İster Adana'da olun ister Uşak'ta, şubelerimize doğrudan ulaşarak veya WhatsApp üzerinden anında iletişime geçerek, konaklama ihtiyaçlarınıza yönelik hızlı çözümler alabilirsiniz.
 
 Şube telefonlarımız her sayfada açıkça belirtilmiş olup, tek tıkla arama imkanı sunar:
-*   **Adana Şubesi:** 0555 898 76 66
+*   **Adana Şubesi:** 0505 898 76 66
 *   **Uşak Şubesi:** 0553 122 22 79
 
 Bu numaralar aracılığıyla doğrudan otel personelimizle konuşabilir, müsaitlik durumu hakkında en güncel bilgiyi alabilir, özel isteklerinizi iletebilir ve hatta telefon üzerinden rezervasyonunuzu hızla gerçekleştirebilirsiniz. Özellikle internet erişiminizin kısıtlı olduğu veya karmaşık bir sorunuz olduğu durumlarda telefonla iletişim, en pratik çözümdür.

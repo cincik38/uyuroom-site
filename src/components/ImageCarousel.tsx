@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, X, ImageOff } from 'lucide-react';
-import { IMAGE_PLACEHOLDER, handleImageError } from '@/lib/media';
+import { IMAGE_PLACEHOLDER, handleDisplayImageError, resizeImageUrl } from '@/lib/media';
 
 interface ImageCarouselProps {
   images: string[];
@@ -91,11 +91,16 @@ const ImageCarousel = ({
         onTouchEnd={onTouchEnd}
       >
         <img
-          src={images[index] || IMAGE_PLACEHOLDER}
-          onError={handleImageError}
-          alt={alt}
+          src={resizeImageUrl(images[index] || IMAGE_PLACEHOLDER, 1280)}
+          data-original={images[index] || IMAGE_PLACEHOLDER}
+          onError={handleDisplayImageError}
+          alt={alt || 'Otel fotoğrafı'}
           onClick={() => setLightbox(true)}
           className="w-full h-full object-cover cursor-zoom-in"
+          width={1280}
+          height={720}
+          decoding="async"
+          fetchPriority="high"
         />
 
         {hasMultiple && (
@@ -151,7 +156,17 @@ const ImageCarousel = ({
                 i === index ? 'border-amber-500' : 'border-transparent opacity-70 hover:opacity-100'
               }`}
             >
-              <img src={img} onError={handleImageError} alt="" className="w-full h-full object-cover" />
+              <img
+                src={resizeImageUrl(img, 320)}
+                data-original={img}
+                onError={handleDisplayImageError}
+                alt={alt ? `${alt}, küçük görsel ${i + 1}` : `Küçük görsel ${i + 1}`}
+                className="w-full h-full object-cover"
+                width={96}
+                height={64}
+                loading="lazy"
+                decoding="async"
+              />
             </button>
           ))}
         </div>
@@ -184,10 +199,12 @@ const ImageCarousel = ({
           )}
 
           <img
-            src={images[index] || IMAGE_PLACEHOLDER}
-            onError={handleImageError}
-            alt={alt}
+            src={resizeImageUrl(images[index] || IMAGE_PLACEHOLDER, 1600)}
+            data-original={images[index] || IMAGE_PLACEHOLDER}
+            onError={handleDisplayImageError}
+            alt={alt || 'Otel fotoğrafı'}
             className="max-w-full max-h-[85vh] object-contain rounded-xl"
+            decoding="async"
           />
 
           {hasMultiple && (

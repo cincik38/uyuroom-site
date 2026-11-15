@@ -1,4 +1,5 @@
 import Markdown from 'markdown-to-jsx';
+import { handleDisplayImageError, resizeImageUrl } from '@/lib/media';
 
 type MarkdownArticleProps = {
   markdown: string;
@@ -14,6 +15,19 @@ const MarkdownArticle = ({ markdown }: MarkdownArticleProps) => (
             props: {
               className: 'font-medium',
             },
+          },
+          img: {
+            component: ({ src, alt, ...rest }: { src?: string; alt?: string }) => (
+              <img
+                src={src ? resizeImageUrl(src, 1200) : src}
+                data-original={src}
+                alt={alt || 'UYUROOM otel görseli'}
+                loading="lazy"
+                decoding="async"
+                onError={handleDisplayImageError}
+                {...rest}
+              />
+            ),
           },
           code: {
             props: {

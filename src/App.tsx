@@ -29,7 +29,7 @@ import WhatsAppWidget from './components/WhatsAppWidget';
 import CookieBanner from './components/CookieBanner';
 import { trackPageView, trackContactClick } from './lib/analytics';
 import ErrorBoundary from './components/ErrorBoundary';
-import { usePageMeta, STATIC_META } from './lib/pageMeta';
+import { useRouteSeo } from './lib/pageMeta';
 
 const queryClient = new QueryClient();
 
@@ -65,8 +65,7 @@ const ScrollToTop = () => {
 
 const RouteMeta = () => {
   const { pathname } = useLocation();
-  const m = STATIC_META[pathname.replace(/\/+$/, '') || '/'];
-  usePageMeta(m?.title, m?.description, m ? pathname : undefined);
+  useRouteSeo(pathname);
   return null;
 };
 

@@ -5,7 +5,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { client } from '@/lib/api';
 import { Room, Hotel, Booking } from '@/lib/types';
-import { handleImageError, resolveRoomCoverUrl } from '@/lib/media';
+import { handleDisplayImageError, resizeImageUrl, resolveRoomCoverUrl } from '@/lib/media';
 import { 
   CreditCard, 
   Banknote, 
@@ -489,10 +489,15 @@ export const BookingPage: React.FC = () => {
               {room && (
                 <div className="flex gap-3 items-center">
                   <img
-                    src={resolveRoomCoverUrl(room.images?.split(','), hotel?.image_url)}
-                    onError={handleImageError}
-                    alt={room.name}
+                    src={resizeImageUrl(resolveRoomCoverUrl(room.images?.split(','), hotel?.image_url), 240)}
+                    data-original={resolveRoomCoverUrl(room.images?.split(','), hotel?.image_url)}
+                    onError={handleDisplayImageError}
+                    alt={`${room.name} odası`}
                     className="w-20 h-16 rounded-xl object-cover"
+                    width={80}
+                    height={64}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div>
                     <h4 className="font-bold text-sm text-slate-900 leading-tight">{room.name}</h4>

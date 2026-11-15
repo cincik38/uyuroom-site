@@ -7,7 +7,7 @@ import { client } from '@/lib/api';
 import { Room, Hotel, RateCalendarEntry } from '@/lib/types';
 import { quoteStay, nightsBetween, formatTRDate } from '@/lib/ota';
 import { loadCalendar, parseStayParams } from '@/lib/pricing';
-import { handleImageError, resolveImageUrls } from '@/lib/media';
+import { resolveImageUrls } from '@/lib/media';
 import ImageCarousel from '@/components/ImageCarousel';
 import { 
   Users, 
@@ -30,6 +30,7 @@ import { Button } from '@/components/ui/button';
 import { GuestSelector } from '@/components/GuestSelector';
 import { format, addDays } from 'date-fns';
 import { usePageMeta } from '@/lib/pageMeta';
+import { roomDescription, roomTitle } from '@/lib/lodgingData.mjs';
 
 export const RoomDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -94,9 +95,10 @@ export const RoomDetail: React.FC = () => {
   };
 
   usePageMeta(
-    room ? `${room.name}${hotel ? ` – ${hotel.city}` : ''}` : undefined,
-    room ? `${hotel?.name || 'UYUROOM HOTEL'} ${room.name}: ${room.capacity} kişilik, ${room.bed_type || 'konforlu'} oda. Tarihinize özel fiyatı görün, komisyonsuz doğrudan rezervasyon yapın.` : undefined,
+    room ? roomTitle(hotel?.city, room.name, hotel?.name) : undefined,
+    room ? roomDescription(hotel?.name, room.name, room.capacity, hotel?.city) : undefined,
     room ? `/room/${room.id}` : undefined,
+    hotel?.image_url,
   );
 
   if (loading) {
@@ -152,7 +154,7 @@ export const RoomDetail: React.FC = () => {
         <div className="mb-8">
           <ImageCarousel
             images={galleryImages}
-            alt={room.name}
+            alt={`${room.name} odası`}
             aspectClassName="aspect-[16/10]"
           />
         </div>

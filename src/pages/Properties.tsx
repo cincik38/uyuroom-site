@@ -27,7 +27,7 @@ import {
 } from '@/lib/ota';
 import type { Hotel, RateCalendarEntry, Room } from '@/lib/types';
 import { loadCalendar, parseStayParams, stayQueryString } from '@/lib/pricing';
-import { handleImageError, resolveCoverUrl } from '@/lib/media';
+import { handleDisplayImageError, resizeImageUrl, resolveCoverUrl } from '@/lib/media';
 
 type SortKey = 'recommended' | 'price_asc' | 'price_desc' | 'rating';
 
@@ -390,11 +390,15 @@ export const Properties: React.FC = () => {
                     <div className="sm:w-64 h-48 sm:h-auto relative shrink-0 bg-slate-200">
                       {cover && (
                         <img
-                          src={cover}
-                          onError={handleImageError}
-                          alt={hotel.name}
+                          src={resizeImageUrl(cover, 800)}
+                          data-original={cover}
+                          onError={handleDisplayImageError}
+                          alt={`${hotel.name}, ${hotel.city} otel`}
                           className="w-full h-full object-cover"
+                          width={800}
+                          height={480}
                           loading="lazy"
+                          decoding="async"
                         />
                       )}
                       <button
