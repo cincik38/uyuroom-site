@@ -1,4 +1,5 @@
 import { parse as parseYaml } from 'yaml';
+import { PUBLIC_META } from './lodgingData.mjs';
 
 type FrontmatterValue = string | string[];
 
@@ -248,9 +249,8 @@ function getPostSeoMeta(post?: BlogPost | null): SeoMeta {
   const siteName = getSiteName();
   const twitterSiteHandle = getTwitterSiteHandle();
   const twitterCreatorHandle = getTwitterCreatorHandle();
-  const fallbackTitle = `Blog | ${siteName}`;
-  const fallbackDescription =
-    'UYUROOM HOTEL blog: Adana ve Uşak otel konaklama, gezi rehberleri ve rezervasyon ipuçları.';
+  const fallbackTitle = PUBLIC_META['/blog'].title;
+  const fallbackDescription = PUBLIC_META['/blog'].description;
 
   if (!post) {
     const fallbackUrl = getAbsoluteUrl('/blog/');

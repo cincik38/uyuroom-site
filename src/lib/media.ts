@@ -62,9 +62,36 @@ export function resolveRoomCoverUrl(
   return resolveCoverUrl([], fallback);
 }
 
+const SUPABASE_OBJECT = '/storage/v1/object/public/';
+
+/**
+ * Supabase'te duran büyük fotoğrafları ekranda gereken genişliğe indirir.
+ * Dönüştürme kapalıysa `handleDisplayImageError` orijinal adrese döner.
+ */
+export function resizeImageUrl(url: string, width: number): string {
+  if (!url || url.startsWith('data:') || url === IMAGE_PLACEHOLDER) return url;
+  if (!url.includes(SUPABASE_OBJECT)) return url;
+  const base = url.split('?')[0].replace(SUPABASE_OBJECT, '/storage/v1/render/image/public/');
+  return `${base}?width=${Math.round(width)}&quality=72&resize=contain`;
+}
+
 /** `<img onError>` için yedek görsele düşüren ortak işleyici. */
 export function handleImageError(e: React.SyntheticEvent<HTMLImageElement>): void {
   const img = e.currentTarget;
   if (img.src === IMAGE_PLACEHOLDER) return;
   img.src = IMAGE_PLACEHOLDER;
+}
+
+/** Önce küçültülmüş adresi dener; olmazsa data-original, o da olmazsa yedek görsel. */
+export function handleDisplayImageError(e: React.SyntheticEvent<HTMLImageElement>): void {
+  const img = e.currentTarget;
+  const original = img.dataset.original;
+  if (original && img.dataset.triedOriginal !== '1') {
+    img.dataset.triedOriginal = '1';
+    if (img.src !== original) {
+      img.src = original;
+      return;
+    }
+  }
+  handleImageError(e);
 }

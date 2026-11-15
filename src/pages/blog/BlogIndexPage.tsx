@@ -44,7 +44,10 @@ const BlogIndexPage = () => (
                     src={hero}
                     alt={post.title}
                     className="w-full h-44 object-cover"
+                    width={640}
+                    height={176}
                     loading="lazy"
+                    decoding="async"
                   />
                 )}
                 <div className="p-5 flex-1 flex flex-col gap-3">
