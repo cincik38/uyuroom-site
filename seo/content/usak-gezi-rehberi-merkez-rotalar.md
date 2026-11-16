@@ -72,7 +72,7 @@ UYUROOM olarak misafirlerimizin konforunu ve memnuniyetini ön planda tutuyoruz.
 
 ### Esnek Ödeme Seçenekleri ve Kolay Rezervasyon
 
-Seyahat planlamasında ödeme kolaylıkları büyük önem taşır. UYUROOM, misafirlerine Kapıda Ödeme, Banka Havalesi/EFT ve Online Kredi Kartı gibi çeşitli ödeme seçenekleri sunar. Bu esneklik sayesinde bütçenize en uygun ve güvenli ödeme yöntemini tercih edebilirsiniz. Özellikle [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) blog yazımızda da belirttiğimiz gibi, komisyonsuz doğrudan rezervasyon avantajlarından faydalanarak en uygun fiyatlarla konaklama imkanı bulursunuz. Web sitemiz üzerinden hızlı ve kolay bir şekilde rezervasyonunuzu tamamlayabilirsiniz.
+Seyahat planlamasında ödeme kolaylıkları büyük önem taşır. UYUROOM'da ödeme otelde kapıda (nakit veya POS) ya da banka havalesi/EFT ile yapılır; kart bilgisi siteden alınmaz. Özellikle [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) blog yazımızda da belirttiğimiz gibi, komisyonsuz doğrudan rezervasyon avantajlarından faydalanarak en uygun fiyatlarla konaklama imkanı bulursunuz. Web sitemiz üzerinden hızlı ve kolay bir şekilde rezervasyonunuzu tamamlayabilirsiniz.
 
 ## Uşak Ziyaretiniz İçin Pratik Bilgiler
 

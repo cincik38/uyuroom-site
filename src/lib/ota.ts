@@ -110,7 +110,6 @@ export const TR_CITIES = [
 export const PAYMENT_METHOD_LABELS: Record<string, string> = {
   pay_at_hotel: 'Kapıda Ödeme',
   bank_transfer: 'Havale / EFT',
-  credit_card: 'Online Kredi Kartı',
 };
 
 /* ------------------------------------------------------------------ */

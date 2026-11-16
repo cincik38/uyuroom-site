@@ -60,7 +60,7 @@ Oda listeleme sayfamızdaki akıllı filtreler, kalabalıktan sıyrılıp tam da
 
 UYUROOM'un online rezervasyon sistemi, seçtiğiniz odayı ayırtma sürecini oldukça basitleştirir. İdeal odanızı bulup "Rezervasyon Yap" butonuna tıkladıktan sonra, birkaç kolay adımla rezervasyonunuzu tamamlayabilirsiniz. Bu süreç, kişisel bilgilerinizin güvende tutulduğu, şeffaf ve hızlı bir akış sunar.
 
-İlk olarak, misafir bilgileri ekranında adınız, soyadınız, iletişim bilgileriniz (telefon ve e-posta) gibi temel bilgileri girmeniz istenir. Bu bilgiler, rezervasyon onayı ve herhangi bir iletişim için kullanılır. Tüm alanları eksiksiz ve doğru bir şekilde doldurduğunuzdan emin olun. Ardından, UYUROOM'un esnek ödeme seçenekleri ile karşılaşırsınız. Misafirlerimize kolaylık sağlamak amacıyla Kapıda Ödeme, Banka Havalesi/EFT ve Online Kredi Kartı olmak üzere üç farklı ödeme yöntemi sunuyoruz. Bu çeşitlilik, herkesin tercihine ve kolaylığına uygun bir çözüm bulmasını sağlar.
+İlk olarak, misafir bilgileri ekranında adınız, soyadınız, iletişim bilgileriniz (telefon ve e-posta) gibi temel bilgileri girmeniz istenir. Bu bilgiler, rezervasyon onayı ve herhangi bir iletişim için kullanılır. Tüm alanları eksiksiz ve doğru bir şekilde doldurduğunuzdan emin olun. Ardından ödeme yöntemini seçersiniz: Kapıda Ödeme ya da Banka Havalesi/EFT. Kart bilgisi bu formda istenmez.
 
 ### Kolay Misafir Bilgileri Girişi
 
@@ -68,7 +68,7 @@ Misafir bilgilerini girerken, formun basitliği ve netliği ön plandadır. Karm
 
 ### Esnek Ödeme Seçenekleri: Size Özel Çözümler
 
-Ödeme aşamasında, UYUROOM'un misafir odaklı yaklaşımını net bir şekilde görebilirsiniz. Kredi kartı kullanmak istemeyenler için [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) imkanı sunulur. Kapıda ödeme seçeneği ile konaklamanız sırasında ödemenizi gerçekleştirebilirsiniz. Banka Havalesi/EFT seçeneğini tercih edenler için ise IBAN bilgilerimiz ve dekont bildirimi hakkında yönlendirmeler sağlanır. Online Kredi Kartı ile ödeme yapmak isteyenler için güvenli 3D Secure altyapısı üzerinden hızlı ve güvenli bir ödeme deneyimi sunulur. Tüm ödeme yöntemlerinde, direkt web sitemizden yaptığınız rezervasyonlarda komisyon alınmaz ve en uygun fiyatlardan faydalanırsınız.
+Ödeme aşamasında, UYUROOM'un misafir odaklı yaklaşımını net bir şekilde görebilirsiniz. [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) ile rezervasyonu siteden yapar, bedeli otele girişte nakit veya POS ile ödersiniz. Banka Havalesi/EFT seçeneğinde IBAN bilgilerimiz ve dekont bildirimi gösterilir. Kart bilgisi internet sitemiz üzerinden alınmaz. Direkt web sitemizden yaptığınız rezervasyonlarda komisyon alınmaz ve en uygun fiyatlardan faydalanırsınız.
 
 ### PNR Kodu ile Rezervasyon Takibi
 
@@ -78,12 +78,12 @@ Rezervasyonunuzu tamamladıktan sonra size özel bir PNR kodu oluşturulur ve bu
 
 UYUROOM Hotel'in online rezervasyon sistemi üzerinden oda ayırtmak, sadece hızlı ve kolay bir işlemden çok daha fazlasını sunar. Bu platform, misafirlerimize bir dizi benzersiz avantaj sağlar ve konaklama deneyimlerinin her aşamasında değer yaratır. En başta, doğrudan web sitemiz üzerinden yapılan rezervasyonlarda herhangi bir komisyon ücreti ödemezsiniz. Bu, size en uygun fiyatı garantilemenin yanı sıra, otel ile aranızda şeffaf ve aracısız bir iletişim kanalı kurar.
 
-Otelimizin Adana ve Uşak'taki [UYUROOM Adana & Uşak: Merkezi Konum ve Kolay Ulaşım](/blog/otel-merkezi-konum-ulasim) sağlayan merkezi konumları, hem iş hem de turistik seyahatleriniz için idealdir. Şehir merkezindeki avantajlı lokasyonlarımız sayesinde ulaşım kolaylığı ve çevredeki sosyal olanaklara erişim imkanı elde edersiniz. Yüksek standartlı, tertemiz odalarımız ve modern olanaklarımızla konforlu bir konaklama garanti ederiz. Esnek ödeme seçeneklerimiz sayesinde (kapıda ödeme, havale, kredi kartı) kişisel tercihlerinize en uygun yöntemi seçebilirsiniz.
+Otelimizin Adana ve Uşak'taki [UYUROOM Adana & Uşak: Merkezi Konum ve Kolay Ulaşım](/blog/otel-merkezi-konum-ulasim) sağlayan merkezi konumları, hem iş hem de turistik seyahatleriniz için idealdir. Şehir merkezindeki avantajlı lokasyonlarımız sayesinde ulaşım kolaylığı ve çevredeki sosyal olanaklara erişim imkanı elde edersiniz. Yüksek standartlı, tertemiz odalarımız ve modern olanaklarımızla konforlu bir konaklama garanti ederiz. Esnek ödeme seçeneklerimiz sayesinde (otelde kapıda ödeme veya havale/EFT; siteden kartla tahsilat yok) kişisel tercihlerinize uygun yöntemi seçebilirsiniz.
 
 ## Sıkça Sorulan Sorular
 
 ### Online rezervasyon yaparken kredi kartı kullanmak zorunda mıyım?
-Hayır, UYUROOM online rezervasyon sisteminde kredi kartı kullanmak zorunda değilsiniz. Kapıda Ödeme ve Banka Havalesi/EFT gibi esnek ödeme seçenekleri de sunulmaktadır.
+Hayır. UYUROOM sitesi kart bilgisi almaz. Rezervasyonu oluşturduktan sonra ödemeyi otelde (nakit veya POS) ya da banka havalesi/EFT ile yaparsınız.
 
 ### Rezervasyonumu yaptıktan sonra nasıl takip edebilirim?
 Rezervasyonunuz tamamlandığında size özel bir PNR kodu gönderilecektir. Bu kod ile web sitemizdeki "Rezervasyon Sorgulama" bölümünden rezervasyonunuzun detaylarını kolayca takip edebilirsiniz.

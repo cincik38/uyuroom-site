@@ -215,7 +215,7 @@ export const BookingConfirmation: React.FC = () => {
                       <span className="font-bold text-amber-600">
                         {booking.payment_method === 'pay_at_hotel' && 'Kapıda Ödeme (Otelde)'}
                         {booking.payment_method === 'bank_transfer' && 'Banka Havalesi / EFT'}
-                        {booking.payment_method === 'credit_card' && 'Online Kredi Kartı'}
+                        {booking.payment_method === 'credit_card' && 'Kredi kartı (siteden tahsil edilmez)'}
                       </span>
                     </div>
                     <div className="flex justify-between items-baseline pt-1 border-t border-slate-200">

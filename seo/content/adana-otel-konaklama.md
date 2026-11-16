@@ -74,7 +74,7 @@ UYUROOM HOTEL'in kullanıcı dostu online rezervasyon sistemi, adım adım rehbe
 
 ### Esnek Ödeme Seçenekleriyle Güvenli Konaklama
 
-Misafir memnuniyetini ön planda tutan UYUROOM HOTEL Adana, esnek ödeme seçenekleri sunarak herkesin kolayca rezervasyon yapabilmesini sağlar. Kapıda ödeme, banka havalesi/EFT veya online kredi kartı ile ödeme gibi farklı alternatifler mevcuttur. Özellikle kredi kartı kullanmak istemeyen misafirlerimiz için kapıda ödeme veya havale/EFT seçenekleri büyük bir kolaylık sunar. [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) başlıklı makalemiz, bu avantajları daha ayrıntılı olarak ele almaktadır. Rezervasyon sonrası PNR kodu ile rezervasyonunuzu kolayca sorgulayabilir, tüm detaylara anında ulaşabilirsiniz.
+Misafir memnuniyetini ön planda tutan UYUROOM HOTEL Adana, rezervasyonu siteden alır; ödemeyi otele bırakır. Konaklama bedelini girişte nakit veya POS ile ödeyebilir ya da banka havalesi/EFT ile yatırabilirsiniz. Kart bilgisi internet sitemiz üzerinden alınmaz ve saklanmaz. [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) başlıklı makalemiz, bu avantajları daha ayrıntılı olarak ele almaktadır. Rezervasyon sonrası PNR kodu ile rezervasyonunuzu kolayca sorgulayabilir, tüm detaylara anında ulaşabilirsiniz.
 
 ## Sıkça Sorulan Sorular (SSS)
 
@@ -85,7 +85,7 @@ UYUROOM HOTEL Adana, Adana'nın Seyhan ilçesinde, Karasoku Mahallesi 28003 Soka
 Otelimizde standart odalar, deluxe odalar ve süitler gibi farklı ihtiyaçlara ve kapasitelere uygun çeşitli oda tipleri bulunmaktadır. Tüm odalarımız yüksek hijyen standartlarında ve modern olanaklarla donatılmıştır.
 
 ### Rezervasyonumu nasıl yapabilirim ve ödeme seçenekleri nelerdir?
-Rezervasyonunuzu web sitemiz üzerinden kolayca ve komisyonsuz yapabilirsiniz. Ödeme seçeneklerimiz arasında kapıda ödeme, banka havalesi/EFT ve online kredi kartı ile ödeme bulunmaktadır.
+Rezervasyonunuzu web sitemiz üzerinden kolayca ve komisyonsuz yapabilirsiniz. Ödeme otelde kapıda (nakit veya POS) ya da banka havalesi/EFT ile yapılır. Siteden kartla ödeme alınmaz.
 
 ### UYUROOM HOTEL Adana, iş seyahati için uygun mu?
 Evet, otelimiz merkezi konumu ve iş olanaklarına yakınlığı sayesinde iş seyahati yapan profesyoneller için oldukça uygundur. Hızlı internet erişimi ve sakin çalışma ortamları sunulmaktadır.

@@ -24,6 +24,7 @@ import PropertyManager from './pages/manage/PropertyManager';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import BlogIndexPage from './pages/blog/BlogIndexPage';
 import BlogPostPage from './pages/blog/BlogPostPage';
+import NotFound from './pages/NotFound';
 import RoleGuard from './components/RoleGuard';
 import WhatsAppWidget from './components/WhatsAppWidget';
 import CookieBanner from './components/CookieBanner';
@@ -130,7 +131,7 @@ const AppRoutes = () => (
         </RoleGuard>
       }
     />
-    <Route path="*" element={<Navigate to="/" replace />} />
+    <Route path="*" element={<NotFound />} />
   </Routes>
   </>
 );

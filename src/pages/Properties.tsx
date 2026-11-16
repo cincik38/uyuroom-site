@@ -173,11 +173,11 @@ export const Properties: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
           <div className="space-y-2">
             <span className="inline-flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-widest">
-              <Sparkles className="w-3.5 h-3.5" /> UYUROOM Pazar Yeri
+              <Sparkles className="w-3.5 h-3.5" /> UYUROOM Otelleri
             </span>
-            <h1 className="text-2xl sm:text-4xl font-black">Konaklama Keşfet</h1>
+            <h1 className="text-2xl sm:text-4xl font-black">Adana ve Uşak Şubelerimiz</h1>
             <p className="text-sm text-slate-400">
-              Türkiye genelindeki anlaşmalı otel, apart ve pansiyonları karşılaştırın.
+              UYUROOM Hotel'in iki şubesi: Seyhan/Adana'da 30 odalı UYUROOM Hotel Adana ve Merkez/Uşak'ta 20 odalı UYUROOM Hotel Uşak. Tarih seçip odaları ve gecelik fiyatı karşılaştırın.
             </p>
           </div>
 
@@ -458,9 +458,11 @@ export const Properties: React.FC = () => {
                             <span className="px-2 py-1 rounded-lg bg-slate-950 text-amber-400 text-sm font-black">
                               {Number(hotel.guest_score).toFixed(1)}
                             </span>
-                            <span className="text-[11px] text-slate-500">
-                              {hotel.review_count || 0} yorum
-                            </span>
+                            {Number(hotel.review_count) > 0 && (
+                              <span className="text-[11px] text-slate-500">
+                                {hotel.review_count} yorum
+                              </span>
+                            )}
                           </div>
                         )}
                         <div className="text-right">

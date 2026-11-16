@@ -66,10 +66,9 @@ UYUROOM'un kullanıcı dostu web sitesi üzerinden, birkaç basit adımda oda ar
 
 ### Esnek Ödeme Seçenekleri: Kapıda Ödeme ve Havale
 
-İş seyahatlerinde bazen kredi kartı kullanmak istemeyebilir veya şirket politikalarınız gereği farklı ödeme yöntemleri tercih edebilirsiniz. UYUROOM olarak, bu tür ihtiyaçlara cevap vermek amacıyla üç farklı ödeme kanalı sunuyoruz:
-*   **Kapıda Ödeme:** Otelimize geldiğinizde ödeme yapma kolaylığı.
-*   **Banka Havalesi/EFT:** Şirketiniz için ideal olabilecek, banka aracılığıyla ödeme imkanı.
-*   **Online Kredi Kartı:** Hızlı ve güvenli online ödeme seçeneği.
+İş seyahatlerinde şirket politikası nedeniyle ödemeyi peşin kartla yapmak istemeyebilirsiniz. UYUROOM sitesi kart bilgisi almaz. İki ödeme kanalı vardır:
+*   **Kapıda Ödeme:** Otele geldiğinizde nakit veya POS ile ödeme.
+*   **Banka Havalesi/EFT:** Şirketiniz için banka aracılığıyla ödeme.
 Bu esnek ödeme seçenekleri, iş seyahatiniz için planlama yaparken size büyük bir rahatlık sunar. [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) makalemizde bu avantajları daha detaylı ele alıyoruz.
 
 ## UYUROOM'da İş Seyahatinizi Geliştiren Ekstra Avantajlar
@@ -93,7 +92,7 @@ UYUROOM Hotel'in odalarında ergonomik çalışma masaları ve yüksek hızlı, 
 Evet, her iki şubemiz de Adana'nın Karasoku Mahallesi'nde ve Uşak'ın Köme Mahallesi'nde olmak üzere şehir merkezinde stratejik noktalarda konumlanmıştır. Bu sayede iş merkezlerine, devlet dairelerine ve toplu taşıma araçlarına kolayca ulaşım imkanı sunar.
 
 ### İş seyahati için rezervasyon yaparken hangi ödeme yöntemlerini kullanabilirim?
-UYUROOM, esnek ödeme seçenekleri sunar: Kapıda Ödeme, Banka Havalesi/EFT (IBAN bilgileri ve dekont bildirimi ile) ve Online Kredi Kartı ile güvenli ödeme yapabilirsiniz.
+UYUROOM'da ödeme otelde kapıda (nakit veya POS) ya da banka havalesi/EFT (IBAN ve dekont bildirimi) ile yapılır. Siteden kartla ödeme alınmaz.
 
 ### Son dakika iş seyahati planlarım için UYUROOM'da oda bulabilir miyim?
 UYUROOM'un online rezervasyon sistemi, gerçek zamanlı oda arama ve filtreleme özellikleri sayesinde son dakika planlamalarınızda bile size hızlıca uygun seçenekleri sunar.

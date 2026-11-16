@@ -34,7 +34,7 @@ UYUROOM HOTEL olarak, her misafirimizin özel olduğunu biliyoruz. Bu nedenle, a
 
 ### Esnek Rezervasyon ve Ödeme Seçenekleri
 
-Tatil planları bazen son anda değişebilir veya farklı ödeme tercihleriniz olabilir. UYUROOM HOTEL, bu gibi durumlar için esnek çözümler sunar. Kapıda ödeme, banka havalesi/EFT veya online kredi kartı gibi çeşitli ödeme yöntemlerinden dilediğinizi seçebilirsiniz. Ayrıca, doğrudan web sitemiz üzerinden yapacağınız rezervasyonlarda komisyon ödemez, en uygun fiyat garantisinden yararlanırsınız. Bu konuda daha fazla bilgi için, [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) başlıklı yazımıza göz atabilirsiniz.
+Tatil planları bazen son anda değişebilir veya farklı ödeme tercihleriniz olabilir. UYUROOM HOTEL, bu gibi durumlar için esnek çözümler sunar. Rezervasyonu siteden oluşturur, ödemeyi otelde (nakit veya POS) ya da banka havalesi/EFT ile yaparsınız. Ayrıca, doğrudan web sitemiz üzerinden yapacağınız rezervasyonlarda komisyon ödemez, en uygun fiyat garantisinden yararlanırsınız. Bu konuda daha fazla bilgi için, [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) başlıklı yazımıza göz atabilirsiniz.
 
 ## Geniş ve Rahat Aile Odaları, Huzurlu Çift Konaklama Seçenekleri
 
@@ -93,7 +93,7 @@ Otelimizde çocuk yatağı/beşik taleplerinizi karşılayabilir, çocukların g
 Evet, her iki şubemiz de şehrin kalbinde, merkezi konumlarda yer almaktadır. Bu sayede, toplu taşıma, alışveriş merkezleri, turistik yerler ve restoranlara kolayca ulaşım sağlayabilirsiniz.
 
 ### Rezervasyon yaparken hangi ödeme seçeneklerini kullanabilirim?
-UYUROOM HOTEL, misafirlerine Kapıda Ödeme, Banka Havalesi/EFT ve Online Kredi Kartı ile ödeme seçenekleri sunar. Doğrudan web sitemiz üzerinden yapacağınız rezervasyonlarda komisyonsuz fiyat avantajlarından yararlanabilirsiniz.
+UYUROOM HOTEL'te ödeme otelde kapıda (nakit veya POS) ya da banka havalesi/EFT ile yapılır. Kart bilgisi siteden alınmaz. Doğrudan web sitemiz üzerinden yapacağınız rezervasyonlarda komisyonsuz fiyat avantajlarından yararlanabilirsiniz.
 
 ## Sonuç
 

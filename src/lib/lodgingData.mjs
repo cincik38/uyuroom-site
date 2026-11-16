@@ -32,6 +32,10 @@ export const HOTELS = [
       addressCountry: 'TR',
     },
     amenities: ['Klima', 'Ücretsiz otopark', 'Mini mutfak', 'Kahvaltı', 'Asansör', 'Ücretsiz Wi-Fi'],
+    // Kapı No:1 OSM'de ayrı düğüm değil. 36.98517, 35.32564 noktası Karasoku Mahallesi
+    // (posta kodu 01010) içindeki adsız konut sokağına (OSM way 178198521) denk gelir.
+    // Aynı sokaktaki No:2 (Küçük Saat Otel) yaklaşık 36.98529, 35.32563'tedir.
+    geo: { latitude: 36.98517, longitude: 35.32564 },
   },
   {
     id: 2,
@@ -222,10 +226,48 @@ export function lodgingGraph(hotels = HOTELS) {
   return data;
 }
 
+function roomJsonLd(room) {
+  const hotel = HOTELS.find((item) => item.id === room.hotelId);
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'HotelRoom',
+    '@id': `${SITE_ORIGIN}${room.path}#room`,
+    name: room.name,
+    description: room.description,
+    url: `${SITE_ORIGIN}${room.path}`,
+    image: room.image,
+    occupancy: {
+      '@type': 'QuantitativeValue',
+      maxValue: room.capacity,
+      unitText: 'kişi',
+    },
+    offers: {
+      '@type': 'Offer',
+      url: `${SITE_ORIGIN}${room.path}`,
+      priceCurrency: 'TRY',
+      availability: 'https://schema.org/InStock',
+      description:
+        'Gecelik fiyat tarihe göre oda sayfasında gösterilir. Ödeme otelde (nakit veya POS) ya da havale/EFT ile yapılır; kart bilgisi siteden alınmaz.',
+    },
+  };
+  if (hotel) {
+    data.containedInPlace = {
+      '@type': 'Hotel',
+      '@id': `${SITE_ORIGIN}${hotel.path}#hotel`,
+      name: hotel.name,
+      url: `${SITE_ORIGIN}${hotel.path}`,
+    };
+  }
+  assertNoStarRating(data);
+  return data;
+}
+
 export function jsonLdForPath(pathname) {
   const path = normalizePath(pathname);
   const hotel = HOTELS.find((item) => item.path === path);
   if (hotel) return hotelJsonLd(hotel);
+  const room = ROOMS.find((item) => item.path === path);
+  if (room) return roomJsonLd(room);
   if (path === '/' || path === '/contact' || path === '/tesisler') return lodgingGraph();
   return null;
 }

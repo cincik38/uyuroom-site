@@ -72,7 +72,7 @@ UYUROOM Otelleri, Adana ve Uşak'taki misafirlerinin farklı ihtiyaçlarına cev
 
 Oda seçimi yaparken, konaklama sürenizi, misafir sayınızı ve özel isteklerinizi göz önünde bulundurmanız önemlidir. UYUROOM web sitesi üzerinden yapacağınız rezervasyonlarda, şehir bazlı şube seçimi (Adana / Uşak), giriş-çıkış tarihi ve yetişkin/çocuk sayısına göre oda arayabilir, fiyat, kapasite ve oda tipi gibi filtreleri kullanarak en uygun seçeneği kolayca bulabilirsiniz.
 
-Online rezervasyon sistemimiz, [UYUROOM Online Rezervasyon Sistemi: Hızlı ve Kolay Adımlar](/blog/online-otel-rezervasyon-sistemi) başlığında da açıklandığı gibi, size adım adım rehberlik ederek en uygun odayı seçmenize yardımcı olur. Ayrıca, Kapıda Ödeme, Banka Havalesi/EFT veya Online Kredi Kartı gibi esnek ödeme seçeneklerimizle, rezervasyonunuzu tamamlamak her zamankinden daha kolaydır.
+Online rezervasyon sistemimiz, [UYUROOM Online Rezervasyon Sistemi: Hızlı ve Kolay Adımlar](/blog/online-otel-rezervasyon-sistemi) başlığında da açıklandığı gibi, size adım adım rehberlik ederek en uygun odayı seçmenize yardımcı olur. Ödemeyi otelde kapıda (nakit veya POS) ya da banka havalesi/EFT ile yaparsınız; kart bilgisi siteden alınmaz.
 
 ## Sıkça Sorulan Sorular
 
