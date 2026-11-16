@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, ShieldCheck, CreditCard, Banknote, Building, ChevronRight, MessageCircle, Navigation } from 'lucide-react';
+import { MapPin, Phone, ShieldCheck, Banknote, Building, ChevronRight, MessageCircle, Navigation } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { BRANCH_CONTACTS, SOCIAL_LINKS, buildWhatsAppLink, buildMapLink } from '@/lib/contacts';
 
@@ -31,7 +31,7 @@ export const Footer: React.FC = () => {
                 <ShieldCheck className="w-3.5 h-3.5" /> Güvenli Rezervasyon
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-emerald-400 font-medium">
-                <Banknote className="w-3.5 h-3.5" /> 3 Ödeme Seçeneği
+                <Banknote className="w-3.5 h-3.5" /> Kapıda veya Havale
               </span>
             </div>
           </div>
@@ -160,7 +160,6 @@ export const Footer: React.FC = () => {
             <Link to="/kvkk" className="hover:text-slate-400">KVKK Aydınlatma Metni</Link>
             <Link to="/policies" className="hover:text-slate-400">İptal ve İade Koşulları</Link>
             <Link to="/mesafeli-satis" className="hover:text-slate-400">Mesafeli Satış Sözleşmesi</Link>
-            <Link to="/personel" className="hover:text-slate-400">Personel Girişi</Link>
           </div>
         </div>
       </div>

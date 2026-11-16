@@ -68,12 +68,11 @@ Personelimiz, **acil otel rezervasyon** taleplerinize anında yanıt vermek üze
 
 ## Esnek Ödeme Seçenekleriyle Son Dakika Stresi Yok
 
-Son dakika konaklama arayışında olan misafirlerin en büyük endişelerinden biri de ödeme sürecidir. Özellikle banka kartı veya kredi kartı kullanmak istemeyenler veya o an için kart bilgilerine erişimi olmayanlar için esnek ödeme seçenekleri büyük kolaylık sağlar. UYUROOM HOTEL, bu tür durumları göz önünde bulundurarak, **son dakika otel rezervasyonu** yaparken bile misafirlerine maksimum ödeme özgürlüğü sunar.
+Son dakika konaklama arayışında olan misafirlerin en büyük endişelerinden biri de ödeme sürecidir. UYUROOM HOTEL kart bilgisini siteden almaz. **Son dakika otel rezervasyonu** yaparken bedeli otele girişte ya da havale/EFT ile ödersiniz.
 
-Rezervasyonunuzu tamamlarken üç farklı ödeme kanalından birini seçebilirsiniz:
-1.  **Kapıda Ödeme:** Otelimize vardığınızda, konaklama ücretinizi nakit veya banka kartı ile ödeyebilirsiniz. Bu seçenek, özellikle kart kullanmak istemeyen veya online ödeme konusunda çekinceleri olan misafirlerimiz için idealdir. "Acil otel rezervasyon" durumlarında, önceden ödeme yapma zorunluluğu olmadan hızla odanıza yerleşmenizi sağlar.
-2.  **Banka Havalesi/EFT:** Rezervasyonunuzu online olarak tamamladıktan sonra, otelimizin IBAN bilgilerine havale veya EFT yoluyla ödeme yapabilirsiniz. Ödeme dekontunu bize bildirdiğinizde rezervasyonunuz kesinleşir. Bu yöntem, özellikle kurumsal müşteriler veya banka hesabından işlem yapmayı tercih edenler için pratik bir çözümdür.
-3.  **Online Kredi Kartı:** Web sitemiz üzerinden güvenli bir şekilde kredi kartınızla ödeme yapabilirsiniz. Bu, en hızlı ve en yaygın ödeme yöntemlerinden biridir. Tüm kart bilgileri güvenli şifreleme teknolojileriyle korunur.
+Rezervasyonunuzu tamamlarken iki ödeme kanalından birini seçebilirsiniz. Siteden kartla tahsilat yapılmaz:
+1.  **Kapıda Ödeme:** Otelimize vardığınızda konaklama ücretini nakit veya POS ile ödersiniz. "Acil otel rezervasyon" durumlarında önceden ödeme yapmadan odanızı ayırtmanızı sağlar.
+2.  **Banka Havalesi/EFT:** Rezervasyonunuzu siteden oluşturduktan sonra otelimizin IBAN bilgilerine havale veya EFT yaparsınız. Dekontu bildirdiğinizde rezervasyon kesinleşir. Kurumsal ödemeler için pratiktir.
 
 UYUROOM olarak, komisyonsuz doğrudan rezervasyon avantajını ödeme seçeneklerimize de yansıtıyoruz. [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) başlıklı yazımızda bu konuda daha fazla bilgi bulabilirsiniz. Amacımız, "hızlı otel arama" sürecinizde, ödeme adımının herhangi bir engel teşkil etmemesini sağlamaktır. Bu esnek yaklaşımla, her misafirimiz kendi konforuna ve tercihine göre ödeme yapabilir, böylece **son dakika otel** ihtiyacınızda bile hiçbir stres yaşamazsınız.
 
@@ -105,7 +104,7 @@ UYUROOM HOTEL, **son dakika otel** arayışınızda hız, konfor, güven ve ekon
 Genellikle oteller, son birkaç saat kala boş odaları doldurmak için fiyat ayarlamaları yapabilir. Ancak en iyi fiyatı ve istediğiniz oda tipini garantilemek için, seyahatinizden birkaç gün önce veya en az 24 saat öncesinden kontrol etmek daha iyidir. UYUROOM'un online sistemi ile anlık müsaitliği her zaman kontrol edebilirsiniz.
 
 **2. UYUROOM'da son dakika rezervasyonlarında hangi ödeme yöntemlerini kullanabilirim?**
-UYUROOM HOTEL'de son dakika rezervasyonlarınız için Kapıda Ödeme, Banka Havalesi/EFT ve Online Kredi Kartı seçeneklerinden faydalanabilirsiniz. Bu esneklik, acil durumlarda bile ödeme konusunda rahat etmenizi sağlar.
+UYUROOM HOTEL'de son dakika rezervasyonlarında ödeme otelde kapıda (nakit veya POS) ya da banka havalesi/EFT ile yapılır. Kart bilgisi siteden alınmaz.
 
 **3. Son dakika rezervasyonlarında otelde yer bulmak garanti mi?**
 Online rezervasyon sistemimiz gerçek zamanlı müsaitlik sunar. Eğer web sitemizde bir oda mevcut olarak görünüyorsa, o oda rezervasyona açıktır. Ancak çok yoğun dönemlerde veya özel etkinliklerde doluluk oranları hızla değişebilir. En garantili yol, beğendiğiniz odayı hemen rezerve etmek veya telefon/WhatsApp hattımızdan anında bilgi almaktır.
@@ -118,7 +117,7 @@ Her iki şubemiz de Adana ve Uşak'ın merkezi noktalarında yer almaktadır. İ
 
 ## Sonuç: Adana ve Uşak'ta Son Dakika Konaklamanın Tek Adresi UYUROOM
 
-Beklenmedik seyahatler veya ani konaklama ihtiyaçları, stresli olmak zorunda değil. UYUROOM HOTEL, Adana ve Uşak'taki lüks ve butik otel şubeleriyle, **son dakika otel rezervasyonu** süreçlerinizi kolaylaştırmak ve en konforlu deneyimi sunmak için yanınızda. Kullanıcı dostu online rezervasyon sistemimiz sayesinde dakikalar içinde odanızı bulabilir, şube telefonlarımız veya WhatsApp hattımız üzerinden anında destek alabilir ve kapıda ödeme, havale/EFT ya da kredi kartı gibi esnek ödeme seçeneklerimizden faydalanabilirsiniz.
+Beklenmedik seyahatler veya ani konaklama ihtiyaçları, stresli olmak zorunda değil. UYUROOM HOTEL, Adana ve Uşak'taki lüks ve butik otel şubeleriyle, **son dakika otel rezervasyonu** süreçlerinizi kolaylaştırmak ve en konforlu deneyimi sunmak için yanınızda. Kullanıcı dostu online rezervasyon sistemimiz sayesinde dakikalar içinde odanızı bulabilir, şube telefonlarımız veya WhatsApp hattımız üzerinden anında destek alabilir ve kapıda ödeme ya da havale/EFT ile, siteden kart tahsilatı olmadan rezervasyonunuzu tamamlayabilirsiniz.
 
 Merkezi konumlarımız, yüksek standartlı temiz odalarımız ve müşteri odaklı hizmet anlayışımızla, ister iş ister tatil amaçlı olsun, **acil otel rezervasyon** ihtiyacınızda size hızlı ve güvenilir bir çözüm sunuyoruz. UYUROOM olarak, "anında oda bul"ma arayışınızda karşılaştığınız her engeli ortadan kaldırıyor, konforlu bir konaklamayı garantiliyoruz.
 

@@ -1,7 +1,24 @@
 {
   "buildCommand": "pnpm run build",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/((?!assets/|images/|blog(?:/|$)|tesisler(?:/|$)|tesis/[12](?:/|$)|room/[1-6](?:/|$)|about(?:/|$)|contact(?:/|$)|policies(?:/|$)|kvkk(?:/|$)|mesafeli-satis(?:/|$)|booking-query(?:/|$)).*)", "destination": "/index.html" }],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "adanaotel.uyuroom.com" }],
+      "destination": "https://uyuroom.com/tesis/1",
+      "statusCode": 301
+    },
+    { "source": "/rooms", "destination": "/tesisler", "statusCode": 301 },
+    { "source": "/rooms/", "destination": "/tesisler", "statusCode": 301 },
+    { "source": "/branches", "destination": "/tesisler", "statusCode": 301 },
+    { "source": "/branches/", "destination": "/tesisler", "statusCode": 301 }
+  ],
+  "rewrites": [
+    { "source": "/(booking-confirmation|booking|personel|karakter-onizleme|giris|admin)/?", "destination": "/index.html" },
+    { "source": "/yonetim(/.*)?", "destination": "/index.html" },
+    { "source": "/room/([^/]+)/?", "destination": "/index.html" },
+    { "source": "/tesis/([^/]+)/?", "destination": "/index.html" }
+  ],
   "headers": [
     { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
     { "source": "/(.*)", "headers": [

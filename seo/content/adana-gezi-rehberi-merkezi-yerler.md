@@ -84,7 +84,7 @@ Adana Şakirpaşa Havalimanı, şehir merkezine oldukça yakındır ve taksi vey
 
 ### Esnek ve Güvenli Ödeme Seçenekleri ile Rezervasyon
 
-Seyahat planlamanızda ödeme kolaylığı arıyorsanız, UYUROOM HOTEL esnek seçenekler sunar. [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) yazımızda da detaylarını bulabileceğiniz gibi, kredi kartı kullanmak istemeyen misafirler için kapıda ödeme veya banka havalesi/EFT gibi alternatifler mevcuttur. Bu sayede, rezervasyonunuzu yaparken tamamen komisyonsuz ve size uygun bir yöntemle ödeme yapabilirsiniz.
+Seyahat planlamanızda ödeme kolaylığı arıyorsanız, UYUROOM HOTEL rezervasyonu siteden alır. [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) yazımızda da anlatıldığı gibi ödeme otelde (nakit veya POS) ya da banka havalesi/EFT ile yapılır. Kart bilgisi siteden alınmaz.
 
 Ayrıca, seyahat planlarınızda herhangi bir soru veya değişiklik olması durumunda [UYUROOM Otel Canlı Destek: Telefon ve WhatsApp ile Anında İletişim](/blog/otel-canli-destek-whatsapp) hizmetimizden faydalanabilirsiniz. Deneyimli ekibimiz, her adımda size yardımcı olmaktan memnuniyet duyacaktır. Adana seyahatinizin sorunsuz ve keyifli geçmesi için UYUROOM olarak her detayı düşündük.
 

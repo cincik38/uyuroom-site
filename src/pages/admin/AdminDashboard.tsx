@@ -420,7 +420,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
             <div className="p-5 border-b border-slate-100 flex items-center justify-between">
               <h3 className="font-bold text-slate-900 text-base">Gelen Rezervasyon Kayıtları</h3>
-              <span className="text-xs text-slate-500">Kapıda Ödeme, Havale ve Online Kart Rezervasyonları</span>
+              <span className="text-xs text-slate-500">Kapıda ödeme ve havale rezervasyonları</span>
             </div>
 
             {bookings.length === 0 ? (
@@ -474,7 +474,7 @@ export const AdminDashboard: React.FC = () => {
                             <span className="text-[10px] uppercase font-bold text-slate-500">
                               {b.payment_method === 'pay_at_hotel' && 'Kapıda Ödeme'}
                               {b.payment_method === 'bank_transfer' && 'Havale / EFT'}
-                              {b.payment_method === 'credit_card' && 'Online Kart'}
+                              {b.payment_method === 'credit_card' && 'Kart (siteden tahsil edilmez)'}
                             </span>
                           </td>
                           <td className="p-3.5">

@@ -46,11 +46,11 @@ Sağlık ve hijyen, UYUROOM HOTEL'in temel taşlarındandır. Misafirlerimize g�
 
 Günümüzde online rezervasyon platformları sayesinde otel bulmak kolaylaşsa da, bu platformlar genellikle aracı komisyonları nedeniyle fiyatları yükseltir. UYUROOM HOTEL olarak, misafirlerimize en uygun fiyatları sunabilmek adına komisyonsuz doğrudan rezervasyon avantajı sağlıyoruz. Web sitemiz üzerinden yapılan rezervasyonlarda herhangi bir ek komisyon ücreti ödemezsiniz, bu da size doğrudan tasarruf olarak geri döner. Bu sayede, "uygun fiyatlı temiz otel" arayışınızda en ekonomik seçeneğe ulaşmış olursunuz.
 
-Doğrudan rezervasyon yapmanın bir diğer avantajı ise esnek ödeme seçenekleridir. Kredi kartı kullanmak istemeyen veya online ödeme konusunda çekinceleri olan misafirlerimiz için kapıda ödeme veya banka havalesi/EFT gibi alternatifler sunuyoruz. Böylece, ödeme tercihlerinize göre size en uygun yöntemi seçebilir ve rahatça konaklamanızın keyfini çıkarabilirsiniz. Bu detaylar, [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) başlıklı yazımızda daha ayrıntılı olarak açıklanmaktadır.
+Doğrudan rezervasyon yapmanın bir diğer avantajı ise ödeme şeklidir. Kart bilgisi siteden alınmaz; bedeli otelde kapıda (nakit veya POS) ya da banka havalesi/EFT ile ödersiniz. Bu detaylar, [Kapıda Ödeme ve Havale Seçenekleriyle Komisyonsuz Otel Rezervasyonu](/blog/komisyonsuz-otel-rezervasyon-odeme) başlıklı yazımızda daha ayrıntılı olarak açıklanmaktadır.
 
 ### Esnek Ödeme Seçenekleri: Rahatınız İçin
 
-UYUROOM HOTEL, misafirlerinin ödeme konusunda tam esnekliğe sahip olmasını önemser. Online kredi kartı ödemeleri elbette mevcuttur, ancak alternatif olarak **Kapıda Ödeme** seçeneği ile otele varışınızda ödemenizi yapabilirsiniz. Bu, özellikle son dakika rezervasyonları veya online işlem yapmayı tercih etmeyen misafirlerimiz için büyük bir kolaylık sunar. Ayrıca, **Banka Havalesi/EFT** yoluyla ödeme yaparak da rezervasyonunuzu tamamlayabilirsiniz. Bu çeşitli seçenekler, her türlü misafirimizin rahatını ve güvenliğini ön planda tutar.
+UYUROOM HOTEL, kart bilgisini siteden almaz. **Kapıda Ödeme** ile otele varışınızda nakit veya POS ile ödersiniz. Bu, özellikle son dakika rezervasyonları için ön ödeme istemeden odayı ayırmanızı sağlar. Ayrıca **Banka Havalesi/EFT** ile de rezervasyonunuzu tamamlayabilirsiniz.
 
 ## Paranızı Değerlendiren Konaklama Seçenekleri
 
@@ -71,7 +71,7 @@ A: UYUROOM HOTEL, direkt rezervasyon ve komisyonsuz işlem prensibiyle çalış�
 A: Otellerimizde uluslararası yüksek hijyen standartları uygulanmaktadır. Odalarımız her misafir değişiminde ve günlük olarak detaylı bir şekilde temizlenir, dezenfekte edilir. Profesyonel ekibimiz ve özel temizlik ürünlerimizle, misafirlerimize tertemiz bir konaklama deneyimi garanti ediyoruz.
 
 ### Q: Ödeme seçenekleriniz nelerdir?
-A: Misafirlerimize esnek ödeme seçenekleri sunuyoruz: Online kredi kartı ödemesinin yanı sıra, otelde kapıda ödeme veya banka havalesi/EFT yoluyla da ödeme yapabilirsiniz. Bu sayede size en uygun yöntemi seçme özgürlüğüne sahip olursunuz.
+A: Ödeme otelde kapıda (nakit veya POS) ya da banka havalesi/EFT ile yapılır. Kart bilgisi internet sitemiz üzerinden alınmaz.
 
 ### Q: Merkezi konumda olmanın avantajları nelerdir?
 A: UYUROOM HOTEL'in Adana ve Uşak'taki merkezi konumları sayesinde, şehirdeki önemli iş merkezlerine, alışveriş bölgelerine, tarihi ve turistik yerlere kolay ve hızlı ulaşım imkanı bulursunuz. Toplu taşıma duraklarına yakınlık da ulaşım kolaylığı sağlar.

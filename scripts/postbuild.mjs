@@ -157,6 +157,26 @@ for (const routePath of SHELL_PATHS) {
 }
 console.log(`postbuild: ${SHELL_PATHS.length} sayfa kabuğu yazıldı`);
 
+let notFoundHtml = homeHtml;
+const notFoundTitle = 'Sayfa bulunamadı | UYUROOM Hotel';
+const notFoundDescription = 'Aradığınız sayfa UYUROOM Hotel sitesinde yok.';
+notFoundHtml = replaceTitle(notFoundHtml, notFoundTitle);
+notFoundHtml = replaceMeta(notFoundHtml, 'name', 'description', notFoundDescription);
+notFoundHtml = replaceMeta(notFoundHtml, 'property', 'og:title', notFoundTitle);
+notFoundHtml = replaceMeta(notFoundHtml, 'property', 'og:description', notFoundDescription);
+notFoundHtml = replaceMeta(notFoundHtml, 'name', 'twitter:title', notFoundTitle);
+notFoundHtml = replaceMeta(notFoundHtml, 'name', 'twitter:description', notFoundDescription);
+notFoundHtml = stripJsonLd(notFoundHtml);
+notFoundHtml = notFoundHtml.replace(/<link\b[^>]*rel=["']canonical["'][^>]*>\s*/i, '');
+if (!/name=["']robots["']/i.test(notFoundHtml)) {
+  notFoundHtml = notFoundHtml.replace(
+    '</head>',
+    '    <meta name="robots" content="noindex" />\n  </head>',
+  );
+}
+fs.writeFileSync(path.join(dist, '404.html'), notFoundHtml);
+console.log('postbuild: 404.html yazıldı');
+
 function xmlEscape(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -208,6 +228,18 @@ const adanaShell = fs.readFileSync(path.join(dist, 'tesis/1/index.html'), 'utf8'
 const homeCheck = fs.readFileSync(homePath, 'utf8');
 if (!usakShell.includes('Uşak Otel | UYUROOM Hotel Uşak')) throw new Error('Uşak başlığı kabuğa yazılmadı');
 if (!usakShell.includes('+905531222279')) throw new Error('Uşak telefonu şemada yok');
+if (!adanaShell.includes('"latitude":36.98517') || !adanaShell.includes('"longitude":35.32564')) {
+  throw new Error('Adana koordinatı şemada yok');
+}
+const roomShell = fs.readFileSync(path.join(dist, 'room/4/index.html'), 'utf8');
+if (!roomShell.includes('"@type":"HotelRoom"') || !roomShell.includes('"@type":"Offer"')) {
+  throw new Error('Oda sayfasında HotelRoom/Offer şeması yok');
+}
+const notFoundCheck = fs.readFileSync(path.join(dist, '404.html'), 'utf8');
+if (!notFoundCheck.includes('Sayfa bulunamadı') || !notFoundCheck.includes('noindex')) {
+  throw new Error('404.html eksik');
+}
+if (notFoundCheck.includes('uyuroom-lodging-jsonld')) throw new Error('404 sayfası otel şeması taşıyor');
 if (/starRating/i.test(usakShell) || /starRating/i.test(adanaShell) || /starRating/i.test(homeCheck)) {
   throw new Error('Şemada starRating var');
 }
