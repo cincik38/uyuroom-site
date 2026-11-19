@@ -19,7 +19,7 @@ import {
   Navigation,
   Home
 } from 'lucide-react';
-import { buildBranchMapLink, resolveBranchAddress } from '@/lib/contacts';
+import { buildLocationRequestLink, LOCATION_REQUEST_LABEL, resolveBranchAddress } from '@/lib/contacts';
 import { resolvePayableBankAccounts, formatIban, normalizeIban, type BankAccount } from '@/lib/bank';
 import { BrandLogo } from '@/components/BrandLogo';
 import { Button } from '@/components/ui/button';
@@ -169,12 +169,12 @@ export const BookingConfirmation: React.FC = () => {
                         {resolveBranchAddress(hotel?.city, hotel?.address)}
                       </span>
                       <a
-                        href={buildBranchMapLink(hotel?.city, hotel?.address, hotel?.name)}
+                        href={buildLocationRequestLink(hotel?.city) || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 rounded-lg bg-slate-950 hover:bg-slate-900 text-amber-400 font-bold text-xs transition-colors border border-amber-500/40"
                       >
-                        <Navigation className="w-4 h-4" /> Konuma Git
+                        <Navigation className="w-4 h-4" /> {LOCATION_REQUEST_LABEL}
                       </a>
                     </div>
                     <div className="flex justify-between">

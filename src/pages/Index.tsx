@@ -10,7 +10,7 @@ import { handleDisplayImageError, resizeImageUrl, resolveCoverUrl } from '@/lib/
 import { parseList } from '@/lib/ota';
 import { MapPin, Star, Banknote, Building2, Navigation, PhoneCall, Search, MessageCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { buildBranchMapLink, resolveBranchAddress, findBranchContact } from '@/lib/contacts';
+import { buildLocationRequestLink, LOCATION_REQUEST_LABEL, resolveBranchAddress, findBranchContact } from '@/lib/contacts';
 import { StaffCharacter } from '@/components/StaffCharacter';
 
 /** Ana sayfa karakteri: sayfa yüklendikten sonra gelir, veri tasarrufu açıksa hiç yüklenmez. */
@@ -133,12 +133,12 @@ export const Index: React.FC = () => {
                         </Button>
                       </Link>
                       <a
-                        href={buildBranchMapLink(hotel.city, hotel.address, hotel.name)}
+                        href={buildLocationRequestLink(hotel.city) || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 h-11 px-4 rounded-md border border-slate-700 text-sm font-semibold text-slate-200 hover:bg-slate-800 transition-colors"
                       >
-                        <Navigation className="w-4 h-4 text-amber-400" /> Yol tarifi
+                        <Navigation className="w-4 h-4 text-amber-400" /> {LOCATION_REQUEST_LABEL}
                       </a>
                       {phoneRaw && (
                         <a

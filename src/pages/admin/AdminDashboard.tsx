@@ -22,7 +22,7 @@ import {
   Navigation,
   Image as ImageIcon
 } from 'lucide-react';
-import { buildBranchMapLink, resolveBranchAddress } from '@/lib/contacts';
+import { resolveBranchAddress } from '@/lib/contacts';
 import { BrandLogoMark } from '@/components/BrandLogo';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -673,14 +673,6 @@ export const AdminDashboard: React.FC = () => {
                     >
                       Bilgileri düzenle
                     </Button>
-                    <a
-                      href={buildBranchMapLink(h.city, h.address, h.name)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 min-h-[40px] px-3 rounded-md text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-                    >
-                      <Navigation className="w-3.5 h-3.5" /> Konuma git
-                    </a>
                   </div>
                 </div>
               ))}

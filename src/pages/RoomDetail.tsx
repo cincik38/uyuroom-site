@@ -25,7 +25,7 @@ import {
   CheckCircle2,
   Navigation
 } from 'lucide-react';
-import { buildBranchMapLink, resolveBranchAddress } from '@/lib/contacts';
+import { buildLocationRequestLink, LOCATION_REQUEST_LABEL, resolveBranchAddress } from '@/lib/contacts';
 import { Button } from '@/components/ui/button';
 import { GuestSelector } from '@/components/GuestSelector';
 import { format, addDays } from 'date-fns';
@@ -179,12 +179,12 @@ export const RoomDetail: React.FC = () => {
                 <p className="text-sm text-slate-500 mt-1 flex items-center gap-1">
                   <MapPin className="w-4 h-4 text-amber-500" /> {resolveBranchAddress(hotel.city, hotel.address)}
                   <a
-                    href={buildBranchMapLink(hotel.city, hotel.address, hotel.name)}
+                    href={buildLocationRequestLink(hotel.city) || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="ml-1 inline-flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-amber-700 underline decoration-amber-400/50"
                   >
-                    <Navigation className="w-3.5 h-3.5" /> Konuma Git
+                    <Navigation className="w-3.5 h-3.5" /> {LOCATION_REQUEST_LABEL}
                   </a>
                 </p>
               )}

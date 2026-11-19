@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, ShieldCheck, Banknote, Building, ChevronRight, MessageCircle, Navigation } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
-import { BRANCH_CONTACTS, SOCIAL_LINKS, buildWhatsAppLink, buildMapLink } from '@/lib/contacts';
+import { BRANCH_CONTACTS, SOCIAL_LINKS, buildWhatsAppLink, buildLocationRequestLink, LOCATION_REQUEST_LABEL } from '@/lib/contacts';
 
 export const Footer: React.FC = () => {
   return (
@@ -67,13 +67,13 @@ export const Footer: React.FC = () => {
                       WhatsApp ile Yaz
                     </a>
                     <a
-                      href={buildMapLink(branch.address, branch.name)}
+                      href={buildLocationRequestLink(branch.city) || buildWhatsAppLink(branch)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 min-h-[40px] px-3 py-2 rounded-lg bg-amber-400/15 border border-amber-400/40 text-[11px] font-bold text-amber-300 hover:bg-amber-400/25 transition-colors"
                     >
                       <Navigation className="w-3.5 h-3.5" />
-                      Konuma Git
+                      {LOCATION_REQUEST_LABEL}
                     </a>
                   </div>
                 </div>

@@ -59,23 +59,16 @@ export const findBranchContact = (city?: string | null): BranchContact | undefin
 };
 
 /**
- * Verilen adres için Google Maps arama bağlantısı üretir.
- * Mobilde tıklandığında cihazın harita uygulamasında konumu açar.
+ * "Konum İste": müşteri haritaya yönlendirilmez; şubenin WhatsApp hattına
+ * "konumu gönderebilir misiniz?" mesajı hazır gelir, müşteri gönder'e basar.
  */
-export const buildMapLink = (address: string, branchName?: string): string => {
-  const query = branchName ? `${branchName}, ${address}` : address;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-};
+export const LOCATION_REQUEST_LABEL = 'Konum İste';
 
-/**
- * Şube kaydından (veritabanı veya sabit) harita bağlantısı üretir.
- * Veritabanı adresi boşsa merkezi sabitlerdeki adres kullanılır.
- */
-export const buildBranchMapLink = (city?: string | null, address?: string | null, name?: string | null): string => {
+export const buildLocationRequestLink = (city?: string | null): string | null => {
   const branch = findBranchContact(city);
-  const resolvedAddress = resolveBranchAddress(city, address);
-  const resolvedName = name?.trim() || branch?.name || 'UYUROOM Hotel';
-  return buildMapLink(resolvedAddress, resolvedName);
+  if (!branch) return null;
+  const message = `Merhaba, UYUROOM HOTEL ${branch.city} şubesinin konumunu gönderebilir misiniz?`;
+  return `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(message)}`;
 };
 
 /**

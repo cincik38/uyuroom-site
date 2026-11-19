@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { usePageMeta } from '@/lib/pageMeta';
 import { HOTELS } from '@/lib/lodgingData.mjs';
+import { buildLocationRequestLink, LOCATION_REQUEST_LABEL } from '@/lib/contacts';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { loadCalendar, parseStayParams } from '@/lib/pricing';
 import {
@@ -160,11 +161,7 @@ export const PropertyDetail: React.FC = () => {
   }
 
   const isFav = favorites.includes(hotel.id);
-  const mapLink = hotel.map_embed
-    ? hotel.map_embed
-    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        `${hotel.name} ${hotel.address || ''} ${hotel.city || ''}`,
-      )}`;
+  const locationRequestLink = buildLocationRequestLink(hotel.city);
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
@@ -202,12 +199,12 @@ export const PropertyDetail: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <a href={mapLink} target="_blank" rel="noopener noreferrer">
+              <a href={locationRequestLink || '#'} target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
                   className="border-slate-300 text-slate-700 !bg-transparent min-h-[44px]"
                 >
-                  <Navigation className="w-4 h-4 mr-2 text-amber-500" /> Konuma Git
+                  <Navigation className="w-4 h-4 mr-2 text-amber-500" /> {LOCATION_REQUEST_LABEL}
                 </Button>
               </a>
               <Button

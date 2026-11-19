@@ -127,7 +127,7 @@ export const PUBLIC_META = {
   '/contact': {
     title: 'İletişim | UYUROOM Hotel Adana ve Uşak',
     description:
-      'Adana Seyhan ve Uşak Merkez şubelerinin adres, telefon ve harita bilgileri. Adana 0505 898 76 66, Uşak 0553 122 22 79.',
+      'Adana Seyhan ve Uşak Merkez şubelerinin adres, telefon ve WhatsApp bilgileri. Adana 0505 898 76 66, Uşak 0553 122 22 79.',
   },
   '/blog': {
     title: 'Adana ve Uşak Gezi Rehberi | UYUROOM Blog',

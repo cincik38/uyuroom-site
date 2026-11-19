@@ -4,7 +4,7 @@ import { Footer } from '@/components/layout/Footer';
 import { client } from '@/lib/api';
 import { Booking, Room, Hotel } from '@/lib/types';
 import { Search, Calendar, MapPin, Users, CheckCircle2, Clock, XCircle, AlertCircle, Phone, Navigation } from 'lucide-react';
-import { buildBranchMapLink, resolveBranchAddress } from '@/lib/contacts';
+import { buildLocationRequestLink, LOCATION_REQUEST_LABEL, resolveBranchAddress } from '@/lib/contacts';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -124,12 +124,12 @@ export const BookingQuery: React.FC = () => {
                     <p className="text-slate-500">{hotel?.city} Şubesi</p>
                     <p className="text-slate-500 mt-1">{resolveBranchAddress(hotel?.city, hotel?.address)}</p>
                     <a
-                      href={buildBranchMapLink(hotel?.city, hotel?.address, hotel?.name)}
+                      href={buildLocationRequestLink(hotel?.city) || '#'}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-2 inline-flex items-center gap-1.5 min-h-[44px] px-4 rounded-lg bg-slate-950 hover:bg-slate-900 text-amber-400 font-bold text-xs transition-colors border border-amber-500/40"
                     >
-                      <Navigation className="w-4 h-4" /> Konuma Git
+                      <Navigation className="w-4 h-4" /> {LOCATION_REQUEST_LABEL}
                     </a>
                     <p className="text-slate-800 font-semibold">{room?.name}</p>
                     <p className="text-slate-600 pt-1">

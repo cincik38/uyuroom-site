@@ -27,7 +27,7 @@ const GENEL = [
   'Havale ile ödemede %5 indirim var, kaçırmayın!',
   'Doğrudan rezervasyon yapın, ödemeyi otelde yapın.',
   'Şubelerin telefonları hemen aşağıda, bize ulaşabilirsiniz.',
-  'Yol tarifine tek tıkla ulaşabilirsiniz.',
+  'Konum için şubemize WhatsApp’tan yazabilirsiniz.',
   'Odaları aşağıdan inceleyin, hepsi sade ve temiz.',
   'Bugün de her köşeyi parlattım!',
   'Temizlik kokusunu seversiniz, söz.',

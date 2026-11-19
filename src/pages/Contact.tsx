@@ -6,7 +6,7 @@ import { Hotel } from '@/lib/types';
 import { MapPin, Phone, Mail, Send, MessageCircle, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { BRANCH_CONTACTS, buildWhatsAppLink, buildMapLink } from '@/lib/contacts';
+import { BRANCH_CONTACTS, buildWhatsAppLink, buildLocationRequestLink, LOCATION_REQUEST_LABEL } from '@/lib/contacts';
 
 export const Contact: React.FC = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -120,13 +120,13 @@ export const Contact: React.FC = () => {
 
                 <div className="space-y-2">
                   <a
-                    href={buildMapLink(branch.address, branch.name)}
+                    href={buildLocationRequestLink(branch.city) || buildWhatsAppLink(branch)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 w-full h-12 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-400 font-bold text-sm transition-colors border border-amber-500/40"
                   >
                     <Navigation className="w-4 h-4" />
-                    Konuma Git ({branch.city})
+                    {LOCATION_REQUEST_LABEL} ({branch.city})
                   </a>
                   <a
                     href={buildWhatsAppLink(branch)}
