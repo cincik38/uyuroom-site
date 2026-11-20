@@ -185,7 +185,7 @@ export function downloadCsv(name: string, rows: Array<Array<string | number>>) {
     return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
   const body = rows.map((r) => r.map(esc).join(';')).join('\r\n');
-  const blob = new Blob([`﻿${body}`], { type: 'text/csv;charset=utf-8' });
+  const blob = new Blob([`\uFEFF${body}`], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = name;
@@ -223,7 +223,7 @@ export const normChannel = (raw: string, fallback: string): string => {
 export interface CsvParse { rows: SpendRow[]; errors: string[] }
 /** Google Ads / Meta dışa aktarımı veya kendi tablonuz: tarih, kanal, kampanya, maliyet, tıklama, gösterim. */
 export function parseSpendCsv(text: string, defaultChannel: string): CsvParse {
-  const lines = text.replace(/^﻿/, '').split(/\r?\n/).filter((l) => l.trim());
+  const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).filter((l) => l.trim());
   const errors: string[] = [];
   if (lines.length < 2) return { rows: [], errors: ['Dosyada başlık satırı ve en az bir veri satırı olmalı.'] };
   const delim = (lines[0].match(/;/g)?.length ?? 0) >= (lines[0].match(/,/g)?.length ?? 0) && lines[0].includes(';') ? ';' : lines[0].includes('\t') ? '\t' : ',';

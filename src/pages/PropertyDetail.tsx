@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { usePageMeta } from '@/lib/pageMeta';
 import { HOTELS } from '@/lib/lodgingData.mjs';
 import { buildLocationRequestLink, LOCATION_REQUEST_LABEL } from '@/lib/contacts';
+import { setActivePageHotel } from '@/lib/analytics';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { loadCalendar, parseStayParams } from '@/lib/pricing';
 import {
@@ -58,6 +59,11 @@ export const PropertyDetail: React.FC = () => {
   const [checkOut, setCheckOut] = useState(initial.checkOut);
   const [adults, setAdults] = useState(initial.adults);
   const [children, setChildren] = useState(initial.children);
+
+  useEffect(() => {
+    setActivePageHotel(id || null);
+    return () => setActivePageHotel(null);
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;

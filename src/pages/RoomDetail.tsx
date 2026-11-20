@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { trackViewRoom } from '@/lib/analytics';
+import { setActivePageHotel, trackViewRoom } from '@/lib/analytics';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -61,6 +61,11 @@ export const RoomDetail: React.FC = () => {
   const basePrice = Number(room?.discounted_price || room?.price_per_night || 0);
   const specialPrice = !!quote && quote.nights > 0 && quote.nightlyPrices.some((n) => n.price !== basePrice);
   const datesOk = nightsBetween(checkIn, checkOut) > 0;
+
+  useEffect(() => {
+    setActivePageHotel(room?.hotel_id ?? null);
+    return () => setActivePageHotel(null);
+  }, [room?.hotel_id]);
 
   useEffect(() => {
     const fetchRoom = async () => {

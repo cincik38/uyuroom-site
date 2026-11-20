@@ -7,19 +7,26 @@
  * Google etiketi Consent Mode v2 ile çalışır (index.html'de varsayılan: reddedildi);
  * ziyaretçi "Kabul Et" derse izinler güncellenir. Meta Pixel yalnızca onayla yüklenir.
  *
+ * İsteğe bağlı ikinci Google Ads hesabı (Uşak) aynı tabloda ayrı anahtarlarla durur.
+ * Boşsa hiçbir Uşak çağrısı yapılmaz; mevcut hesabın config ve dönüşümleri değişmez.
+ * Doluysa her iki AW kimliği gtag('config') alır. Uşak dönüşümü, etiketi varsa Uşak
+ * hesabına da send_to ile gider. Ayrıntı: adsAccounts.ts.
+ *
  * Ayrıca Reklam Merkezi için birinci taraf, kişisel veri içermeyen sayaç olayları `track_event` ile
  * Supabase'e yazılır (yalnızca çerez onayıyla; ad, e-posta, telefon, IP hiçbir zaman gönderilmez).
  */
 import { supabase } from '@/lib/supabase';
+import {
+  bookingConversionTargets,
+  contactConversionTargets,
+  contactHotelId,
+  googleTagPlan,
+  type AdsTrackingConfig,
+  type ContactContext,
+} from '@/lib/adsAccounts';
 
-export interface TrackingConfig {
-  ga4: string;
-  ads: string;
-  adsBooking: string;
-  adsPhone: string;
-  adsWhatsapp: string;
-  pixel: string;
-}
+export type TrackingConfig = AdsTrackingConfig;
+export type { ContactContext };
 
 /** Veritabanındaki anahtar -> yapılandırma alanı */
 export const TRACKING_KEYS = {
@@ -28,6 +35,10 @@ export const TRACKING_KEYS = {
   ads_booking_label: 'adsBooking',
   ads_phone_label: 'adsPhone',
   ads_whatsapp_label: 'adsWhatsapp',
+  ads_usak_id: 'adsUsak',
+  ads_usak_booking_label: 'adsUsakBooking',
+  ads_usak_phone_label: 'adsUsakPhone',
+  ads_usak_whatsapp_label: 'adsUsakWhatsapp',
   meta_pixel_id: 'pixel',
 } as const;
 
@@ -38,22 +49,38 @@ export const TRACKING_PATTERNS: Record<keyof typeof TRACKING_KEYS, RegExp> = {
   ads_booking_label: /^[A-Za-z0-9_-]{8,40}$/,
   ads_phone_label: /^[A-Za-z0-9_-]{8,40}$/,
   ads_whatsapp_label: /^[A-Za-z0-9_-]{8,40}$/,
+  ads_usak_id: /^AW-[0-9]{6,14}$/,
+  ads_usak_booking_label: /^[A-Za-z0-9_-]{8,40}$/,
+  ads_usak_phone_label: /^[A-Za-z0-9_-]{8,40}$/,
+  ads_usak_whatsapp_label: /^[A-Za-z0-9_-]{8,40}$/,
   meta_pixel_id: /^[0-9]{8,20}$/,
+};
+
+const BLANK: TrackingConfig = {
+  ga4: '',
+  ads: '',
+  adsBooking: '',
+  adsPhone: '',
+  adsWhatsapp: '',
+  adsUsak: '',
+  adsUsakBooking: '',
+  adsUsakPhone: '',
+  adsUsakWhatsapp: '',
+  pixel: '',
 };
 
 type Dict = Record<string, unknown>;
 
 const ENV: TrackingConfig = {
+  ...BLANK,
   ga4: (import.meta.env.VITE_GA4_ID as string) || '',
   ads: (import.meta.env.VITE_ADS_ID as string) || '',
   adsBooking: (import.meta.env.VITE_ADS_CONVERSION_LABEL as string) || '',
-  adsPhone: '',
-  adsWhatsapp: '',
   pixel: (import.meta.env.VITE_META_PIXEL_ID as string) || '',
 };
 
 const CONSENT_KEY = 'uyu_consent';
-const CACHE_KEY = 'uyu_trk_cfg_v1';
+const CACHE_KEY = 'uyu_trk_cfg_v2';
 const FETCH_TIMEOUT_MS = 2500;
 
 let cfg: TrackingConfig = { ...ENV };
@@ -72,11 +99,11 @@ declare global {
   }
 }
 
-const isConfigured = (c: TrackingConfig) => Boolean(c.ga4 || c.ads || c.pixel);
+const isConfigured = (c: TrackingConfig) => Boolean(c.ga4 || c.ads || c.adsUsak || c.pixel);
 
 /** Tarayıcıdan gelen değerlerden yalnızca biçimi geçerli olanları alır. */
 function sanitize(raw: Partial<Record<keyof typeof TRACKING_KEYS, string>>): TrackingConfig {
-  const out: TrackingConfig = { ga4: '', ads: '', adsBooking: '', adsPhone: '', adsWhatsapp: '', pixel: '' };
+  const out: TrackingConfig = { ...BLANK };
   (Object.keys(TRACKING_KEYS) as Array<keyof typeof TRACKING_KEYS>).forEach((k) => {
     const v = String(raw[k] ?? '').trim();
     if (v && TRACKING_PATTERNS[k].test(v)) out[TRACKING_KEYS[k]] = v;
@@ -89,7 +116,7 @@ function readCache(): TrackingConfig | null {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<TrackingConfig>;
-    return { ...ENV, ...{ ga4: '', ads: '', adsBooking: '', adsPhone: '', adsWhatsapp: '', pixel: '' }, ...parsed };
+    return { ...ENV, ...BLANK, ...parsed };
   } catch {
     return null;
   }
@@ -172,12 +199,26 @@ function gt(...args: unknown[]) {
 
 function initGoogle() {
   if (getConsent() === 'granted') grantGoogle();
-  const lead = cfg.ga4 || cfg.ads;
-  if (!lead) return;
-  loadScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(lead)}`);
+  const plan = googleTagPlan(cfg);
+  if (!plan) return;
+  loadScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(plan.scriptId)}`);
   window.gtag?.('js', new Date());
-  if (cfg.ga4) window.gtag?.('config', cfg.ga4, { send_page_view: false });
-  if (cfg.ads) window.gtag?.('config', cfg.ads);
+  for (const call of plan.calls) {
+    if (call.params) window.gtag?.('config', call.id, call.params);
+    else window.gtag?.('config', call.id);
+  }
+}
+
+/** Oda / tesis / rezervasyon sayfası hangi otel olduğunu tıklama anında bilsin. */
+export function setActivePageHotel(hotelId: number | string | null | undefined) {
+  if (typeof document === 'undefined') return;
+  if (hotelId == null || hotelId === '') document.documentElement.removeAttribute('data-uyu-hotel');
+  else document.documentElement.setAttribute('data-uyu-hotel', String(hotelId));
+}
+
+export function activePageHotel(): string | null {
+  if (typeof document === 'undefined') return null;
+  return document.documentElement.getAttribute('data-uyu-hotel');
 }
 
 function becomeReady(next: TrackingConfig) {
@@ -238,7 +279,7 @@ export function trackPageView(path: string) {
   // Yönetim ve gizli önizleme sayfaları istatistiğe girmez
   if (path.startsWith('/yonetim') || path.startsWith('/karakter-onizleme') || path.startsWith('/personel')) return;
   gt('event', 'page_view', { page_path: path, page_location: window.location.href });
-  metaOn() && window.fbq?.('track', 'PageView');
+  if (metaOn()) window.fbq?.('track', 'PageView');
   collect('page_view', { path });
 }
 
@@ -250,7 +291,7 @@ export function trackViewRoom(room: { id: number | string; name: string; price: 
     value: room.price,
     items: [{ item_id: String(room.id), item_name: room.name, item_category: room.hotel, price: room.price }],
   });
-  metaOn() && window.fbq?.('track', 'ViewContent', {
+  if (metaOn()) window.fbq?.('track', 'ViewContent', {
     content_ids: [String(room.id)],
     content_name: room.name,
     content_type: 'product',
@@ -267,7 +308,7 @@ export function trackBeginBooking(p: { value: number; roomId: number | string; r
     value: p.value,
     items: [{ item_id: String(p.roomId), item_name: p.roomName }],
   });
-  metaOn() && window.fbq?.('track', 'InitiateCheckout', { value: p.value, currency: 'TRY' });
+  if (metaOn()) window.fbq?.('track', 'InitiateCheckout', { value: p.value, currency: 'TRY' });
 }
 
 /** Rezervasyon tamamlandı (dönüşüm). */
@@ -279,24 +320,35 @@ export function trackBookingComplete(p: { code: string; value: number; roomId: n
     value: p.value,
     items: [{ item_id: String(p.roomId), item_name: p.roomName }],
   });
-  if (cfg.ads && cfg.adsBooking) {
+  for (const sendTo of bookingConversionTargets(cfg, p.hotelId)) {
     gt('event', 'conversion', {
-      send_to: `${cfg.ads}/${cfg.adsBooking}`,
+      send_to: sendTo,
       value: p.value,
       currency: 'TRY',
       transaction_id: p.code,
     });
   }
-  metaOn() && window.fbq?.('track', 'Purchase', { value: p.value, currency: 'TRY' }, { eventID: p.code });
+  if (metaOn()) window.fbq?.('track', 'Purchase', { value: p.value, currency: 'TRY' }, { eventID: p.code });
 }
 
-/** Telefon / WhatsApp tıklaması. */
-export function trackContactClick(kind: 'phone' | 'whatsapp') {
-  collect('contact_click', { path: window.location.pathname, props: { kind } });
+/** Telefon / WhatsApp tıklaması. href ve sayfa, Uşak hesabına da yazılacağını belirler. */
+export function trackContactClick(kind: 'phone' | 'whatsapp', ctx: ContactContext = {}) {
+  const resolved: ContactContext = {
+    href: ctx.href,
+    path: ctx.path ?? window.location.pathname,
+    search: ctx.search ?? window.location.search,
+    hotelId: ctx.hotelId ?? activePageHotel(),
+  };
+  collect('contact_click', {
+    path: resolved.path,
+    hotel_id: contactHotelId(resolved),
+    props: { kind },
+  });
   gt('event', 'contact', { method: kind });
-  const label = kind === 'phone' ? cfg.adsPhone : cfg.adsWhatsapp;
-  if (cfg.ads && label) gt('event', 'conversion', { send_to: `${cfg.ads}/${label}` });
-  metaOn() && window.fbq?.('track', 'Contact');
+  for (const sendTo of contactConversionTargets(cfg, kind, resolved)) {
+    gt('event', 'conversion', { send_to: sendTo });
+  }
+  if (metaOn()) window.fbq?.('track', 'Contact');
 }
 
 /** Arama formu gönderildi. */

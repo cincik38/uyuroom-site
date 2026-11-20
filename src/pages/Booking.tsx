@@ -1,4 +1,4 @@
-import { trackBookingComplete, trackBeginBooking } from '@/lib/analytics';
+import { setActivePageHotel, trackBookingComplete, trackBeginBooking } from '@/lib/analytics';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
@@ -49,6 +49,11 @@ export const BookingPage: React.FC = () => {
   const [room, setRoom] = useState<Room | null>(null);
   const [hotel, setHotel] = useState<Hotel | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setActivePageHotel(hotel?.id || hotelIdParam || null);
+    return () => setActivePageHotel(null);
+  }, [hotel?.id, hotelIdParam]);
   const [submitting, setSubmitting] = useState(false);
 
   // Form State

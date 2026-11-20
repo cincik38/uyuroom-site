@@ -17,17 +17,32 @@ const EMPTY: Values = {
   ads_booking_label: '',
   ads_phone_label: '',
   ads_whatsapp_label: '',
+  ads_usak_id: '',
+  ads_usak_booking_label: '',
+  ads_usak_phone_label: '',
+  ads_usak_whatsapp_label: '',
   meta_pixel_id: '',
 };
+
+const LABEL_HINT = 'Etiket 8-40 karakter olmalı; harf, rakam, tire ve alt çizgi içerebilir.';
 
 const ERRORS: Record<Key, string> = {
   ga4_id: 'Ölçüm kimliği G- ile başlamalı, örneğin G-ABC123DEF4.',
   ads_id: 'Google Ads kimliği AW- ile başlayıp rakamlarla devam etmeli, örneğin AW-123456789.',
-  ads_booking_label: 'Etiket 8-40 karakter olmalı; harf, rakam, tire ve alt çizgi içerebilir.',
-  ads_phone_label: 'Etiket 8-40 karakter olmalı; harf, rakam, tire ve alt çizgi içerebilir.',
-  ads_whatsapp_label: 'Etiket 8-40 karakter olmalı; harf, rakam, tire ve alt çizgi içerebilir.',
+  ads_booking_label: LABEL_HINT,
+  ads_phone_label: LABEL_HINT,
+  ads_whatsapp_label: LABEL_HINT,
+  ads_usak_id: 'Google Ads kimliği AW- ile başlayıp rakamlarla devam etmeli, örneğin AW-123456789.',
+  ads_usak_booking_label: LABEL_HINT,
+  ads_usak_phone_label: LABEL_HINT,
+  ads_usak_whatsapp_label: LABEL_HINT,
   meta_pixel_id: 'Pixel kimliği yalnızca rakamlardan oluşmalı (8-20 hane).',
 };
+
+const PRIMARY_LABELS: Key[] = ['ads_booking_label', 'ads_phone_label', 'ads_whatsapp_label'];
+const USAK_LABELS: Key[] = ['ads_usak_booking_label', 'ads_usak_phone_label', 'ads_usak_whatsapp_label'];
+const USAK_KEYS: Key[] = ['ads_usak_id', ...USAK_LABELS];
+const BASE_KEYS: Key[] = (Object.keys(EMPTY) as Key[]).filter((k) => !USAK_KEYS.includes(k));
 
 const input =
   'w-full h-11 px-3 rounded-xl border bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400/60 focus:border-amber-400 font-mono';
@@ -132,12 +147,21 @@ export const TrackingSettings: React.FC<{ embedded?: boolean }> = ({ embedded = 
   const set = (k: Key, raw: string) => {
     let v = raw.trim();
     const next: Partial<Values> = {};
-    if (k === 'ga4_id' || k === 'ads_id') v = v.toUpperCase();
+    if (k === 'ga4_id' || k === 'ads_id' || k === 'ads_usak_id') v = v.toUpperCase();
     if (k === 'meta_pixel_id') v = v.replace(/\D/g, '');
     // "AW-123456789/AbCdEfGhIj" biçiminde yapıştırılırsa kimliği ve etiketi ayır
-    if ((k === 'ads_booking_label' || k === 'ads_phone_label' || k === 'ads_whatsapp_label') && v.includes('/')) {
+    const labelOwner: Partial<Record<Key, 'ads_id' | 'ads_usak_id'>> = {
+      ads_booking_label: 'ads_id',
+      ads_phone_label: 'ads_id',
+      ads_whatsapp_label: 'ads_id',
+      ads_usak_booking_label: 'ads_usak_id',
+      ads_usak_phone_label: 'ads_usak_id',
+      ads_usak_whatsapp_label: 'ads_usak_id',
+    };
+    const owner = labelOwner[k];
+    if (owner && v.includes('/')) {
       const [id, label] = v.split('/');
-      if (/^AW-[0-9]+$/i.test(id) && !values.ads_id) next.ads_id = id.toUpperCase();
+      if (/^AW-[0-9]+$/i.test(id) && !values[owner]) next[owner] = id.toUpperCase();
       v = label.trim();
     }
     setValues((cur) => ({ ...cur, ...next, [k]: v }));
@@ -150,8 +174,11 @@ export const TrackingSettings: React.FC<{ embedded?: boolean }> = ({ embedded = 
     (Object.keys(EMPTY) as Key[]).forEach((k) => {
       if (values[k] && !TRACKING_PATTERNS[k].test(values[k])) found[k] = ERRORS[k];
     });
-    if ((values.ads_booking_label || values.ads_phone_label || values.ads_whatsapp_label) && !values.ads_id) {
+    if (PRIMARY_LABELS.some((k) => values[k]) && !values.ads_id) {
       found.ads_id = 'Dönüşüm etiketi girdiyseniz Google Ads kimliğini de girmelisiniz.';
+    }
+    if (USAK_LABELS.some((k) => values[k]) && !values.ads_usak_id) {
+      found.ads_usak_id = 'Uşak dönüşüm etiketi girdiyseniz Uşak Google Ads kimliğini de girmelisiniz.';
     }
     setErrors(found);
     if (Object.keys(found).length > 0) {
@@ -159,13 +186,30 @@ export const TrackingSettings: React.FC<{ embedded?: boolean }> = ({ embedded = 
       return;
     }
     setSaving(true);
-    const rows = (Object.keys(EMPTY) as Key[]).map((k) => ({ key: k, value: values[k] }));
-    const { error } = await supabase.from('tracking_settings').upsert(rows, { onConflict: 'key' });
-    setSaving(false);
+    const rowsOf = (keys: Key[]) => keys.map((k) => ({ key: k, value: values[k] }));
+    const { error } = await supabase.from('tracking_settings').upsert(rowsOf(BASE_KEYS), { onConflict: 'key' });
     if (error) {
+      setSaving(false);
       toast.error('Kaydedilemedi. Oturumunuz kapanmış olabilir, yeniden giriş yapın.');
       return;
     }
+    // Uşak anahtarları ayrı yazılır. Kısıt henüz güncellenmediyse mevcut hesabın kaydı bozulmaz.
+    const writeUsak = USAK_KEYS.some((k) => values[k] || saved[k]);
+    if (writeUsak) {
+      const { error: usakError } = await supabase.from('tracking_settings').upsert(rowsOf(USAK_KEYS), { onConflict: 'key' });
+      if (usakError) {
+        setSaving(false);
+        setSaved((cur) => ({ ...cur, ...Object.fromEntries(BASE_KEYS.map((k) => [k, values[k]])) }) as Values);
+        const blocked = usakError.code === '23514' || /check constraint|tracking_settings/i.test(usakError.message || '');
+        toast.error(
+          blocked
+            ? 'Mevcut hesap kaydedildi. Uşak alanları veritabanı kuralına takıldı; Supabase SQL editöründe Uşak takip göçünü bir kez çalıştırıp yeniden kaydedin.'
+            : 'Mevcut hesap kaydedildi, Uşak alanları kaydedilemedi. Oturumunuz kapanmış olabilir, yeniden giriş yapın.',
+        );
+        return;
+      }
+    }
+    setSaving(false);
     toast.success('Kaydedildi. Yeni ziyaretçilerde hemen, daha önce gelenlerde bir sonraki ziyarette geçerli olur.');
     await load();
   };
@@ -206,7 +250,8 @@ export const TrackingSettings: React.FC<{ embedded?: boolean }> = ({ embedded = 
           {!embedded && <h1 className="text-2xl sm:text-3xl font-black tracking-tight">Takip Kodları</h1>}
           <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
             Google Analytics, Google Ads ve Meta Pixel kimliklerini buraya girin. Kaydedince siteye otomatik eklenir, ayrıca
-            kod yüklemeniz gerekmez. Ziyaretçi çerez bandında kabul etmeden hiçbir takip çalışmaz.
+            kod yüklemeniz gerekmez. Ziyaretçi çerez bandında kabul etmeden hiçbir takip çalışmaz. Uşak oteli için ayrı bir
+            Google Ads hesabı varsa aşağıdaki isteğe bağlı bölüme yazın; boş bırakırsanız mevcut hesap eskisi gibi çalışır.
           </p>
           {!embedded && <p className="flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-xs text-amber-900 leading-relaxed max-w-2xl">
             <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
@@ -236,6 +281,9 @@ export const TrackingSettings: React.FC<{ embedded?: boolean }> = ({ embedded = 
             </Section>
 
             <Section title="Google Ads dönüşümleri" active={Boolean(saved.ads_id)}>
+              <p className="text-xs text-slate-500 leading-relaxed -mt-1">
+                Mevcut hesap. Adana rezervasyonları ve Adana numarasına tıklamalar bu kimliğe gider. Bu alanlar eskisi gibi çalışır.
+              </p>
               <Field
                 id="ads_id"
                 label="Google Ads Kimliği"
@@ -274,6 +322,51 @@ export const TrackingSettings: React.FC<{ embedded?: boolean }> = ({ embedded = 
               />
             </Section>
 
+            <Section title="Uşak Google Ads hesabı" active={Boolean(saved.ads_usak_id)}>
+              <p className="text-xs text-slate-500 leading-relaxed -mt-1">
+                İsteğe bağlı. Uşak otelinin ayrı Google Ads hesabı. Kimlik ve etiketler boşsa Uşak dönüşümleri yalnızca yukarıdaki
+                hesaba gider. Doldurursanız Uşak rezervasyonu ile Uşak numarası (0553 122 22 79) ve Uşak sayfalarındaki telefon /
+                WhatsApp tıklamaları, etiketi varsa bu hesaba da gönderilir. Ana sayfa, iletişim ve menü gibi ortak yerlerde
+                tıklanan numara esas alınır; Adana numarası bu hesaba yazılmaz.
+              </p>
+              <Field
+                id="ads_usak_id"
+                label="Uşak Google Ads Kimliği"
+                placeholder="AW-123456789"
+                hint="Uşak hesabının dönüşüm etiketi kurulumundaki AW- kimliği. Yukarıdaki hesaptan farklı olmalıdır."
+                value={values.ads_usak_id}
+                error={errors.ads_usak_id}
+                onChange={(v) => set('ads_usak_id', v)}
+              />
+              <Field
+                id="ads_usak_booking_label"
+                label="Rezervasyon tamamlandı etiketi (isteğe bağlı)"
+                placeholder="Boş bırakılabilir"
+                hint={'Uşak tesisinin rezervasyonu tamamlanınca bu etikete de gider. "AW-…/AbCd..." olarak yapıştırabilirsiniz.'}
+                value={values.ads_usak_booking_label}
+                error={errors.ads_usak_booking_label}
+                onChange={(v) => set('ads_usak_booking_label', v)}
+              />
+              <Field
+                id="ads_usak_phone_label"
+                label="Telefon tıklaması etiketi (isteğe bağlı)"
+                placeholder="Boş bırakılabilir"
+                hint="Uşak numarasına veya Uşak sayfasındaki telefon bağlantısına tıklanınca bu etikete de gider."
+                value={values.ads_usak_phone_label}
+                error={errors.ads_usak_phone_label}
+                onChange={(v) => set('ads_usak_phone_label', v)}
+              />
+              <Field
+                id="ads_usak_whatsapp_label"
+                label="WhatsApp tıklaması etiketi (isteğe bağlı)"
+                placeholder="Boş bırakılabilir"
+                hint="Uşak WhatsApp hattına veya Uşak sayfasındaki WhatsApp bağlantısına tıklanınca bu etikete de gider."
+                value={values.ads_usak_whatsapp_label}
+                error={errors.ads_usak_whatsapp_label}
+                onChange={(v) => set('ads_usak_whatsapp_label', v)}
+              />
+            </Section>
+
             <Section title="Meta Pixel (Facebook ve Instagram)" active={Boolean(saved.meta_pixel_id)}>
               <Field
                 id="meta_pixel_id"
@@ -303,6 +396,7 @@ export const TrackingSettings: React.FC<{ embedded?: boolean }> = ({ embedded = 
         <div className="rounded-2xl border border-slate-200 bg-white p-5 text-xs text-slate-600 leading-relaxed space-y-1.5">
           <p className="font-bold text-slate-800 text-sm">Sitenin gönderdiği olaylar</p>
           <p>page_view (sayfa görüntüleme), view_item (oda sayfası), begin_checkout (rezervasyon başladı), purchase (rezervasyon tamamlandı; tutar ve rezervasyon koduyla), contact (telefon veya WhatsApp tıklaması).</p>
+          <p>Uşak hesabı ve ilgili etiket doluysa o dönüşüm ikinci bir send_to ile Uşak kimliğine de gider. Adana rezervasyonu ve Adana numarası yalnızca ilk hesaba gider. Çerez onayı olmadan Google’a gönderilmez.</p>
           <p>Kontrol için Google Tag Assistant ile uyuroom.com adresini açıp çerez bandında "Kabul Et" seçebilirsiniz.</p>
         </div>
       </main>
