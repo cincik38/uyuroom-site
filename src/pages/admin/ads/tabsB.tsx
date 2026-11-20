@@ -556,6 +556,7 @@ export const TrackingTab: React.FC = () => {
     { ok: Boolean(vals.ga4_id), label: 'Google Analytics 4 kimliği', hint: 'Ziyaret ve davranış raporları için' },
     { ok: Boolean(vals.ads_id), label: 'Google Ads kimliği', hint: 'Reklam dönüşümlerini Google’a bildirmek için' },
     { ok: Boolean(vals.ads_booking_label), label: 'Rezervasyon dönüşüm etiketi', hint: 'Google Ads’in “rezervasyon yapıldı” olayını tanıması için' },
+    { ok: Boolean(vals.ads_usak_id), label: 'Uşak Google Ads kimliği', hint: 'İsteğe bağlı. Uşak otelinin ayrı reklam hesabı; boşsa Uşak dönüşümleri mevcut hesaba gider' },
     { ok: Boolean(vals.meta_pixel_id), label: 'Meta Pixel', hint: 'Facebook / Instagram reklam ölçümü için' },
     { ok: Boolean(live && live.events_24h > 0), label: 'Birinci taraf ölçüm (Reklam Merkezi)', hint: live ? `Son 24 saatte ${fmtInt(live.events_24h)} olay, son olay: ${live.last_event_at ? new Date(live.last_event_at).toLocaleString('tr-TR') : 'yok'}` : 'Kontrol ediliyor' },
   ];

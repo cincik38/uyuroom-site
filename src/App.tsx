@@ -55,8 +55,10 @@ const ScrollToTop = () => {
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement | null)?.closest?.('a');
       const href = a?.getAttribute('href') || '';
-      if (href.startsWith('tel:')) trackContactClick('phone');
-      else if (/wa\.me|api\.whatsapp\.com/.test(href)) trackContactClick('whatsapp');
+      const hotelId = document.documentElement.getAttribute('data-uyu-hotel');
+      const ctx = { href, path: window.location.pathname, search: window.location.search, hotelId };
+      if (href.startsWith('tel:')) trackContactClick('phone', ctx);
+      else if (/wa\.me|api\.whatsapp\.com/.test(href)) trackContactClick('whatsapp', ctx);
     };
     document.addEventListener('click', onClick);
     return () => document.removeEventListener('click', onClick);
